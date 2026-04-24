@@ -12,6 +12,8 @@
   inset: 0;
   opacity: 0;
   pointer-events: none;
+  overflow-y: auto;
+  overflow-x: hidden;
   transform: scale(1.02);
   background-position: center;
   background-size: cover;
@@ -63,7 +65,7 @@
   display: grid;
   align-items: center;
   width: min(88rem, calc(100% - 2rem));
-  height: 100%;
+  min-height: 100%;
   margin: 0 auto;
   padding: calc(var(--header-offset) + 1rem) 0 calc(5.5rem + env(safe-area-inset-bottom, 0px));
 }

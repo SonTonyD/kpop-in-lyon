@@ -100,7 +100,7 @@
 }
 
 main {
-  min-height: calc(100svh - var(--footer-space));
+  min-height: calc(100svh - var(--header-offset));
   padding-top: var(--header-offset);
 }
 

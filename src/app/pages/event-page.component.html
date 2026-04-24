@@ -1,14 +1,60 @@
 <section
-  class="event-hero page-hero"
-  [style.background-image]="'linear-gradient(180deg, rgba(6, 6, 18, 0.28), rgba(6, 6, 18, 0.82)), url(' + event.image + ')'"
+  class="event-hero"
+  [style.background-image]="'linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(' + event.image + ')'"
 >
-  <div class="page-hero__content surface-card">
-    <p class="eyebrow">Event</p>
-    <h1>{{ event.title }}</h1>
-    <div class="event-highlights">
-      <span>{{ event.date }}</span>
-      <span>{{ event.location }}</span>
+  <div class="event-overlay"></div>
+
+  <div class="event-content">
+    <div class="event-copy">
+      <div class="event-context">
+        <p class="event-index">EV-01 — ÉVÉNEMENT ACTUEL</p>
+        <div class="sale-indicator">
+          <span class="sale-dot"></span>
+          <span>ON SALE NOW</span>
+        </div>
+      </div>
+
+      <h1>
+        <span>SEVENTEEN</span>
+        <span>EVENT</span>
+      </h1>
+
+      <p class="event-description">{{ event.description }}</p>
+      <div class="event-separator"></div>
+
+      <div class="event-bottom">
+        <div class="event-facts">
+          <article class="fact-block">
+            <p>DATE</p>
+            <strong>{{ event.date | uppercase }}</strong>
+            <span>Heure : {{ event.time }}</span>
+          </article>
+
+          <article class="fact-block">
+            <p>LIEU</p>
+            <strong>LYON, FRANCE</strong>
+            <span>{{ event.venueNote }}</span>
+          </article>
+
+          <article class="fact-block">
+            <p>FORMAT</p>
+            <strong>{{ event.format | uppercase }}</strong>
+            <span>{{ event.capacity }}</span>
+          </article>
+        </div>
+
+        <aside class="countdown-card">
+          <p class="countdown-label">STARTS IN</p>
+          <div class="countdown-grid">
+            @for (item of countdown(); track item.label) {
+              <div class="countdown-item">
+                <strong>{{ item.value }}</strong>
+                <span>{{ item.label }}</span>
+              </div>
+            }
+          </div>
+        </aside>
+      </div>
     </div>
-    <p>{{ event.description }}</p>
   </div>
 </section>

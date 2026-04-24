@@ -6,7 +6,6 @@ import { pastEventImages, pastEventStats, upcomingEvent } from '../data/site-con
 interface HomeSlide {
   eyebrow: string;
   title: string;
-  subtitle?: string;
   description: string;
   actionLabel?: string;
   actionLink?: string;
@@ -24,22 +23,22 @@ interface HomeSlide {
 export class HomePageComponent implements OnInit, OnDestroy {
   protected readonly pastEventImages = pastEventImages;
   protected readonly pastEventStats = pastEventStats;
+  protected readonly event = upcomingEvent;
   protected readonly currentSlide = signal(0);
 
   protected readonly slides: HomeSlide[] = [
     {
-      eyebrow: 'Upcoming Event',
+      eyebrow: 'EV-01 — ÉVÉNEMENT ACTUEL',
       title: upcomingEvent.title,
-      subtitle: `${upcomingEvent.date} • ${upcomingEvent.location}`,
-      description: 'Fan event dedicated to SEVENTEEN',
-      actionLabel: 'Join Event',
+      description: upcomingEvent.description,
+      actionLabel: 'Voir l’événement',
       actionLink: '/event',
       image: upcomingEvent.image,
       kind: 'upcoming',
     },
     {
-      eyebrow: 'Past Events',
-      title: 'Thank you for all the amazing moments shared together.',
+      eyebrow: 'PAST EVENTS',
+      title: 'THANK YOU FOR ALL THE AMAZING MOMENTS SHARED TOGETHER.',
       description:
         'A collection of immersive fan projects, memorable decorations and warm community energy.',
       image: pastEventImages[0],

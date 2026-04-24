@@ -3,43 +3,76 @@
     <article
       class="slide"
       [class.active]="currentSlide() === index"
-      [style.background-image]="'linear-gradient(135deg, rgba(10, 7, 25, 0.18), rgba(10, 7, 25, 0.72)), url(' + slide.image + ')'"
+      [style.background-image]="'linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(' + slide.image + ')'"
       [attr.aria-hidden]="currentSlide() !== index"
     >
-      <div class="slide-panel surface-card">
-        <p class="eyebrow">{{ slide.eyebrow }}</p>
-        <h1>{{ slide.title }}</h1>
+      <div class="slide-overlay"></div>
 
-        @if (slide.subtitle) {
-          <p class="slide-subtitle">{{ slide.subtitle }}</p>
-        }
-
-        <p class="slide-copy">{{ slide.description }}</p>
-
-        @if (slide.kind === 'upcoming') {
-          <div class="event-meta">
-            <span>Immersive poster reveal</span>
-            <span>Elegant fan atmosphere</span>
-          </div>
-          <a class="button-primary" [routerLink]="slide.actionLink">{{ slide.actionLabel }}</a>
-        } @else {
-          <div class="past-content">
-            <div class="past-gallery">
-              @for (image of pastEventImages; track image) {
-                <img [src]="image" alt="Past K-pop event memory" />
-              }
+      <div class="slide-shell">
+        <div class="slide-panel" [class.slide-panel--past]="slide.kind === 'past'">
+          @if (slide.kind === 'upcoming') {
+            <div class="slide-context">
+              <p class="eyebrow">{{ slide.eyebrow }}</p>
+              <div class="sale-indicator">
+                <span class="sale-dot"></span>
+                <span>ON SALE NOW</span>
+              </div>
             </div>
 
-            <div class="stats-grid">
-              @for (stat of pastEventStats; track stat.label) {
-                <div class="stat-card">
-                  <strong>{{ stat.value }}</strong>
-                  <span>{{ stat.label }}</span>
+            <h1>
+              <span>SEVENTEEN</span>
+              <span>EVENT</span>
+            </h1>
+
+            <p class="slide-copy slide-quote">{{ slide.description }}</p>
+            <div class="slide-separator"></div>
+
+            <div class="slide-facts">
+              <div class="slide-fact">
+                <p>DATE</p>
+                <strong>{{ event.date | uppercase }}</strong>
+                <span>Heure : {{ event.time }}</span>
+              </div>
+
+              <div class="slide-fact">
+                <p>LIEU</p>
+                <strong>LYON, FRANCE</strong>
+                <span>{{ event.venueNote }}</span>
+              </div>
+
+              <div class="slide-fact">
+                <p>FORMAT</p>
+                <strong>{{ event.format | uppercase }}</strong>
+                <span>{{ event.capacity }}</span>
+              </div>
+            </div>
+
+            <a class="button-primary" [routerLink]="slide.actionLink">{{ slide.actionLabel }}</a>
+          } @else {
+            <div class="surface-card past-panel">
+              <p class="eyebrow">{{ slide.eyebrow }}</p>
+              <h2>{{ slide.title }}</h2>
+              <p class="slide-copy">{{ slide.description }}</p>
+
+              <div class="past-content">
+                <div class="past-gallery">
+                  @for (image of pastEventImages; track image) {
+                    <img [src]="image" alt="Souvenir d'un ancien événement K-pop" />
+                  }
                 </div>
-              }
+
+                <div class="stats-grid">
+                  @for (stat of pastEventStats; track stat.label) {
+                    <div class="stat-card">
+                      <strong>{{ stat.value }}</strong>
+                      <span>{{ stat.label }}</span>
+                    </div>
+                  }
+                </div>
+              </div>
             </div>
-          </div>
-        }
+          }
+        </div>
       </div>
     </article>
   }
@@ -64,36 +97,5 @@
     <button type="button" class="ghost-button" (click)="nextSlide()" aria-label="Next slide">
       Next
     </button>
-  </div>
-</section>
-
-<section class="home-section home-story">
-  <div class="section-heading">
-    <p class="eyebrow">K-pop in Lyon</p>
-    <h2>Designed to feel like a premium fan universe.</h2>
-    <p>
-      Mobile first, visually immersive and easy to navigate, the experience keeps the spotlight on
-      the next event while celebrating the community moments that made it special.
-    </p>
-  </div>
-
-  <div class="story-grid">
-    <article class="surface-card feature-card">
-      <span>01</span>
-      <h3>Visual first</h3>
-      <p>Dominant imagery, soft overlays and elegant contrast keep the mood cinematic.</p>
-    </article>
-
-    <article class="surface-card feature-card">
-      <span>02</span>
-      <h3>Community driven</h3>
-      <p>Reviews, participation stats and past memories build trust and excitement quickly.</p>
-    </article>
-
-    <article class="surface-card feature-card">
-      <span>03</span>
-      <h3>Ready to collaborate</h3>
-      <p>The fanbase collaboration form is already structured for future submissions and workflow.</p>
-    </article>
   </div>
 </section>

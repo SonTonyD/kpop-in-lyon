@@ -17,16 +17,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should expose four main navigation items', () => {
+  it('should expose five main navigation items', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.navItems.length).toBe(4);
+    expect(app.navItems.length).toBe(5);
   });
 
   it('should render the brand name', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.brand strong')?.textContent).toContain('KPOP IN LYON');
+    expect(compiled.querySelector('.brand')?.textContent).toContain('KPOP IN LYON');
   });
 });

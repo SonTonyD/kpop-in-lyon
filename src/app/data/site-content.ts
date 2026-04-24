@@ -1,7 +1,12 @@
 export interface EventInfo {
   title: string;
   date: string;
+  dateTime: string;
+  time: string;
   location: string;
+  venueNote: string;
+  format: string;
+  capacity: string;
   description: string;
   image: string;
 }
@@ -26,7 +31,12 @@ export interface CollaborationOption {
 export const upcomingEvent: EventInfo = {
   title: 'SEVENTEEN EVENT',
   date: 'May 19, 2026',
+  dateTime: '2026-05-19T19:00:00+02:00',
+  time: '19:00 — 23:00',
   location: 'Lyon',
+  venueNote: 'Venue revealed to attendees',
+  format: 'Fan Event',
+  capacity: 'Capacity 250',
   description:
     'A fan event dedicated to SEVENTEEN, bringing fans together to celebrate their universe.',
   image: 'assets/event-hero.svg',
@@ -39,9 +49,9 @@ export const pastEventImages = [
 ];
 
 export const pastEventStats: PastEventStat[] = [
-  { label: 'Average rating', value: '4.9/5' },
+  { label: 'Note moyenne', value: '4.9/5' },
   { label: 'Participants', value: '320+' },
-  { label: 'Fan projects', value: '18' },
+  { label: 'Projets fans', value: '18' },
 ];
 
 export const reviews: Review[] = [
@@ -49,22 +59,22 @@ export const reviews: Review[] = [
     name: 'Mina92',
     rating: 5,
     comment:
-      'Beautiful decoration, smooth organization and a warm atmosphere from start to finish.',
-    event: 'SEVENTEEN Cupsleeve',
+      'Décoration magnifique, organisation fluide et ambiance chaleureuse du début à la fin.',
+    event: 'Cupsleeve SEVENTEEN',
   },
   {
     name: 'HoshiVibes',
     rating: 5,
     comment:
-      'The playlist, freebies and photo spots were incredible. It really felt immersive.',
+      'La playlist, les freebies et les espaces photo étaient incroyables. L’expérience était vraiment immersive.',
     event: 'Carat Night Lyon',
   },
   {
     name: 'WonwooLens',
     rating: 4,
     comment:
-      'Very classy setup and friendly team. I would love an even bigger venue next time.',
-    event: 'Fan Project Showcase',
+      'Mise en place très élégante et équipe adorable. J’aimerais simplement une salle encore plus grande la prochaine fois.',
+    event: 'Showcase Fan Project',
   },
 ];
 

@@ -1,5 +1,6 @@
 .contact-page {
   padding-bottom: 4rem;
+  padding-inline: 0.75rem;
 }
 
 .contact-form {
@@ -75,6 +76,10 @@ small {
 }
 
 @media (min-width: 48rem) {
+  .contact-page {
+    padding-inline: 1rem;
+  }
+
   .form-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

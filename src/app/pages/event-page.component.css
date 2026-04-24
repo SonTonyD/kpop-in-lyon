@@ -1,35 +1,213 @@
 .event-hero {
-  min-height: calc(100svh - 5rem);
-  display: grid;
-  place-items: center;
+  position: relative;
+  min-height: 100svh;
   background-position: center;
   background-size: cover;
-  padding: 1rem;
+  overflow: hidden;
 }
 
-.page-hero__content {
-  max-width: 42rem;
-  text-align: center;
+.event-hero::before,
+.event-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.page-hero__content h1 {
-  font-size: clamp(3rem, 8vw, 6rem);
-  line-height: 0.92;
+.event-hero::before {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent 26%);
+  background-size: 5.5rem 100%, 100% 100%;
+  opacity: 0.22;
+}
+
+.event-hero::after {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.05) 0.7px, transparent 0.7px);
+  background-size: 5px 5px;
+  opacity: 0.08;
+}
+
+.event-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 12% 28%, rgba(94, 166, 255, 0.2), transparent 24%),
+    radial-gradient(circle at 74% 18%, rgba(255, 90, 186, 0.16), transparent 18%),
+    linear-gradient(180deg, rgba(7, 8, 20, 0.18), rgba(7, 8, 20, 0.7));
+}
+
+.event-content {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  width: min(88rem, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 6.75rem 0 3rem;
+}
+
+.event-copy {
+  width: min(100%, 76rem);
+}
+
+.event-context {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.event-index,
+.sale-indicator,
+.fact-block p,
+.countdown-label {
   margin: 0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
 }
 
-.event-highlights {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin: 1.5rem 0 1rem;
+.event-index {
+  color: rgba(235, 238, 249, 0.72);
 }
 
-.event-highlights span {
-  padding: 0.7rem 1rem;
-  border-radius: 999px;
-  border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.08);
+.sale-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #8ee9ff;
+}
+
+.sale-dot {
+  width: 0.72rem;
+  height: 0.72rem;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, #88f0ff, #5b8cff);
+  box-shadow: 0 0 18px rgba(89, 197, 255, 0.48);
+}
+
+.event-copy h1 {
+  display: grid;
+  margin: 1.1rem 0 0;
+  color: #f2eff7;
+  font-size: clamp(4.2rem, 12vw, 9.8rem);
+  line-height: 0.84;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.event-description {
+  width: min(100%, 34rem);
+  margin: 1.6rem 0 0;
+  color: rgba(227, 230, 242, 0.8);
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.8;
+}
+
+.event-separator {
+  width: 100%;
+  height: 1px;
+  margin: 2rem 0 1.5rem;
+  background: linear-gradient(90deg, rgba(255, 93, 167, 0.55), rgba(255, 93, 167, 0.04));
+}
+
+.event-bottom {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.event-facts {
+  display: grid;
+  gap: 1rem;
+}
+
+.fact-block strong,
+.countdown-item strong {
+  display: block;
   color: var(--text-strong);
+}
+
+.fact-block strong {
+  margin-top: 0.4rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.fact-block span {
+  display: block;
+  margin-top: 0.4rem;
+  color: rgba(224, 225, 232, 0.74);
+}
+
+.countdown-card {
+  width: min(100%, 28rem);
+  padding: 1.15rem;
+  border: 1px solid rgba(255, 110, 199, 0.38);
+  background: rgba(8, 8, 18, 0.38);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  backdrop-filter: blur(12px);
+}
+
+.countdown-label {
+  color: rgba(255, 195, 226, 0.85);
+}
+
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.countdown-item {
+  padding: 0.85rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.countdown-item strong {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  line-height: 0.95;
+}
+
+.countdown-item span {
+  display: block;
+  margin-top: 0.35rem;
+  color: rgba(224, 225, 232, 0.72);
+  font-size: 0.76rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 64rem) {
+  .event-bottom {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+
+  .event-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .countdown-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .countdown-card {
+    width: 30rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .event-content {
+    width: min(100%, calc(100% - 1.25rem));
+    padding-top: 8.5rem;
+  }
+
+  .event-copy h1 {
+    font-size: clamp(3.5rem, 17vw, 6rem);
+  }
 }

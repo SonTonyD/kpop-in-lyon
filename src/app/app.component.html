@@ -1,18 +1,20 @@
 <div class="app-shell">
   <header class="site-header">
-    <a class="brand" routerLink="/">
-      <span>K</span>
-      <div>
-        <strong>KPOP IN LYON</strong>
-        <small>Immersive fan events</small>
-      </div>
-    </a>
+    <a class="brand" routerLink="/">KPOP IN LYON</a>
 
     <nav class="site-nav" aria-label="Main navigation">
       @for (item of navItems; track item.path) {
-        <a routerLinkActive="active" [routerLink]="item.path">{{ item.label }}</a>
+        <a
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.exact }"
+          [routerLink]="item.path"
+        >
+          {{ item.label }}
+        </a>
       }
     </nav>
+
+    <p class="header-note">EST. LYON / 2024</p>
   </header>
 
   <main>

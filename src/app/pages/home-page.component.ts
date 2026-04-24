@@ -27,6 +27,8 @@ export class HomePageComponent {
   protected readonly currentSlide = signal(0);
   private touchStartX: number | null = null;
   private touchCurrentX: number | null = null;
+  private touchStartY: number | null = null;
+  private touchCurrentY: number | null = null;
 
   protected readonly slides: HomeSlide[] = [
     {
@@ -61,23 +63,38 @@ export class HomePageComponent {
 
   protected handleTouchStart(event: TouchEvent): void {
     this.touchStartX = event.touches[0]?.clientX ?? null;
+    this.touchStartY = event.touches[0]?.clientY ?? null;
     this.touchCurrentX = this.touchStartX;
+    this.touchCurrentY = this.touchStartY;
   }
 
   protected handleTouchMove(event: TouchEvent): void {
     this.touchCurrentX = event.touches[0]?.clientX ?? this.touchCurrentX;
+    this.touchCurrentY = event.touches[0]?.clientY ?? this.touchCurrentY;
   }
 
   protected handleTouchEnd(): void {
-    if (this.touchStartX === null || this.touchCurrentX === null) {
+    if (
+      this.touchStartX === null ||
+      this.touchCurrentX === null ||
+      this.touchStartY === null ||
+      this.touchCurrentY === null
+    ) {
       this.resetTouch();
       return;
     }
 
     const deltaX = this.touchCurrentX - this.touchStartX;
-    const swipeThreshold = 45;
+    const deltaY = this.touchCurrentY - this.touchStartY;
+    const horizontalDistance = Math.abs(deltaX);
+    const verticalDistance = Math.abs(deltaY);
+    const swipeThreshold = 70;
+    const horizontalDominanceRatio = 1.35;
 
-    if (Math.abs(deltaX) >= swipeThreshold) {
+    if (
+      horizontalDistance >= swipeThreshold &&
+      horizontalDistance > verticalDistance * horizontalDominanceRatio
+    ) {
       if (deltaX < 0) {
         this.nextSlide();
       } else {
@@ -91,5 +108,7 @@ export class HomePageComponent {
   private resetTouch(): void {
     this.touchStartX = null;
     this.touchCurrentX = null;
+    this.touchStartY = null;
+    this.touchCurrentY = null;
   }
 }

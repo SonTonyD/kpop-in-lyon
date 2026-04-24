@@ -1,4 +1,10 @@
-<section class="hero-carousel">
+<section
+  class="hero-carousel"
+  (touchstart)="handleTouchStart($event)"
+  (touchmove)="handleTouchMove($event)"
+  (touchend)="handleTouchEnd()"
+  (touchcancel)="handleTouchEnd()"
+>
   @for (slide of slides; track slide.title; let index = $index) {
     <article
       class="slide"
@@ -93,7 +99,12 @@
   }
 
   <div class="carousel-controls">
-    <button type="button" class="ghost-button" (click)="previousSlide()" aria-label="Previous slide">
+    <button
+      type="button"
+      class="ghost-button carousel-arrow"
+      (click)="previousSlide()"
+      aria-label="Previous slide"
+    >
       Prev
     </button>
 
@@ -109,7 +120,12 @@
       }
     </div>
 
-    <button type="button" class="ghost-button" (click)="nextSlide()" aria-label="Next slide">
+    <button
+      type="button"
+      class="ghost-button carousel-arrow"
+      (click)="nextSlide()"
+      aria-label="Next slide"
+    >
       Next
     </button>
   </div>

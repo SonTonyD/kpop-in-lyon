@@ -25,6 +25,8 @@ export class HomePageComponent {
   protected readonly pastEventStats = pastEventStats;
   protected readonly event = upcomingEvent;
   protected readonly currentSlide = signal(0);
+  private touchStartX: number | null = null;
+  private touchCurrentX: number | null = null;
 
   protected readonly slides: HomeSlide[] = [
     {
@@ -55,5 +57,39 @@ export class HomePageComponent {
 
   protected nextSlide(): void {
     this.currentSlide.update((value) => (value + 1) % this.slides.length);
+  }
+
+  protected handleTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.touches[0]?.clientX ?? null;
+    this.touchCurrentX = this.touchStartX;
+  }
+
+  protected handleTouchMove(event: TouchEvent): void {
+    this.touchCurrentX = event.touches[0]?.clientX ?? this.touchCurrentX;
+  }
+
+  protected handleTouchEnd(): void {
+    if (this.touchStartX === null || this.touchCurrentX === null) {
+      this.resetTouch();
+      return;
+    }
+
+    const deltaX = this.touchCurrentX - this.touchStartX;
+    const swipeThreshold = 45;
+
+    if (Math.abs(deltaX) >= swipeThreshold) {
+      if (deltaX < 0) {
+        this.nextSlide();
+      } else {
+        this.previousSlide();
+      }
+    }
+
+    this.resetTouch();
+  }
+
+  private resetTouch(): void {
+    this.touchStartX = null;
+    this.touchCurrentX = null;
   }
 }

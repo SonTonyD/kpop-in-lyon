@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { upcomingEvent } from '../data/site-content';
+import { pastEventImages, pastEventStats, upcomingEvent } from '../data/site-content';
 
 interface HomeSlide {
   eyebrow: string;
@@ -20,7 +20,9 @@ interface HomeSlide {
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css',
 })
-export class HomePageComponent implements OnInit, OnDestroy {
+export class HomePageComponent {
+  protected readonly pastEventImages = pastEventImages;
+  protected readonly pastEventStats = pastEventStats;
   protected readonly event = upcomingEvent;
   protected readonly currentSlide = signal(0);
 
@@ -34,21 +36,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
       image: upcomingEvent.image,
       kind: 'upcoming',
     },
+    {
+      eyebrow: 'Past Events',
+      title: 'Past Events',
+      description: 'Thank you for all the amazing moments shared together.',
+      image: pastEventImages[0],
+      kind: 'past',
+    },
   ];
-
-  private autoplayId: ReturnType<typeof setInterval> | null = null;
-
-  ngOnInit(): void {
-    this.autoplayId = setInterval(() => {
-      this.currentSlide.update((value) => (value + 1) % this.slides.length);
-    }, 6000);
-  }
-
-  ngOnDestroy(): void {
-    if (this.autoplayId) {
-      clearInterval(this.autoplayId);
-    }
-  }
 
   protected goToSlide(index: number): void {
     this.currentSlide.set(index);

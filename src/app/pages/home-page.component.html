@@ -48,6 +48,44 @@
             </div>
 
             <a class="button-primary" [routerLink]="slide.actionLink">{{ slide.actionLabel }}</a>
+          } @else {
+            <div class="past-hero">
+              <div class="slide-context">
+                <p class="eyebrow">{{ slide.eyebrow }}</p>
+                <div class="sale-indicator sale-indicator--past">
+                  <span class="sale-dot sale-dot--past"></span>
+                  <span>COMMUNITY MEMORIES</span>
+                </div>
+              </div>
+
+              <h2 class="past-title">
+                <span>PAST</span>
+                <span>EVENTS</span>
+              </h2>
+
+              <p class="slide-copy slide-quote">{{ slide.description }}</p>
+              <div class="slide-separator"></div>
+
+              <div class="past-hero-layout">
+                <div class="past-facts">
+                  @for (stat of pastEventStats; track stat.label; let index = $index) {
+                    @if (index < 2) {
+                      <div class="stat-card stat-card--hero">
+                        <p>{{ stat.label }}</p>
+                        <strong>{{ stat.value }}</strong>
+                        <span>Built from participant feedback and event turnout.</span>
+                      </div>
+                    }
+                  }
+                </div>
+
+                <div class="past-gallery past-gallery--hero">
+                  @for (image of pastEventImages; track image) {
+                    <img [src]="image" alt="Past K-pop event memory" />
+                  }
+                </div>
+              </div>
+            </div>
           }
         </div>
       </div>

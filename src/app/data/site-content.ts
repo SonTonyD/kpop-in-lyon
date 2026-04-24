@@ -43,9 +43,9 @@ export const upcomingEvent: EventInfo = {
 };
 
 export const pastEventImages = [
-  'assets/past-event-1.svg',
-  'assets/past-event-2.svg',
-  'assets/past-event-3.svg',
+  'assets/past-event-1.jpeg',
+  'assets/past-event-2.jpeg',
+  'assets/past-event-3.jpeg',
 ];
 
 export const pastEventStats: PastEventStat[] = [

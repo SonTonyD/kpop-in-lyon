@@ -9,6 +9,8 @@
   --accent-alt: #68a8ff;
   --border-soft: rgba(255, 255, 255, 0.12);
   --shadow-soft: 0 24px 70px rgba(3, 3, 12, 0.42);
+  --header-offset: 4.8rem;
+  --footer-space: 4.5rem;
 }
 
 *,
@@ -118,7 +120,7 @@ a {
 
 .home-section,
 .page-shell {
-  padding-top: 3rem;
+  padding-top: 1.5rem;
 }
 
 .section-heading {
@@ -128,6 +130,7 @@ a {
 .page-shell {
   width: min(72rem, calc(100% - 2rem));
   margin: 0 auto;
+  min-height: calc(100svh - var(--header-offset) - var(--footer-space));
 }
 
 .section-heading h1,
@@ -141,4 +144,11 @@ a {
 .section-heading p {
   font-size: 1rem;
   line-height: 1.65;
+}
+
+@media (max-width: 44rem) {
+  :root {
+    --header-offset: 7.4rem;
+    --footer-space: 4.25rem;
+  }
 }

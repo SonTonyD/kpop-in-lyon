@@ -1,5 +1,7 @@
 .app-shell {
   min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
 
 .site-header {
@@ -10,9 +12,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 1.25rem;
+  padding: 0.8rem 1.25rem;
   backdrop-filter: blur(18px);
-  background: linear-gradient(180deg, rgba(5, 6, 15, 0.88), rgba(5, 6, 15, 0.34));
+  background: linear-gradient(
+    180deg,
+    rgba(5, 6, 15, 0.88),
+    rgba(5, 6, 15, 0.34)
+  );
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -30,8 +36,15 @@
   display: flex;
   gap: 1.15rem;
   overflow-x: auto;
+  overflow-y: hidden;
   justify-content: center;
   flex: 1;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.site-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .site-nav a {
@@ -47,13 +60,18 @@
 }
 
 .site-nav a::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   bottom: -0.2rem;
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent) 18%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--accent) 18%,
+    transparent
+  );
   opacity: 0;
   transform: scaleX(0.5);
   transition:
@@ -82,7 +100,8 @@
 }
 
 main {
-  min-height: 100svh;
+  min-height: calc(100svh - var(--footer-space));
+  padding-top: var(--header-offset);
 }
 
 .site-footer {
@@ -90,7 +109,7 @@ main {
   gap: 0.35rem;
   width: min(72rem, calc(100% - 2rem));
   margin: 0 auto;
-  padding: 1rem 0 2rem;
+  padding: 0.5rem 0 1rem;
   color: var(--text-soft);
 }
 
@@ -102,7 +121,7 @@ main {
   .site-header {
     flex-direction: column;
     align-items: flex-start;
-    padding-inline: 1rem;
+    padding: 0.7rem 1rem;
   }
 
   .site-nav {

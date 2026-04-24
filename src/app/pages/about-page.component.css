@@ -1,8 +1,8 @@
 .about-page {
   width: min(72rem, calc(100% - 2rem));
-  min-height: calc(100svh - 5rem);
+  min-height: calc(100svh - var(--header-offset) - var(--footer-space));
   margin: 0 auto;
-  padding: 6.5rem 0 3rem;
+  padding: 1rem 0 1.5rem;
   display: grid;
   gap: 1.25rem;
 }

@@ -1,0 +1,23 @@
+<svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1200" fill="#080611"/>
+  <rect width="1600" height="1200" fill="url(#paint0_linear_1_2)"/>
+  <circle cx="1312" cy="216" r="204" fill="#FF6EC7" fill-opacity="0.28"/>
+  <circle cx="303" cy="312" r="244" fill="#67A7FF" fill-opacity="0.22"/>
+  <circle cx="789" cy="884" r="325" fill="#FFC75F" fill-opacity="0.14"/>
+  <path d="M261 928C464.735 705.016 647.568 591.886 809.5 588.611C971.432 585.336 1147.93 692.909 1339 911.33" stroke="white" stroke-opacity="0.18" stroke-width="2"/>
+  <path d="M380 1002L608 775L850 909L1188 594" stroke="white" stroke-opacity="0.22" stroke-width="6" stroke-linecap="round"/>
+  <rect x="951" y="265" width="308" height="440" rx="26" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.22"/>
+  <text x="997" y="368" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="3">SEVENTEEN</text>
+  <text x="997" y="425" fill="#F7D2E9" font-family="Arial, sans-serif" font-size="19" letter-spacing="5">EVENT POSTER</text>
+  <text x="997" y="521" fill="white" font-family="Arial, sans-serif" font-size="76" font-weight="700">MAY 19</text>
+  <text x="999" y="573" fill="white" fill-opacity="0.75" font-family="Arial, sans-serif" font-size="24">LYON • FRANCE</text>
+  <text x="997" y="638" fill="white" fill-opacity="0.8" font-family="Arial, sans-serif" font-size="24">Immersive fan event with</text>
+  <text x="997" y="672" fill="white" fill-opacity="0.8" font-family="Arial, sans-serif" font-size="24">premium styling and photo zones.</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_2" x1="1600" y1="0" x2="118" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#191535"/>
+      <stop offset="0.46" stop-color="#110C24"/>
+      <stop offset="1" stop-color="#07050E"/>
+    </linearGradient>
+  </defs>
+</svg>

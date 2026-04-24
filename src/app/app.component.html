@@ -1,0 +1,26 @@
+<div class="app-shell">
+  <header class="site-header">
+    <a class="brand" routerLink="/">
+      <span>K</span>
+      <div>
+        <strong>KPOP IN LYON</strong>
+        <small>Immersive fan events</small>
+      </div>
+    </a>
+
+    <nav class="site-nav" aria-label="Main navigation">
+      @for (item of navItems; track item.path) {
+        <a routerLinkActive="active" [routerLink]="item.path">{{ item.label }}</a>
+      }
+    </nav>
+  </header>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="site-footer">
+    <p>Kpop in Lyon • Lyon, France</p>
+    <p>Designed for immersive K-pop community moments.</p>
+  </footer>
+</div>

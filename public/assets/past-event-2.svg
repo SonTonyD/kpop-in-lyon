@@ -1,0 +1,16 @@
+<svg width="900" height="700" viewBox="0 0 900 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="700" rx="32" fill="#0C0B15"/>
+  <rect width="900" height="700" rx="32" fill="url(#paint0_linear_1_4)"/>
+  <circle cx="693" cy="138" r="124" fill="#FFC75F" fill-opacity="0.28"/>
+  <circle cx="223" cy="228" r="172" fill="#FF6EC7" fill-opacity="0.2"/>
+  <path d="M92 516C265 384.667 392.333 356.333 474 431C555.667 505.667 669 507.667 814 437" stroke="white" stroke-opacity="0.22" stroke-width="10" stroke-linecap="round"/>
+  <text x="96" y="160" fill="white" font-family="Arial, sans-serif" font-size="24" letter-spacing="5">PAST EVENT</text>
+  <text x="93" y="248" fill="white" font-family="Arial, sans-serif" font-size="72" font-weight="700">FAN PROJECT</text>
+  <text x="96" y="310" fill="white" fill-opacity="0.78" font-family="Arial, sans-serif" font-size="32">Elegant visuals for a memorable celebration.</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_4" x1="900" y1="0" x2="90" y2="700" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22142D"/>
+      <stop offset="1" stop-color="#0B0910"/>
+    </linearGradient>
+  </defs>
+</svg>

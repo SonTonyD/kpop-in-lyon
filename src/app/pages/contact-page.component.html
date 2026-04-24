@@ -1,0 +1,134 @@
+<section class="page-shell contact-page">
+  <div class="section-heading">
+    <p class="eyebrow">Contact</p>
+    <h1>Collaboration Fan Base</h1>
+    <p>
+      Organiser un événement avec Kpop in Lyon. Vous êtes une fan base et vous souhaitez
+      collaborer avec nous autour d’un événement K-pop ? Remplissez ce formulaire afin que nous
+      puissions étudier votre projet.
+    </p>
+  </div>
+
+  <form class="contact-form surface-card" [formGroup]="form" (ngSubmit)="submit()">
+    <section>
+      <h2>Infos de base</h2>
+      <div class="form-grid">
+        <label>
+          <span>Nom prénom</span>
+          <input type="text" formControlName="fullName" />
+          @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+            <small>Ce champ est obligatoire.</small>
+          }
+        </label>
+
+        <label>
+          <span>Nom de la fanbase</span>
+          <input type="text" formControlName="fanbaseName" />
+          @if (form.controls.fanbaseName.touched && form.controls.fanbaseName.invalid) {
+            <small>Ce champ est obligatoire.</small>
+          }
+        </label>
+
+        <label>
+          <span>Email</span>
+          <input type="email" formControlName="email" />
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <small>Un email valide est requis.</small>
+          }
+        </label>
+
+        <label>
+          <span>Réseaux sociaux</span>
+          <input type="text" formControlName="socialLinks" />
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Projet</h2>
+      <div class="form-grid">
+        <label>
+          <span>Groupe / artiste</span>
+          <input type="text" formControlName="artist" />
+          @if (form.controls.artist.touched && form.controls.artist.invalid) {
+            <small>Ce champ est obligatoire.</small>
+          }
+        </label>
+
+        <label>
+          <span>Ville / lieu</span>
+          <input type="text" formControlName="city" />
+          @if (form.controls.city.touched && form.controls.city.invalid) {
+            <small>Ce champ est obligatoire.</small>
+          }
+        </label>
+
+        <label class="full-width">
+          <span>Date ou période</span>
+          <input type="text" formControlName="period" />
+          @if (form.controls.period.touched && form.controls.period.invalid) {
+            <small>Ce champ est obligatoire.</small>
+          }
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Type de collaboration</h2>
+      <div class="choice-grid">
+        @for (option of collaborationTypes; track option.id) {
+          <label class="choice-card">
+            <input
+              type="checkbox"
+              [value]="option.label"
+              [checked]="isSelected('collaborationTypes', option.label)"
+              (change)="onMultiSelectChange($event, 'collaborationTypes', option.label)"
+            />
+            <span>{{ option.label }}</span>
+          </label>
+        }
+      </div>
+      @if (hasChoiceError('collaborationTypes')) {
+        <small>Sélectionne au moins une option.</small>
+      }
+    </section>
+
+    <section>
+      <h2>Décorations</h2>
+      <div class="choice-grid">
+        @for (option of decorationTypes; track option.id) {
+          <label class="choice-card">
+            <input
+              type="checkbox"
+              [value]="option.label"
+              [checked]="isSelected('decorationTypes', option.label)"
+              (change)="onMultiSelectChange($event, 'decorationTypes', option.label)"
+            />
+            <span>{{ option.label }}</span>
+          </label>
+        }
+      </div>
+      @if (hasChoiceError('decorationTypes')) {
+        <small>Sélectionne au moins une option.</small>
+      }
+    </section>
+
+    <section>
+      <h2>Détails</h2>
+      <label>
+        <span>Décrivez votre projet, vos idées ou attentes.</span>
+        <textarea rows="6" formControlName="details"></textarea>
+        @if (form.controls.details.touched && form.controls.details.invalid) {
+          <small>Merci de détailler votre projet en au moins 15 caractères.</small>
+        }
+      </label>
+    </section>
+
+    <div class="form-footer">
+      <button type="submit" class="button-primary">Envoyer la demande</button>
+      @if (submitted()) {
+        <p class="success-message">La demande a bien été préparée. Le branchement d’envoi pourra venir ensuite.</p>
+      }
+    </div>
+  </form>
+</section>

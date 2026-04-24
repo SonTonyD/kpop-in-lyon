@@ -1,0 +1,17 @@
+<svg width="900" height="700" viewBox="0 0 900 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="700" rx="32" fill="#0A0911"/>
+  <rect width="900" height="700" rx="32" fill="url(#paint0_linear_1_5)"/>
+  <circle cx="167" cy="545" r="149" fill="#67A7FF" fill-opacity="0.22"/>
+  <circle cx="757" cy="222" r="118" fill="#FF6EC7" fill-opacity="0.28"/>
+  <rect x="101" y="113" width="274" height="402" rx="26" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.14"/>
+  <text x="452" y="228" fill="white" font-family="Arial, sans-serif" font-size="66" font-weight="700">MEMORIES</text>
+  <text x="455" y="282" fill="#F7D2E9" font-family="Arial, sans-serif" font-size="26">THANK YOU FOR COMING</text>
+  <text x="454" y="371" fill="white" fill-opacity="0.78" font-family="Arial, sans-serif" font-size="28">Shared smiles, thoughtful details,</text>
+  <text x="454" y="411" fill="white" fill-opacity="0.78" font-family="Arial, sans-serif" font-size="28">and a refined atmosphere.</text>
+  <defs>
+    <linearGradient id="paint0_linear_1_5" x1="900" y1="0" x2="116" y2="700" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15142B"/>
+      <stop offset="1" stop-color="#07050C"/>
+    </linearGradient>
+  </defs>
+</svg>

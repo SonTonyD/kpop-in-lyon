@@ -1,0 +1,39 @@
+<section class="page-shell">
+  <div class="section-heading">
+    <p class="eyebrow">Avis</p>
+    <h1>What fans loved about the experience.</h1>
+    <p>
+      A clean and readable review wall to showcase feedback, confidence and atmosphere from past
+      events.
+    </p>
+  </div>
+
+  <div class="reviews-grid">
+    @for (review of reviews; track review.name) {
+      <article class="surface-card review-card">
+        <div class="review-header">
+          <div>
+            <h2>{{ review.name }}</h2>
+            <p>{{ review.event }}</p>
+          </div>
+          <div class="review-stars" [attr.aria-label]="'Rating ' + review.rating + ' out of 5'">
+            @for (star of stars; track star) {
+              <span [class.active]="star <= review.rating">★</span>
+            }
+          </div>
+        </div>
+
+        <p class="review-copy">{{ review.comment }}</p>
+      </article>
+    }
+  </div>
+
+  <div class="cta-banner surface-card">
+    <div>
+      <p class="eyebrow">Next step</p>
+      <h2>Laisser un avis</h2>
+      <p>The submission form can be connected later to an API or email workflow.</p>
+    </div>
+    <button type="button" class="button-primary">Laisser un avis</button>
+  </div>
+</section>

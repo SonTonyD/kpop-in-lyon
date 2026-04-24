@@ -1,8 +1,8 @@
 .hero-carousel {
   position: relative;
   margin-top: calc(-1 * var(--header-offset));
-  height: calc(100svh - var(--footer-space));
-  min-height: calc(100svh - var(--footer-space));
+  height: 100svh;
+  min-height: 100svh;
   overflow: hidden;
 }
 

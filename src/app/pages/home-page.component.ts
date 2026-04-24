@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { pastEventImages, pastEventStats, upcomingEvent } from '../data/site-content';
+import { upcomingEvent } from '../data/site-content';
 
 interface HomeSlide {
   eyebrow: string;
@@ -21,8 +21,6 @@ interface HomeSlide {
   styleUrl: './home-page.component.css',
 })
 export class HomePageComponent implements OnInit, OnDestroy {
-  protected readonly pastEventImages = pastEventImages;
-  protected readonly pastEventStats = pastEventStats;
   protected readonly event = upcomingEvent;
   protected readonly currentSlide = signal(0);
 
@@ -35,14 +33,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
       actionLink: '/event',
       image: upcomingEvent.image,
       kind: 'upcoming',
-    },
-    {
-      eyebrow: 'PAST EVENTS',
-      title: 'THANK YOU FOR ALL THE AMAZING MOMENTS SHARED TOGETHER.',
-      description:
-        'A collection of immersive fan projects, memorable decorations and warm community energy.',
-      image: pastEventImages[0],
-      kind: 'past',
     },
   ];
 

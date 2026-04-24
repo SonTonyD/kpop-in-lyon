@@ -1,23 +1,72 @@
 <svg width="1600" height="1200" viewBox="0 0 1600 1200" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1600" height="1200" fill="#080611"/>
-  <rect width="1600" height="1200" fill="url(#paint0_linear_1_2)"/>
-  <circle cx="1312" cy="216" r="204" fill="#FF6EC7" fill-opacity="0.28"/>
-  <circle cx="303" cy="312" r="244" fill="#67A7FF" fill-opacity="0.22"/>
-  <circle cx="789" cy="884" r="325" fill="#FFC75F" fill-opacity="0.14"/>
-  <path d="M261 928C464.735 705.016 647.568 591.886 809.5 588.611C971.432 585.336 1147.93 692.909 1339 911.33" stroke="white" stroke-opacity="0.18" stroke-width="2"/>
-  <path d="M380 1002L608 775L850 909L1188 594" stroke="white" stroke-opacity="0.22" stroke-width="6" stroke-linecap="round"/>
-  <rect x="951" y="265" width="308" height="440" rx="26" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.22"/>
-  <text x="997" y="368" fill="white" font-family="Arial, sans-serif" font-size="34" font-weight="700" letter-spacing="3">SEVENTEEN</text>
-  <text x="997" y="425" fill="#F7D2E9" font-family="Arial, sans-serif" font-size="19" letter-spacing="5">EVENT POSTER</text>
-  <text x="997" y="521" fill="white" font-family="Arial, sans-serif" font-size="76" font-weight="700">MAY 19</text>
-  <text x="999" y="573" fill="white" fill-opacity="0.75" font-family="Arial, sans-serif" font-size="24">LYON • FRANCE</text>
-  <text x="997" y="638" fill="white" fill-opacity="0.8" font-family="Arial, sans-serif" font-size="24">Immersive fan event with</text>
-  <text x="997" y="672" fill="white" fill-opacity="0.8" font-family="Arial, sans-serif" font-size="24">premium styling and photo zones.</text>
+  <rect width="1600" height="1200" fill="#05040B"/>
+  <rect width="1600" height="1200" fill="url(#bg)"/>
+  <g opacity="0.3">
+    <rect x="148" width="2" height="1200" fill="url(#lineFade)"/>
+    <rect x="362" width="1.5" height="1200" fill="url(#lineFade)"/>
+    <rect x="622" width="2" height="1200" fill="url(#lineFade)"/>
+    <rect x="931" width="1.5" height="1200" fill="url(#lineFade)"/>
+    <rect x="1197" width="2" height="1200" fill="url(#lineFade)"/>
+    <rect x="1428" width="1.5" height="1200" fill="url(#lineFade)"/>
+  </g>
+  <ellipse cx="287" cy="233" rx="220" ry="258" fill="#6FA6FF" fill-opacity="0.18"/>
+  <ellipse cx="1238" cy="211" rx="252" ry="234" fill="#FF5FC8" fill-opacity="0.18"/>
+  <ellipse cx="849" cy="826" rx="442" ry="286" fill="#1C2A5D" fill-opacity="0.42"/>
+  <ellipse cx="798" cy="1115" rx="496" ry="166" fill="#090812"/>
+  <path d="M-56 918C157 779 292 722 439 719C614 715 697 847 890 840C1087 833 1208 676 1651 506V1200H-56V918Z" fill="url(#stageShadow)"/>
+  <path d="M122 958C332 865 477 816 646 816C838 816 948 913 1149 900C1293 891 1424 822 1600 731" stroke="url(#beam1)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M-8 844C162 760 294 705 460 703C652 699 780 806 989 790C1151 777 1298 689 1504 548" stroke="url(#beam2)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M1024 124C939 260 871 406 820 563" stroke="url(#spotlightA)" stroke-width="190" stroke-linecap="round"/>
+  <path d="M1255 76C1120 252 1028 438 959 617" stroke="url(#spotlightB)" stroke-width="136" stroke-linecap="round"/>
+  <path d="M532 114C615 271 672 417 728 592" stroke="url(#spotlightC)" stroke-width="166" stroke-linecap="round"/>
+  <path d="M355 74C482 231 575 393 676 596" stroke="url(#spotlightD)" stroke-width="120" stroke-linecap="round"/>
+  <circle cx="1132" cy="324" r="5" fill="white" fill-opacity="0.5"/>
+  <circle cx="1180" cy="359" r="2.5" fill="white" fill-opacity="0.42"/>
+  <circle cx="458" cy="406" r="3" fill="white" fill-opacity="0.42"/>
+  <circle cx="515" cy="356" r="5" fill="white" fill-opacity="0.48"/>
+  <circle cx="870" cy="192" r="2.5" fill="white" fill-opacity="0.35"/>
   <defs>
-    <linearGradient id="paint0_linear_1_2" x1="1600" y1="0" x2="118" y2="1200" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#191535"/>
-      <stop offset="0.46" stop-color="#110C24"/>
-      <stop offset="1" stop-color="#07050E"/>
+    <linearGradient id="bg" x1="1600" y1="0" x2="84" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15122C"/>
+      <stop offset="0.44" stop-color="#0E0B1C"/>
+      <stop offset="1" stop-color="#06050B"/>
+    </linearGradient>
+    <linearGradient id="lineFade" x1="0.5" y1="0" x2="0.5" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="white" stop-opacity="0.15"/>
+      <stop offset="0.84" stop-color="white" stop-opacity="0.08"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="stageShadow" x1="768" y1="703" x2="768" y2="1200" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#111020" stop-opacity="0"/>
+      <stop offset="0.46" stop-color="#0B0915" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#05040B"/>
+    </linearGradient>
+    <linearGradient id="beam1" x1="122" y1="958" x2="1600" y2="731" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6EC7" stop-opacity="0"/>
+      <stop offset="0.48" stop-color="#FF6EC7" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#6FA6FF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="beam2" x1="-8" y1="844" x2="1504" y2="548" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6FA6FF" stop-opacity="0"/>
+      <stop offset="0.42" stop-color="#6FA6FF" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#FF6EC7" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="spotlightA" x1="1024" y1="124" x2="820" y2="563" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6EC7" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#FF6EC7" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="spotlightB" x1="1255" y1="76" x2="959" y2="617" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8C7CFF" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#8C7CFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="spotlightC" x1="532" y1="114" x2="728" y2="592" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6FA6FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#6FA6FF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="spotlightD" x1="355" y1="74" x2="676" y2="596" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="white" stop-opacity="0"/>
     </linearGradient>
   </defs>
 </svg>

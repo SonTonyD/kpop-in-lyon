@@ -48,29 +48,6 @@
             </div>
 
             <a class="button-primary" [routerLink]="slide.actionLink">{{ slide.actionLabel }}</a>
-          } @else {
-            <div class="surface-card past-panel">
-              <p class="eyebrow">{{ slide.eyebrow }}</p>
-              <h2>{{ slide.title }}</h2>
-              <p class="slide-copy">{{ slide.description }}</p>
-
-              <div class="past-content">
-                <div class="past-gallery">
-                  @for (image of pastEventImages; track image) {
-                    <img [src]="image" alt="Souvenir d'un ancien événement K-pop" />
-                  }
-                </div>
-
-                <div class="stats-grid">
-                  @for (stat of pastEventStats; track stat.label) {
-                    <div class="stat-card">
-                      <strong>{{ stat.value }}</strong>
-                      <span>{{ stat.label }}</span>
-                    </div>
-                  }
-                </div>
-              </div>
-            </div>
           }
         </div>
       </div>

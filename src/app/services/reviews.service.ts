@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ParticipantReview } from './back-office.types';
+import { ParticipantReview, ParticipantReviewPayload } from './back-office.types';
 import { SupabaseService } from './supabase.service';
 
 interface ReviewRow {
   id: string;
   name: string;
   event: string;
-  rating: number;
+  rating: number | null;
   comment: string;
   is_published: boolean;
   created_at: string;
@@ -48,6 +48,21 @@ export class ReviewsService {
       .from('participant_reviews')
       .update({ is_published: isPublished })
       .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+  }
+
+  async createReview(payload: ParticipantReviewPayload): Promise<void> {
+    const rating = Math.min(5, Math.max(1, Math.trunc(payload.rating)));
+    const { error } = await this.supabase.client.from('participant_reviews').insert({
+      name: payload.name,
+      event: payload.event,
+      rating,
+      comment: payload.comment,
+      is_published: false,
+    });
 
     if (error) {
       throw error;

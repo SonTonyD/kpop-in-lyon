@@ -20,7 +20,7 @@ create table if not exists public.participant_reviews (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   event text not null,
-  rating integer not null check (rating between 1 and 5),
+  rating integer check (rating between 1 and 5),
   comment text not null,
   is_published boolean not null default false,
   created_at timestamptz not null default now()
@@ -28,6 +28,23 @@ create table if not exists public.participant_reviews (
 
 alter table public.event_requests enable row level security;
 alter table public.participant_reviews enable row level security;
+
+alter table public.participant_reviews
+  alter column rating drop not null;
+
+alter table public.participant_reviews
+  drop constraint if exists participant_reviews_comment_length;
+
+alter table public.participant_reviews
+  add constraint participant_reviews_comment_length
+  check (char_length(comment) between 10 and 220);
+
+update public.participant_reviews
+set rating = 5
+where rating is null;
+
+alter table public.participant_reviews
+  alter column rating set not null;
 
 drop policy if exists "Public can create event requests" on public.event_requests;
 create policy "Public can create event requests"
@@ -57,6 +74,13 @@ on public.participant_reviews
 for select
 to anon, authenticated
 using (is_published = true);
+
+drop policy if exists "Public can create pending reviews" on public.participant_reviews;
+create policy "Public can create pending reviews"
+on public.participant_reviews
+for insert
+to anon, authenticated
+with check (is_published = false and rating between 1 and 5);
 
 drop policy if exists "Managers can read all reviews" on public.participant_reviews;
 create policy "Managers can read all reviews"

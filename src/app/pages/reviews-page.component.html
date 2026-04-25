@@ -4,7 +4,7 @@
     <h1>Ce que les participants ont aimé de l’expérience.</h1>
     <p>
       Une page claire et lisible pour mettre en avant les retours, la confiance et l’ambiance des
-      événements passés.
+      évènements passés.
     </p>
   </div>
 
@@ -16,32 +16,84 @@
     <p class="state-message surface-card">Aucun avis n’est publié pour le moment.</p>
   } @else {
     <div class="reviews-grid">
-    @for (review of reviews(); track review.id) {
-      <article class="surface-card review-card">
-        <div class="review-header">
-          <div>
-            <h2>{{ review.name }}</h2>
-            <p>{{ review.event }}</p>
-          </div>
-          <div class="review-stars" [attr.aria-label]="'Note ' + review.rating + ' sur 5'">
-            @for (star of stars; track star) {
-              <span [class.active]="star <= review.rating">★</span>
+      @for (review of reviews(); track review.id) {
+        <article class="surface-card review-card">
+          <div class="review-header">
+            <div>
+              <h2>{{ review.name }}</h2>
+              <p>{{ review.event }}</p>
+            </div>
+            @if (review.rating !== null) {
+              <div class="review-stars" [attr.aria-label]="'Note ' + review.rating + ' sur 5'">
+                @for (star of stars; track star) {
+                  <span [class.active]="star <= review.rating">★</span>
+                }
+              </div>
             }
           </div>
-        </div>
 
-        <p class="review-copy">{{ review.comment }}</p>
-      </article>
-    }
+          <p class="review-copy">{{ review.comment }}</p>
+        </article>
+      }
     </div>
   }
 
-  <div class="cta-banner surface-card">
+  <div class="cta-banner surface-card" id="laisser-un-avis">
     <div>
-      <p class="eyebrow">Prochaine étape</p>
+      <p class="eyebrow">Votre retour</p>
       <h2>Laisser un avis</h2>
-      <p>Le formulaire d’envoi pourra être relié plus tard à une API ou à un workflow email.</p>
+      <p>Partagez votre expérience. L’avis sera relu avant publication sur le site.</p>
     </div>
-    <button type="button" class="button-primary">Laisser un avis</button>
+
+    <form class="review-form" [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+      <label>
+        <span>Pseudo</span>
+        <input type="text" formControlName="name" maxlength="32" />
+        @if (reviewForm.controls.name.touched && reviewForm.controls.name.invalid) {
+          <small>Indique un pseudo de 32 caractères maximum.</small>
+        }
+      </label>
+
+      <label>
+        <span>Nom de l’évènement</span>
+        <input type="text" formControlName="event" maxlength="80" />
+        @if (reviewForm.controls.event.touched && reviewForm.controls.event.invalid) {
+          <small>Indique le nom de l’évènement.</small>
+        }
+      </label>
+
+      <fieldset class="rating-field full-width">
+        <legend>Note</legend>
+        <div class="rating-options">
+          @for (star of stars; track star) {
+            <label>
+              <input type="radio" formControlName="rating" [value]="star" />
+              <span>{{ star }} ★</span>
+            </label>
+          }
+        </div>
+      </fieldset>
+
+      <label class="full-width">
+        <span>Commentaire</span>
+        <textarea rows="5" formControlName="comment" [attr.maxlength]="commentMaxLength"></textarea>
+        <small>{{ reviewForm.controls.comment.value?.length || 0 }}/{{ commentMaxLength }}</small>
+        @if (reviewForm.controls.comment.touched && reviewForm.controls.comment.invalid) {
+          <small>Ton commentaire doit faire entre 10 et {{ commentMaxLength }} caractères.</small>
+        }
+      </label>
+
+      <div class="form-actions full-width">
+        <button type="submit" class="button-primary" [disabled]="submitting()">
+          {{ submitting() ? 'Envoi...' : 'Envoyer l’avis' }}
+        </button>
+        @if (submitted()) {
+          <p class="success-message">Merci, ton avis a bien été envoyé pour validation.</p>
+        }
+        @if (submitError()) {
+          <p class="error-message">{{ submitError() }}</p>
+        }
+      </div>
+    </form>
   </div>
 </section>

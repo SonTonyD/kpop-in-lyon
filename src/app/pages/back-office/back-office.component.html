@@ -46,7 +46,7 @@
               <div>
                 <p class="card-kicker">{{ review.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
                 <h2>{{ review.name }}</h2>
-                <p>{{ review.event }} · {{ review.rating }}/5</p>
+                <p>{{ review.event }} @if (review.rating !== null) { · {{ review.rating }}/5 }</p>
               </div>
               <button
                 type="button"

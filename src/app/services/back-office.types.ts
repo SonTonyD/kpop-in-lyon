@@ -33,8 +33,15 @@ export interface ParticipantReview {
   id: string;
   name: string;
   event: string;
-  rating: number;
+  rating: number | null;
   comment: string;
   isPublished: boolean;
   createdAt: string;
+}
+
+export interface ParticipantReviewPayload {
+  name: string;
+  event: string;
+  rating: number;
+  comment: string;
 }

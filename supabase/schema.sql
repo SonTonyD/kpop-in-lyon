@@ -31,7 +31,7 @@ create table if not exists public.managed_events (
   title text not null,
   description text not null,
   starts_at timestamptz not null,
-  date_label text not null,
+  date_label text not null, 
   time_label text not null,
   location text not null,
   country text not null,

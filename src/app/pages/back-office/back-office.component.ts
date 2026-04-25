@@ -11,6 +11,7 @@ import {
 } from '../../services/back-office.types';
 import { AuthService } from '../../services/auth.service';
 import { EventRequestsService } from '../../services/event-requests.service';
+import { ActiveEventStoreService } from '../../services/active-event-store.service';
 import { ManagedEventsService } from '../../services/managed-events.service';
 import { ReviewsService } from '../../services/reviews.service';
 
@@ -46,6 +47,7 @@ export class BackOfficeComponent implements OnInit {
     private readonly reviewsService: ReviewsService,
     private readonly eventRequestsService: EventRequestsService,
     private readonly managedEventsService: ManagedEventsService,
+    private readonly activeEventStore: ActiveEventStoreService,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
   ) {
@@ -162,6 +164,7 @@ export class BackOfficeComponent implements OnInit {
       this.managedEvents.update((events) =>
         events.map((item) => ({ ...item, isActive: item.id === event.id })),
       );
+      await this.activeEventStore.refresh();
       this.success.set('Cet évènement est maintenant affiché en première page.');
     } catch {
       this.error.set('Cet évènement n’a pas pu être défini comme évènement en cours.');

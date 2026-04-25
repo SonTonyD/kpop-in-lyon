@@ -5,7 +5,26 @@
   (touchend)="handleTouchEnd()"
   (touchcancel)="handleTouchEnd()"
 >
-  @for (slide of slides(); track slide.title; let index = $index) {
+  @if (loading() || !event()) {
+    <article class="slide active skeleton-slide">
+      <div class="slide-overlay"></div>
+      <div class="slide-shell">
+        <div class="slide-panel skeleton-panel" aria-label="Chargement de l’évènement">
+          <div class="skeleton-line skeleton-kicker"></div>
+          <div class="skeleton-title"></div>
+          <div class="skeleton-title skeleton-title-short"></div>
+          <div class="skeleton-copy"></div>
+          <div class="slide-separator"></div>
+          <div class="slide-facts">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+        </div>
+      </div>
+    </article>
+  } @else {
+    @for (slide of slides(); track slide.title; let index = $index) {
     <article
       class="slide"
       [class.active]="currentSlide() === index"
@@ -26,7 +45,7 @@
             </div>
 
             <h1>
-              @for (titleLine of splitTitle(event().title); track titleLine) {
+              @for (titleLine of splitTitle(event()!.title); track titleLine) {
                 <span>{{ titleLine }}</span>
               }
             </h1>
@@ -37,20 +56,20 @@
             <div class="slide-facts">
               <div class="slide-fact">
                 <p>Date</p>
-                <strong>{{ event().date | uppercase }}</strong>
-                <span>Heure : {{ event().time }}</span>
+                <strong>{{ event()!.date | uppercase }}</strong>
+                <span>Heure : {{ event()!.time }}</span>
               </div>
 
               <div class="slide-fact">
                 <p>Lieu</p>
-                <strong>{{ event().location | uppercase }}, {{ event().venueNote | uppercase }}</strong>
-                <span>{{ event().venueNote }}</span>
+                <strong>{{ event()!.location | uppercase }}, {{ event()!.venueNote | uppercase }}</strong>
+                <span>{{ event()!.venueNote }}</span>
               </div>
 
               <div class="slide-fact">
                 <p>Format</p>
-                <strong>{{ event().format | uppercase }}</strong>
-                <span>{{ event().capacity }}</span>
+                <strong>{{ event()!.format | uppercase }}</strong>
+                <span>{{ event()!.capacity }}</span>
               </div>
             </div>
 
@@ -97,6 +116,7 @@
         </div>
       </div>
     </article>
+    }
   }
 
   <div class="carousel-controls">

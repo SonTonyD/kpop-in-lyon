@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { EventInfo, pastEventImages, pastEventStats, upcomingEvent } from '../data/site-content';
-import { ManagedEventsService, managedEventToEventInfo } from '../services/managed-events.service';
+import { EventInfo, pastEventImages, pastEventStats } from '../data/site-content';
+import { ActiveEventStoreService } from '../services/active-event-store.service';
 
 interface HomeSlide {
   eyebrow: string;
@@ -24,16 +24,17 @@ interface HomeSlide {
 export class HomePageComponent implements OnInit {
   protected readonly pastEventImages = pastEventImages;
   protected readonly pastEventStats = pastEventStats;
-  protected readonly event = signal<EventInfo>(upcomingEvent);
+  protected readonly event = computed<EventInfo | null>(() => this.activeEventStore.event());
+  protected readonly loading = computed(() => this.activeEventStore.loading());
   protected readonly currentSlide = signal(0);
   protected readonly slides = computed<HomeSlide[]>(() => [
     {
       eyebrow: 'EV-01 - ÉVÈNEMENT ACTUEL',
-      title: this.event().title,
-      description: this.event().description,
+      title: this.event()?.title ?? '',
+      description: this.event()?.description ?? '',
       actionLabel: 'Voir l’évènement',
       actionLink: '/event',
-      image: this.event().image,
+      image: this.event()?.image ?? 'assets/event-hero.svg',
       kind: 'upcoming',
     },
     {
@@ -50,17 +51,10 @@ export class HomePageComponent implements OnInit {
   private touchStartY: number | null = null;
   private touchCurrentY: number | null = null;
 
-  constructor(private readonly managedEventsService: ManagedEventsService) {}
+  constructor(private readonly activeEventStore: ActiveEventStoreService) {}
 
   async ngOnInit(): Promise<void> {
-    try {
-      const activeEvent = await this.managedEventsService.getActiveEvent();
-      if (activeEvent) {
-        this.event.set(managedEventToEventInfo(activeEvent));
-      }
-    } catch {
-      this.event.set(upcomingEvent);
-    }
+    await this.activeEventStore.load();
   }
 
   protected splitTitle(title: string): string[] {

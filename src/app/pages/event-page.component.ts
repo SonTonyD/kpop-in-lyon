@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { EventInfo, upcomingEvent } from '../data/site-content';
-import { ManagedEventsService, managedEventToEventInfo } from '../services/managed-events.service';
+import { Component, OnDestroy, OnInit, computed, effect, signal } from '@angular/core';
+import { EventInfo } from '../data/site-content';
+import { ActiveEventStoreService } from '../services/active-event-store.service';
 
 @Component({
   selector: 'app-event-page',
@@ -11,7 +11,8 @@ import { ManagedEventsService, managedEventToEventInfo } from '../services/manag
   styleUrl: './event-page.component.css',
 })
 export class EventPageComponent implements OnInit, OnDestroy {
-  protected readonly event = signal<EventInfo>(upcomingEvent);
+  protected readonly event = computed<EventInfo | null>(() => this.activeEventStore.event());
+  protected readonly loading = computed(() => this.activeEventStore.loading());
   protected readonly countdown = signal([
     { value: '00', label: 'Jours' },
     { value: '00', label: 'Heures' },
@@ -21,18 +22,16 @@ export class EventPageComponent implements OnInit, OnDestroy {
 
   private countdownId: ReturnType<typeof setInterval> | null = null;
 
-  constructor(private readonly managedEventsService: ManagedEventsService) {}
+  constructor(private readonly activeEventStore: ActiveEventStoreService) {
+    effect(() => {
+      if (this.event()) {
+        this.updateCountdown();
+      }
+    });
+  }
 
   async ngOnInit(): Promise<void> {
-    try {
-      const activeEvent = await this.managedEventsService.getActiveEvent();
-      if (activeEvent) {
-        this.event.set(managedEventToEventInfo(activeEvent));
-      }
-    } catch {
-      this.event.set(upcomingEvent);
-    }
-
+    await this.activeEventStore.load();
     this.updateCountdown();
     this.countdownId = setInterval(() => this.updateCountdown(), 1000);
   }
@@ -54,7 +53,12 @@ export class EventPageComponent implements OnInit, OnDestroy {
   }
 
   private updateCountdown(): void {
-    const target = new Date(this.event().dateTime).getTime();
+    const event = this.event();
+    if (!event) {
+      return;
+    }
+
+    const target = new Date(event.dateTime).getTime();
     const now = Date.now();
     const diff = Math.max(target - now, 0);
 

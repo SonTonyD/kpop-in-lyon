@@ -30,6 +30,14 @@
   opacity: 0.08;
 }
 
+.event-hero--loading {
+  background:
+    linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)),
+    url('/assets/event-hero.svg');
+  background-position: center;
+  background-size: cover;
+}
+
 .event-overlay {
   position: absolute;
   inset: 0;
@@ -182,6 +190,69 @@
   font-size: 0.76rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+.skeleton-event {
+  display: grid;
+  gap: 1rem;
+}
+
+.skeleton-line,
+.skeleton-title,
+.skeleton-copy,
+.skeleton-card,
+.skeleton-count {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.45rem;
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.skeleton-line::after,
+.skeleton-title::after,
+.skeleton-copy::after,
+.skeleton-card::after,
+.skeleton-count::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+  animation: skeleton-shimmer 1400ms infinite;
+}
+
+.skeleton-kicker {
+  width: min(18rem, 70%);
+  height: 0.9rem;
+}
+
+.skeleton-title {
+  width: min(54rem, 100%);
+  height: clamp(3.5rem, 11vw, 8rem);
+}
+
+.skeleton-title-short {
+  width: min(34rem, 76%);
+}
+
+.skeleton-copy {
+  width: min(34rem, 100%);
+  height: 4.5rem;
+  margin-top: 0.4rem;
+}
+
+.skeleton-card {
+  min-height: 5.4rem;
+}
+
+.skeleton-count {
+  min-height: 5.8rem;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
 }
 
 @media (min-width: 64rem) {

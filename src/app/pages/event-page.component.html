@@ -1,11 +1,37 @@
 <section
   class="event-hero"
-  [style.background-image]="'linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(' + event().image + ')'"
+  [class.event-hero--loading]="loading() || !event()"
+  [style.background-image]="event() ? 'linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(' + event()!.image + ')' : ''"
 >
   <div class="event-overlay"></div>
 
   <div class="event-content">
-    <div class="event-copy">
+    @if (loading() || !event()) {
+      <div class="event-copy skeleton-event" aria-label="Chargement de l’évènement">
+        <div class="skeleton-line skeleton-kicker"></div>
+        <div class="skeleton-title"></div>
+        <div class="skeleton-title skeleton-title-short"></div>
+        <div class="skeleton-copy"></div>
+        <div class="event-separator"></div>
+        <div class="event-bottom">
+          <div class="event-facts">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+          </div>
+          <div class="countdown-card">
+            <div class="skeleton-line skeleton-kicker"></div>
+            <div class="countdown-grid">
+              <div class="skeleton-count"></div>
+              <div class="skeleton-count"></div>
+              <div class="skeleton-count"></div>
+              <div class="skeleton-count"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="event-copy">
       <div class="event-context">
         <p class="event-index">EV-01 - ÉVÈNEMENT ACTUEL</p>
         <div class="sale-indicator">
@@ -15,32 +41,32 @@
       </div>
 
       <h1>
-        @for (titleLine of splitTitle(event().title); track titleLine) {
+        @for (titleLine of splitTitle(event()!.title); track titleLine) {
           <span>{{ titleLine }}</span>
         }
       </h1>
 
-      <p class="event-description">{{ event().description }}</p>
+      <p class="event-description">{{ event()!.description }}</p>
       <div class="event-separator"></div>
 
       <div class="event-bottom">
         <div class="event-facts">
           <article class="fact-block">
             <p>Date</p>
-            <strong>{{ event().date | uppercase }}</strong>
-            <span>Heure : {{ event().time }}</span>
+            <strong>{{ event()!.date | uppercase }}</strong>
+            <span>Heure : {{ event()!.time }}</span>
           </article>
 
           <article class="fact-block">
             <p>Lieu</p>
-            <strong>{{ event().location | uppercase }}, {{ event().venueNote | uppercase }}</strong>
-            <span>{{ event().venueNote }}</span>
+            <strong>{{ event()!.location | uppercase }}, {{ event()!.venueNote | uppercase }}</strong>
+            <span>{{ event()!.venueNote }}</span>
           </article>
 
           <article class="fact-block">
             <p>Format</p>
-            <strong>{{ event().format | uppercase }}</strong>
-            <span>{{ event().capacity }}</span>
+            <strong>{{ event()!.format | uppercase }}</strong>
+            <span>{{ event()!.capacity }}</span>
           </article>
         </div>
 
@@ -56,6 +82,7 @@
           </div>
         </aside>
       </div>
-    </div>
+      </div>
+    }
   </div>
 </section>

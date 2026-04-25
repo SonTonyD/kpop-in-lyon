@@ -1,7 +1,9 @@
 .page-shell {
   width: min(72rem, calc(100% - 2rem));
+  max-width: 100%;
   margin: 0 auto;
   padding: 1rem 0 1.5rem;
+  overflow-x: clip;
 }
 
 .reviews-grid {
@@ -17,6 +19,8 @@
 .review-card {
   display: grid;
   gap: 1rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .review-header {
@@ -24,15 +28,18 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
+  min-width: 0;
 }
 
 .review-header h2,
 .cta-banner h2 {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .review-header p {
   margin: 0.35rem 0 0;
+  overflow-wrap: anywhere;
 }
 
 .review-stars {
@@ -52,22 +59,27 @@
 .review-copy {
   margin: 0;
   max-width: 38rem;
+  overflow-wrap: anywhere;
 }
 
 .cta-banner {
   display: grid;
   gap: 1rem;
   margin-top: 2rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .review-form {
   display: grid;
   gap: 1rem;
+  min-width: 0;
 }
 
 .review-form label {
   display: grid;
   gap: 0.55rem;
+  min-width: 0;
 }
 
 .review-form span {
@@ -77,6 +89,8 @@
 
 .review-form input,
 .review-form textarea {
+  min-width: 0;
+  max-width: 100%;
   width: 100%;
   border: 1px solid var(--border-soft);
   border-radius: 1rem;
@@ -113,7 +127,8 @@
 .rating-options {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.5rem;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
 .rating-options label {
@@ -130,11 +145,14 @@
   display: grid;
   place-items: center;
   min-height: 2.75rem;
+  min-width: 0;
   border: 1px solid var(--border-soft);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-main);
   cursor: pointer;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .rating-options input:checked + span {
@@ -187,5 +205,11 @@
 
   .full-width {
     grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 24rem) {
+  .rating-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

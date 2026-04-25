@@ -95,16 +95,16 @@ export class ContactPageComponent {
     try {
       const value = this.form.getRawValue();
       const payload: EventRequestPayload = {
-        fullName: value.fullName ?? '',
-        fanbaseName: value.fanbaseName ?? '',
-        email: value.email ?? '',
-        socialLinks: value.socialLinks || null,
-        artist: value.artist ?? '',
-        city: value.city ?? '',
-        period: value.period ?? '',
+        fullName: (value.fullName ?? '').trim(),
+        fanbaseName: (value.fanbaseName ?? '').trim(),
+        email: (value.email ?? '').trim(),
+        socialLinks: (value.socialLinks ?? '').trim() || null,
+        artist: (value.artist ?? '').trim(),
+        city: (value.city ?? '').trim(),
+        period: (value.period ?? '').trim(),
         collaborationTypes: toStringArray(value.collaborationTypes),
         decorationTypes: toStringArray(value.decorationTypes),
-        details: value.details ?? '',
+        details: (value.details ?? '').trim(),
       };
 
       await this.eventRequestsService.createRequest(payload);

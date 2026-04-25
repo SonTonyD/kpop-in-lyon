@@ -34,6 +34,7 @@ export class EventRequestsService {
       collaboration_types: payload.collaborationTypes,
       decoration_types: payload.decorationTypes,
       details: payload.details,
+      status: 'new',
     });
 
     if (error) {

@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { pastEventImages, pastEventStats, upcomingEvent } from '../data/site-content';
+import { EventInfo, pastEventImages, pastEventStats, upcomingEvent } from '../data/site-content';
+import { ManagedEventsService, managedEventToEventInfo } from '../services/managed-events.service';
 
 interface HomeSlide {
   eyebrow: string;
@@ -20,24 +21,19 @@ interface HomeSlide {
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css',
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
   protected readonly pastEventImages = pastEventImages;
   protected readonly pastEventStats = pastEventStats;
-  protected readonly event = upcomingEvent;
+  protected readonly event = signal<EventInfo>(upcomingEvent);
   protected readonly currentSlide = signal(0);
-  private touchStartX: number | null = null;
-  private touchCurrentX: number | null = null;
-  private touchStartY: number | null = null;
-  private touchCurrentY: number | null = null;
-
-  protected readonly slides: HomeSlide[] = [
+  protected readonly slides = computed<HomeSlide[]>(() => [
     {
       eyebrow: 'EV-01 - ÉVÈNEMENT ACTUEL',
-      title: upcomingEvent.title,
-      description: upcomingEvent.description,
+      title: this.event().title,
+      description: this.event().description,
       actionLabel: 'Voir l’évènement',
       actionLink: '/event',
-      image: upcomingEvent.image,
+      image: this.event().image,
       kind: 'upcoming',
     },
     {
@@ -47,18 +43,46 @@ export class HomePageComponent {
       image: pastEventImages[0],
       kind: 'past',
     },
-  ];
+  ]);
+
+  private touchStartX: number | null = null;
+  private touchCurrentX: number | null = null;
+  private touchStartY: number | null = null;
+  private touchCurrentY: number | null = null;
+
+  constructor(private readonly managedEventsService: ManagedEventsService) {}
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const activeEvent = await this.managedEventsService.getActiveEvent();
+      if (activeEvent) {
+        this.event.set(managedEventToEventInfo(activeEvent));
+      }
+    } catch {
+      this.event.set(upcomingEvent);
+    }
+  }
+
+  protected splitTitle(title: string): string[] {
+    const words = title.trim().split(/\s+/);
+    if (words.length <= 1) {
+      return [title];
+    }
+
+    const middle = Math.ceil(words.length / 2);
+    return [words.slice(0, middle).join(' '), words.slice(middle).join(' ')];
+  }
 
   protected goToSlide(index: number): void {
     this.currentSlide.set(index);
   }
 
   protected previousSlide(): void {
-    this.currentSlide.update((value) => (value - 1 + this.slides.length) % this.slides.length);
+    this.currentSlide.update((value) => (value - 1 + this.slides().length) % this.slides().length);
   }
 
   protected nextSlide(): void {
-    this.currentSlide.update((value) => (value + 1) % this.slides.length);
+    this.currentSlide.update((value) => (value + 1) % this.slides().length);
   }
 
   protected handleTouchStart(event: TouchEvent): void {

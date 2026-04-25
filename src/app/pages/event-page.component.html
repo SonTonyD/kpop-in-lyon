@@ -1,6 +1,6 @@
 <section
   class="event-hero"
-  [style.background-image]="'linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(' + event.image + ')'"
+  [style.background-image]="'linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(' + event().image + ')'"
 >
   <div class="event-overlay"></div>
 
@@ -15,31 +15,32 @@
       </div>
 
       <h1>
-        <span>SEVENTEEN</span>
-        <span>ÉVÈNEMENT</span>
+        @for (titleLine of splitTitle(event().title); track titleLine) {
+          <span>{{ titleLine }}</span>
+        }
       </h1>
 
-      <p class="event-description">{{ event.description }}</p>
+      <p class="event-description">{{ event().description }}</p>
       <div class="event-separator"></div>
 
       <div class="event-bottom">
         <div class="event-facts">
           <article class="fact-block">
             <p>Date</p>
-            <strong>{{ event.date | uppercase }}</strong>
-            <span>Heure : {{ event.time }}</span>
+            <strong>{{ event().date | uppercase }}</strong>
+            <span>Heure : {{ event().time }}</span>
           </article>
 
           <article class="fact-block">
             <p>Lieu</p>
-            <strong>LYON, FRANCE</strong>
-            <span>{{ event.venueNote }}</span>
+            <strong>{{ event().location | uppercase }}, {{ event().venueNote | uppercase }}</strong>
+            <span>{{ event().venueNote }}</span>
           </article>
 
           <article class="fact-block">
             <p>Format</p>
-            <strong>{{ event.format | uppercase }}</strong>
-            <span>{{ event.capacity }}</span>
+            <strong>{{ event().format | uppercase }}</strong>
+            <span>{{ event().capacity }}</span>
           </article>
         </div>
 

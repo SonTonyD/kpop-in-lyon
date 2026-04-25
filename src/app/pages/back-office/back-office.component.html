@@ -13,6 +13,14 @@
   <div class="tab-bar" role="tablist" aria-label="Sections de l’espace gestion">
     <button
       type="button"
+      [class.active]="activeTab() === 'managedEvents'"
+      (click)="activeTab.set('managedEvents')"
+    >
+      Évènements
+      <span>{{ managedEvents().length }}</span>
+    </button>
+    <button
+      type="button"
       [class.active]="activeTab() === 'reviews'"
       (click)="activeTab.set('reviews')"
     >
@@ -32,9 +40,128 @@
   @if (error()) {
     <p class="state-message error-message surface-card">{{ error() }}</p>
   }
+  @if (success()) {
+    <p class="state-message success-message surface-card">{{ success() }}</p>
+  }
 
   @if (loading()) {
     <p class="state-message surface-card">Chargement des données...</p>
+  } @else if (activeTab() === 'managedEvents') {
+    <section class="managed-events-layout" aria-label="Gestion des évènements affichés">
+      <form class="admin-card surface-card managed-event-form" [formGroup]="eventForm" (ngSubmit)="saveManagedEvent()">
+        <div>
+          <p class="card-kicker">{{ editingEventId() ? 'Modification' : 'Nouvel évènement' }}</p>
+          <h2>{{ editingEventId() ? 'Modifier l’évènement' : 'Créer un évènement' }}</h2>
+        </div>
+
+        <div class="event-form-grid">
+          <label>
+            <span>Titre affiché en grand</span>
+            <input type="text" formControlName="title" placeholder="SEVENTEEN ÉVÈNEMENT" />
+          </label>
+
+          <label class="full-width">
+            <span>Texte sous le titre</span>
+            <textarea rows="4" formControlName="description"></textarea>
+          </label>
+
+          <label>
+            <span>Date</span>
+            <input type="date" formControlName="date" />
+          </label>
+
+          <label>
+            <span>Heure</span>
+            <input type="time" formControlName="time" />
+          </label>
+
+          <label>
+            <span>Lieu / ville</span>
+            <input type="text" formControlName="location" />
+          </label>
+
+          <label>
+            <span>Pays</span>
+            <input type="text" formControlName="country" />
+          </label>
+
+          <label>
+            <span>Format</span>
+            <input type="text" formControlName="format" placeholder="Évènement fan" />
+          </label>
+
+          <label>
+            <span>Capacité</span>
+            <input type="text" formControlName="capacity" placeholder="Capacité 250 personnes" />
+          </label>
+
+          <label class="full-width">
+            <span>Image de fond</span>
+            <input type="text" formControlName="image" />
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="button-primary" [disabled]="savingId() === 'new-event'">
+            {{ editingEventId() ? 'Enregistrer les modifications' : 'Créer l’évènement' }}
+          </button>
+          @if (editingEventId()) {
+            <button type="button" class="ghost-button" (click)="resetEventForm()">Annuler</button>
+          }
+        </div>
+      </form>
+
+      <section class="admin-list" aria-label="Évènements configurés">
+        @if (managedEvents().length === 0) {
+          <p class="state-message surface-card">Aucun évènement n’a encore été créé.</p>
+        } @else {
+          @for (event of managedEvents(); track event.id) {
+            <article class="admin-card surface-card">
+              <div class="card-main">
+                <div>
+                  <p class="card-kicker">
+                    {{ event.isActive ? 'Affiché en première page' : (event.createdAt | date: 'dd/MM/yyyy HH:mm') }}
+                  </p>
+                  <h2>{{ event.title }}</h2>
+                  <p>{{ event.dateLabel }} · {{ event.timeLabel }} · {{ event.location }}, {{ event.country }}</p>
+                </div>
+                <div class="card-actions">
+                  <button
+                    type="button"
+                    class="publish-toggle"
+                    [class.active]="event.isActive"
+                    [disabled]="savingId() === event.id"
+                    (click)="setActiveManagedEvent(event)"
+                  >
+                    {{ event.isActive ? 'En cours' : 'Afficher' }}
+                  </button>
+                  <button type="button" class="ghost-button" (click)="editManagedEvent(event)">Modifier</button>
+                  <button
+                    type="button"
+                    class="danger-button"
+                    [disabled]="savingId() === event.id"
+                    (click)="deleteManagedEvent(event)"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+              <p class="request-copy">{{ event.description }}</p>
+              <dl class="request-details">
+                <div>
+                  <dt>Format</dt>
+                  <dd>{{ event.format }}</dd>
+                </div>
+                <div>
+                  <dt>Capacité</dt>
+                  <dd>{{ event.capacity }}</dd>
+                </div>
+              </dl>
+            </article>
+          }
+        }
+      </section>
+    </section>
   } @else if (activeTab() === 'reviews') {
     <section class="admin-list" aria-label="Avis participants">
       @if (reviews().length === 0) {

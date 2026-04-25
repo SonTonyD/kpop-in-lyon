@@ -26,8 +26,25 @@ create table if not exists public.participant_reviews (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.managed_events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text not null,
+  starts_at timestamptz not null,
+  date_label text not null,
+  time_label text not null,
+  location text not null,
+  country text not null,
+  format text not null,
+  capacity text not null,
+  image text not null default 'assets/event-hero.svg',
+  is_active boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
 alter table public.event_requests enable row level security;
 alter table public.participant_reviews enable row level security;
+alter table public.managed_events enable row level security;
 
 alter table public.participant_reviews
   alter column rating drop not null;
@@ -110,6 +127,63 @@ on public.participant_reviews
 for delete
 to authenticated
 using (true);
+
+drop policy if exists "Public can read active managed events" on public.managed_events;
+create policy "Public can read active managed events"
+on public.managed_events
+for select
+to anon, authenticated
+using (is_active = true or auth.role() = 'authenticated');
+
+drop policy if exists "Managers can create managed events" on public.managed_events;
+create policy "Managers can create managed events"
+on public.managed_events
+for insert
+to authenticated
+with check (true);
+
+drop policy if exists "Managers can update managed events" on public.managed_events;
+create policy "Managers can update managed events"
+on public.managed_events
+for update
+to authenticated
+using (true)
+with check (true);
+
+drop policy if exists "Managers can delete managed events" on public.managed_events;
+create policy "Managers can delete managed events"
+on public.managed_events
+for delete
+to authenticated
+using (true);
+
+insert into public.managed_events (
+  title,
+  description,
+  starts_at,
+  date_label,
+  time_label,
+  location,
+  country,
+  format,
+  capacity,
+  image,
+  is_active
+)
+values (
+  'SEVENTEEN ÉVÈNEMENT',
+  'Un évènement fan dédié à SEVENTEEN, pensé pour rassembler les fans autour de leur univers.',
+  '2026-05-19T19:00:00+02:00',
+  '19 mai 2026',
+  '19:00',
+  'Lyon',
+  'France',
+  'Évènement fan',
+  'Capacité 250 personnes',
+  'assets/event-hero.svg',
+  true
+)
+on conflict do nothing;
 
 insert into public.participant_reviews (name, event, rating, comment, is_published)
 values

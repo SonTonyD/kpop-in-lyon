@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, signal } from '@angular/core';
-import { upcomingEvent } from '../data/site-content';
+import { EventInfo, upcomingEvent } from '../data/site-content';
+import { ManagedEventsService, managedEventToEventInfo } from '../services/managed-events.service';
 
 @Component({
   selector: 'app-event-page',
@@ -10,7 +11,7 @@ import { upcomingEvent } from '../data/site-content';
   styleUrl: './event-page.component.css',
 })
 export class EventPageComponent implements OnInit, OnDestroy {
-  protected readonly event = upcomingEvent;
+  protected readonly event = signal<EventInfo>(upcomingEvent);
   protected readonly countdown = signal([
     { value: '00', label: 'Jours' },
     { value: '00', label: 'Heures' },
@@ -20,7 +21,18 @@ export class EventPageComponent implements OnInit, OnDestroy {
 
   private countdownId: ReturnType<typeof setInterval> | null = null;
 
-  ngOnInit(): void {
+  constructor(private readonly managedEventsService: ManagedEventsService) {}
+
+  async ngOnInit(): Promise<void> {
+    try {
+      const activeEvent = await this.managedEventsService.getActiveEvent();
+      if (activeEvent) {
+        this.event.set(managedEventToEventInfo(activeEvent));
+      }
+    } catch {
+      this.event.set(upcomingEvent);
+    }
+
     this.updateCountdown();
     this.countdownId = setInterval(() => this.updateCountdown(), 1000);
   }
@@ -31,8 +43,18 @@ export class EventPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected splitTitle(title: string): string[] {
+    const words = title.trim().split(/\s+/);
+    if (words.length <= 1) {
+      return [title];
+    }
+
+    const middle = Math.ceil(words.length / 2);
+    return [words.slice(0, middle).join(' '), words.slice(middle).join(' ')];
+  }
+
   private updateCountdown(): void {
-    const target = new Date(this.event.dateTime).getTime();
+    const target = new Date(this.event().dateTime).getTime();
     const now = Date.now();
     const diff = Math.max(target - now, 0);
 

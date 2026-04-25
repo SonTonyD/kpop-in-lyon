@@ -5,7 +5,7 @@
   (touchend)="handleTouchEnd()"
   (touchcancel)="handleTouchEnd()"
 >
-  @for (slide of slides; track slide.title; let index = $index) {
+  @for (slide of slides(); track slide.title; let index = $index) {
     <article
       class="slide"
       [class.active]="currentSlide() === index"
@@ -26,8 +26,9 @@
             </div>
 
             <h1>
-              <span>SEVENTEEN</span>
-              <span>ÉVÈNEMENT</span>
+              @for (titleLine of splitTitle(event().title); track titleLine) {
+                <span>{{ titleLine }}</span>
+              }
             </h1>
 
             <p class="slide-copy slide-quote">{{ slide.description }}</p>
@@ -36,20 +37,20 @@
             <div class="slide-facts">
               <div class="slide-fact">
                 <p>Date</p>
-                <strong>{{ event.date | uppercase }}</strong>
-                <span>Heure : {{ event.time }}</span>
+                <strong>{{ event().date | uppercase }}</strong>
+                <span>Heure : {{ event().time }}</span>
               </div>
 
               <div class="slide-fact">
                 <p>Lieu</p>
-                <strong>LYON, FRANCE</strong>
-                <span>{{ event.venueNote }}</span>
+                <strong>{{ event().location | uppercase }}, {{ event().venueNote | uppercase }}</strong>
+                <span>{{ event().venueNote }}</span>
               </div>
 
               <div class="slide-fact">
                 <p>Format</p>
-                <strong>{{ event.format | uppercase }}</strong>
-                <span>{{ event.capacity }}</span>
+                <strong>{{ event().format | uppercase }}</strong>
+                <span>{{ event().capacity }}</span>
               </div>
             </div>
 
@@ -109,7 +110,7 @@
     </button>
 
     <div class="carousel-dots" aria-label="Pagination du carrousel">
-      @for (slide of slides; track slide.title; let index = $index) {
+      @for (slide of slides(); track slide.title; let index = $index) {
         <button
           type="button"
           class="carousel-dot"

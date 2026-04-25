@@ -45,3 +45,32 @@ export interface ParticipantReviewPayload {
   rating: number;
   comment: string;
 }
+
+export interface ManagedEvent {
+  id: string;
+  title: string;
+  description: string;
+  startsAt: string;
+  dateLabel: string;
+  timeLabel: string;
+  location: string;
+  country: string;
+  format: string;
+  capacity: string;
+  image: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface ManagedEventPayload {
+  title: string;
+  description: string;
+  startsAt: string;
+  dateLabel: string;
+  timeLabel: string;
+  location: string;
+  country: string;
+  format: string;
+  capacity: string;
+  image: string;
+}

@@ -13,6 +13,10 @@
         </a>
       }
     </nav>
+
+    @if (authService.session()) {
+      <a class="admin-access" routerLink="/back-office">Back-office</a>
+    }
   </header>
 
   <main>

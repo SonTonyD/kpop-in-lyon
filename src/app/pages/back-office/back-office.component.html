@@ -48,15 +48,25 @@
                 <h2>{{ review.name }}</h2>
                 <p>{{ review.event }} @if (review.rating !== null) { · {{ review.rating }}/5 }</p>
               </div>
-              <button
-                type="button"
-                class="publish-toggle"
-                [class.active]="review.isPublished"
-                [disabled]="savingId() === review.id"
-                (click)="togglePublished(review)"
-              >
-                {{ review.isPublished ? 'Publié' : 'Masqué' }}
-              </button>
+              <div class="card-actions">
+                <button
+                  type="button"
+                  class="publish-toggle"
+                  [class.active]="review.isPublished"
+                  [disabled]="savingId() === review.id"
+                  (click)="togglePublished(review)"
+                >
+                  {{ review.isPublished ? 'Publié' : 'Masqué' }}
+                </button>
+                <button
+                  type="button"
+                  class="danger-button"
+                  [disabled]="savingId() === review.id"
+                  (click)="deleteReview(review)"
+                >
+                  Supprimer
+                </button>
+              </div>
             </div>
             <p class="review-copy">{{ review.comment }}</p>
           </article>
@@ -76,18 +86,28 @@
                 <h2>{{ request.artist }}</h2>
                 <p>{{ request.fanbaseName }} · {{ request.city }} · {{ request.period }}</p>
               </div>
-              <label class="status-field">
-                <span>Statut</span>
-                <select
-                  [value]="request.status"
+              <div class="card-actions">
+                <label class="status-field">
+                  <span>Statut</span>
+                  <select
+                    [value]="request.status"
+                    [disabled]="savingId() === request.id"
+                    (change)="updateStatus(request, $event)"
+                  >
+                    @for (status of statuses; track status.value) {
+                      <option [value]="status.value">{{ status.label }}</option>
+                    }
+                  </select>
+                </label>
+                <button
+                  type="button"
+                  class="danger-button"
                   [disabled]="savingId() === request.id"
-                  (change)="updateStatus(request, $event)"
+                  (click)="deleteRequest(request)"
                 >
-                  @for (status of statuses; track status.value) {
-                    <option [value]="status.value">{{ status.label }}</option>
-                  }
-                </select>
-              </label>
+                  Supprimer
+                </button>
+              </div>
             </div>
 
             <dl class="request-details">

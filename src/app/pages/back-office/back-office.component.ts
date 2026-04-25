@@ -81,6 +81,28 @@ export class BackOfficeComponent implements OnInit {
     }
   }
 
+  protected async deleteReview(review: ParticipantReview): Promise<void> {
+    const confirmed = window.confirm(
+      `Supprimer définitivement l'avis de ${review.name} ? Cette action est irréversible.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.savingId.set(review.id);
+    this.error.set('');
+
+    try {
+      await this.reviewsService.deleteReview(review.id);
+      this.reviews.update((reviews) => reviews.filter((item) => item.id !== review.id));
+    } catch {
+      this.error.set('Cet avis n’a pas pu être supprimé.');
+    } finally {
+      this.savingId.set('');
+    }
+  }
+
   protected async updateStatus(request: EventRequest, event: Event): Promise<void> {
     const status = (event.target as HTMLSelectElement).value as EventRequestStatus;
     this.savingId.set(request.id);
@@ -93,6 +115,28 @@ export class BackOfficeComponent implements OnInit {
       );
     } catch {
       this.error.set('Le statut de cette demande n’a pas pu être modifié.');
+    } finally {
+      this.savingId.set('');
+    }
+  }
+
+  protected async deleteRequest(request: EventRequest): Promise<void> {
+    const confirmed = window.confirm(
+      `Supprimer définitivement la demande pour ${request.artist} ? Cette action est irréversible.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.savingId.set(request.id);
+    this.error.set('');
+
+    try {
+      await this.eventRequestsService.deleteRequest(request.id);
+      this.requests.update((requests) => requests.filter((item) => item.id !== request.id));
+    } catch {
+      this.error.set('Cette demande d’évènement n’a pas pu être supprimée.');
     } finally {
       this.savingId.set('');
     }

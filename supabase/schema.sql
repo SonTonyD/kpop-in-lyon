@@ -68,6 +68,13 @@ to authenticated
 using (true)
 with check (true);
 
+drop policy if exists "Managers can delete event requests" on public.event_requests;
+create policy "Managers can delete event requests"
+on public.event_requests
+for delete
+to authenticated
+using (true);
+
 drop policy if exists "Public can read published reviews" on public.participant_reviews;
 create policy "Public can read published reviews"
 on public.participant_reviews
@@ -96,6 +103,13 @@ for update
 to authenticated
 using (true)
 with check (true);
+
+drop policy if exists "Managers can delete reviews" on public.participant_reviews;
+create policy "Managers can delete reviews"
+on public.participant_reviews
+for delete
+to authenticated
+using (true);
 
 insert into public.participant_reviews (name, event, rating, comment, is_published)
 values

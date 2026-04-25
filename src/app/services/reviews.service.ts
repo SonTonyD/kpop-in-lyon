@@ -68,6 +68,17 @@ export class ReviewsService {
       throw error;
     }
   }
+
+  async deleteReview(id: string): Promise<void> {
+    const { error } = await this.supabase.client
+      .from('participant_reviews')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+  }
 }
 
 function mapReview(row: ReviewRow): ParticipantReview {

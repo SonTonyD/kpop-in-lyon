@@ -5,6 +5,7 @@
 
 .back-office-header,
 .card-main,
+.card-actions,
 .header-actions,
 .tab-bar {
   display: flex;
@@ -90,6 +91,12 @@
   gap: 1rem;
 }
 
+.card-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
 .card-main h2 {
   margin: 0 0 0.35rem;
   color: var(--text-strong);
@@ -110,11 +117,20 @@
   text-transform: uppercase;
 }
 
-.publish-toggle {
+.publish-toggle,
+.danger-button {
   min-width: 6.5rem;
   min-height: 2.4rem;
   padding: 0.55rem 0.9rem;
   font-weight: 800;
+}
+
+.danger-button {
+  border: 1px solid rgba(255, 120, 142, 0.46);
+  border-radius: 999px;
+  background: rgba(255, 120, 142, 0.12);
+  color: #ffb4c7;
+  cursor: pointer;
 }
 
 .status-field {
@@ -188,6 +204,11 @@ select:disabled {
   }
 
   .header-actions {
+    justify-content: flex-start;
+  }
+
+  .card-actions {
+    align-items: stretch;
     justify-content: flex-start;
   }
 

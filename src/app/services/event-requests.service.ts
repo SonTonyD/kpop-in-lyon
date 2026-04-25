@@ -65,6 +65,14 @@ export class EventRequestsService {
       throw error;
     }
   }
+
+  async deleteRequest(id: string): Promise<void> {
+    const { error } = await this.supabase.client.from('event_requests').delete().eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+  }
 }
 
 function mapEventRequest(row: EventRequestRow): EventRequest {

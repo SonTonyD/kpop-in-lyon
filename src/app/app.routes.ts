@@ -10,20 +10,20 @@ import { ReviewsPageComponent } from './pages/reviews-page.component';
 
 export const routes: Routes = [
   { path: '', component: HomePageComponent, title: 'Kpop in Lyon' },
-  { path: 'event', component: EventPageComponent, title: 'Event | Kpop in Lyon' },
+  { path: 'event', component: EventPageComponent, title: 'Évènement | Kpop in Lyon' },
   { path: 'reviews', component: ReviewsPageComponent, title: 'Avis | Kpop in Lyon' },
-  { path: 'about', component: AboutPageComponent, title: 'A propos | Kpop in Lyon' },
+  { path: 'about', component: AboutPageComponent, title: 'À propos | Kpop in Lyon' },
   { path: 'contact', component: ContactPageComponent, title: 'Contact | Kpop in Lyon' },
   {
     path: 'back-office/login',
     component: BackOfficeLoginComponent,
-    title: 'Connexion back-office | Kpop in Lyon',
+    title: 'Connexion gestion | Kpop in Lyon',
   },
   {
     path: 'back-office',
     component: BackOfficeComponent,
     canActivate: [authGuard],
-    title: 'Back-office | Kpop in Lyon',
+    title: 'Espace gestion | Kpop in Lyon',
   },
   { path: '**', redirectTo: '' },
 ];

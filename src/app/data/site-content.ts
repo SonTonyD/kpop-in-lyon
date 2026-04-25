@@ -29,16 +29,16 @@ export interface CollaborationOption {
 }
 
 export const upcomingEvent: EventInfo = {
-  title: 'SEVENTEEN EVENT',
-  date: 'May 19, 2026',
+  title: 'ÉVÈNEMENT SEVENTEEN',
+  date: '19 mai 2026',
   dateTime: '2026-05-19T19:00:00+02:00',
-  time: '19:00 — 23:00',
+  time: '19:00 - 23:00',
   location: 'Lyon',
-  venueNote: 'Venue revealed to attendees',
-  format: 'Fan Event',
-  capacity: 'Capacity 250',
+  venueNote: 'Lieu communiqué aux participants',
+  format: 'Évènement fan',
+  capacity: 'Capacité 250 personnes',
   description:
-    'A fan event dedicated to SEVENTEEN, bringing fans together to celebrate their universe.',
+    'Un évènement fan dédié à SEVENTEEN, pensé pour rassembler les fans autour de leur univers.',
   image: 'assets/event-hero.svg',
 };
 
@@ -66,21 +66,21 @@ export const reviews: Review[] = [
     name: 'HoshiVibes',
     rating: 5,
     comment:
-      'La playlist, les freebies et les espaces photo étaient incroyables. L’expérience était vraiment immersive.',
-    event: 'Carat Night Lyon',
+      'La playlist, les cadeaux et les espaces photo étaient incroyables. L’expérience était vraiment immersive.',
+    event: 'Soirée Carat à Lyon',
   },
   {
     name: 'WonwooLens',
     rating: 4,
     comment:
       'Mise en place très élégante et équipe adorable. J’aimerais simplement une salle encore plus grande la prochaine fois.',
-    event: 'Showcase Fan Project',
+    event: 'Projet fan showcase',
   },
 ];
 
 export const aboutParagraphs = [
   'Kpop in Lyon est un projet créé par des passionnés de K-pop.',
-  'Nous organisons des événements dédiés à des artistes et groupes afin de rassembler les fans autour de moments uniques.',
+  'Nous organisons des évènements dédiés à des artistes et groupes afin de rassembler les fans autour de moments uniques.',
   'Notre objectif est de proposer des expériences immersives, conviviales et visuellement marquantes.',
 ];
 

@@ -21,13 +21,13 @@
               <p class="eyebrow">{{ slide.eyebrow }}</p>
               <div class="sale-indicator">
                 <span class="sale-dot"></span>
-                <span>ON SALE NOW</span>
+                <span>Inscriptions ouvertes</span>
               </div>
             </div>
 
             <h1>
               <span>SEVENTEEN</span>
-              <span>EVENT</span>
+              <span>ÉVÈNEMENT</span>
             </h1>
 
             <p class="slide-copy slide-quote">{{ slide.description }}</p>
@@ -35,19 +35,19 @@
 
             <div class="slide-facts">
               <div class="slide-fact">
-                <p>DATE</p>
+                <p>Date</p>
                 <strong>{{ event.date | uppercase }}</strong>
                 <span>Heure : {{ event.time }}</span>
               </div>
 
               <div class="slide-fact">
-                <p>LIEU</p>
+                <p>Lieu</p>
                 <strong>LYON, FRANCE</strong>
                 <span>{{ event.venueNote }}</span>
               </div>
 
               <div class="slide-fact">
-                <p>FORMAT</p>
+                <p>Format</p>
                 <strong>{{ event.format | uppercase }}</strong>
                 <span>{{ event.capacity }}</span>
               </div>
@@ -60,13 +60,13 @@
                 <p class="eyebrow">{{ slide.eyebrow }}</p>
                 <div class="sale-indicator sale-indicator--past">
                   <span class="sale-dot sale-dot--past"></span>
-                  <span>COMMUNITY MEMORIES</span>
+                  <span>Souvenirs de la communauté</span>
                 </div>
               </div>
 
               <h2 class="past-title">
-                <span>PAST</span>
-                <span>EVENTS</span>
+                <span>ÉVÈNEMENTS</span>
+                <span>PASSÉS</span>
               </h2>
 
               <p class="slide-copy slide-quote">{{ slide.description }}</p>
@@ -79,7 +79,7 @@
                       <div class="stat-card stat-card--hero">
                         <p>{{ stat.label }}</p>
                         <strong>{{ stat.value }}</strong>
-                        <span>Built from participant feedback and event turnout.</span>
+                        <span>Données issues des retours participants et de la fréquentation.</span>
                       </div>
                     }
                   }
@@ -87,7 +87,7 @@
 
                 <div class="past-gallery past-gallery--hero">
                   @for (image of pastEventImages; track image) {
-                    <img [src]="image" alt="Past K-pop event memory" />
+                    <img [src]="image" alt="Souvenir d’un évènement K-pop passé" />
                   }
                 </div>
               </div>
@@ -103,19 +103,19 @@
       type="button"
       class="ghost-button carousel-arrow"
       (click)="previousSlide()"
-      aria-label="Previous slide"
+      aria-label="Diapositive précédente"
     >
-      Prev
+      Précédent
     </button>
 
-    <div class="carousel-dots" aria-label="Carousel pagination">
+    <div class="carousel-dots" aria-label="Pagination du carrousel">
       @for (slide of slides; track slide.title; let index = $index) {
         <button
           type="button"
           class="carousel-dot"
           [class.active]="currentSlide() === index"
           (click)="goToSlide(index)"
-          [attr.aria-label]="'Go to slide ' + (index + 1)"
+          [attr.aria-label]="'Aller à la diapositive ' + (index + 1)"
         ></button>
       }
     </div>
@@ -124,9 +124,9 @@
       type="button"
       class="ghost-button carousel-arrow"
       (click)="nextSlide()"
-      aria-label="Next slide"
+      aria-label="Diapositive suivante"
     >
-      Next
+      Suivant
     </button>
   </div>
 </section>

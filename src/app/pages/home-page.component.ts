@@ -32,18 +32,18 @@ export class HomePageComponent {
 
   protected readonly slides: HomeSlide[] = [
     {
-      eyebrow: 'EV-01 — ÉVÉNEMENT ACTUEL',
+      eyebrow: 'EV-01 - ÉVÈNEMENT ACTUEL',
       title: upcomingEvent.title,
       description: upcomingEvent.description,
-      actionLabel: 'Voir l’événement',
+      actionLabel: 'Voir l’évènement',
       actionLink: '/event',
       image: upcomingEvent.image,
       kind: 'upcoming',
     },
     {
-      eyebrow: 'Past Events',
-      title: 'Past Events',
-      description: 'Thank you for all the amazing moments shared together.',
+      eyebrow: 'Évènements passés',
+      title: 'Évènements passés',
+      description: 'Merci pour tous les moments partagés avec la communauté.',
       image: pastEventImages[0],
       kind: 'past',
     },

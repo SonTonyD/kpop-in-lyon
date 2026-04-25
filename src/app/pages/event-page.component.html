@@ -7,16 +7,16 @@
   <div class="event-content">
     <div class="event-copy">
       <div class="event-context">
-        <p class="event-index">EV-01 — ÉVÉNEMENT ACTUEL</p>
+        <p class="event-index">EV-01 - ÉVÈNEMENT ACTUEL</p>
         <div class="sale-indicator">
           <span class="sale-dot"></span>
-          <span>ON SALE NOW</span>
+          <span>Inscriptions ouvertes</span>
         </div>
       </div>
 
       <h1>
         <span>SEVENTEEN</span>
-        <span>EVENT</span>
+        <span>ÉVÈNEMENT</span>
       </h1>
 
       <p class="event-description">{{ event.description }}</p>
@@ -25,26 +25,26 @@
       <div class="event-bottom">
         <div class="event-facts">
           <article class="fact-block">
-            <p>DATE</p>
+            <p>Date</p>
             <strong>{{ event.date | uppercase }}</strong>
             <span>Heure : {{ event.time }}</span>
           </article>
 
           <article class="fact-block">
-            <p>LIEU</p>
+            <p>Lieu</p>
             <strong>LYON, FRANCE</strong>
             <span>{{ event.venueNote }}</span>
           </article>
 
           <article class="fact-block">
-            <p>FORMAT</p>
+            <p>Format</p>
             <strong>{{ event.format | uppercase }}</strong>
             <span>{{ event.capacity }}</span>
           </article>
         </div>
 
         <aside class="countdown-card">
-          <p class="countdown-label">STARTS IN</p>
+          <p class="countdown-label">Début dans</p>
           <div class="countdown-grid">
             @for (item of countdown(); track item.label) {
               <div class="countdown-item">

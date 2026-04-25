@@ -56,7 +56,7 @@ export class BackOfficeComponent implements OnInit {
       this.reviews.set(reviews);
       this.requests.set(requests);
     } catch {
-      this.error.set('Les données du back-office ne peuvent pas être chargées.');
+      this.error.set('Les données de l’espace gestion ne peuvent pas être chargées.');
     } finally {
       this.loading.set(false);
     }
@@ -83,7 +83,7 @@ export class BackOfficeComponent implements OnInit {
 
   protected async deleteReview(review: ParticipantReview): Promise<void> {
     const confirmed = window.confirm(
-      `Supprimer définitivement l'avis de ${review.name} ? Cette action est irréversible.`,
+      `Supprimer définitivement l’avis de ${review.name} ? Cette action est irréversible.`,
     );
 
     if (!confirmed) {

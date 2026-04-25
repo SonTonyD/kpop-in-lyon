@@ -56,11 +56,11 @@ function getAuthErrorMessage(error: unknown): string {
   const normalizedMessage = message.toLowerCase();
 
   if (normalizedMessage.includes('email not confirmed')) {
-    return 'Cet email existe, mais il n’est pas encore confirmé dans Supabase Auth.';
+    return 'Cet email existe, mais il n’est pas encore confirmé dans l’authentification Supabase.';
   }
 
   if (normalizedMessage.includes('invalid login credentials')) {
-    return 'Identifiants refusés par Supabase. Vérifie que le user Auth a bien un mot de passe défini et que son email est confirmé.';
+    return 'Identifiants refusés par Supabase. Vérifie que le compte a bien un mot de passe défini et que son email est confirmé.';
   }
 
   return message || 'Connexion impossible. Vérifie l’email et le mot de passe.';
@@ -73,8 +73,8 @@ function getAuthErrorDetail(error: unknown): string {
 
   const detail = error as { code?: string; message?: string; name?: string; status?: number };
   const parts = [
-    detail.name ? `name: ${detail.name}` : '',
-    detail.status ? `status: ${detail.status}` : '',
+    detail.name ? `nom: ${detail.name}` : '',
+    detail.status ? `statut: ${detail.status}` : '',
     detail.code ? `code: ${detail.code}` : '',
     detail.message ? `message: ${detail.message}` : '',
   ].filter(Boolean);

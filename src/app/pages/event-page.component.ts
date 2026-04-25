@@ -12,8 +12,8 @@ import { upcomingEvent } from '../data/site-content';
 export class EventPageComponent implements OnInit, OnDestroy {
   protected readonly event = upcomingEvent;
   protected readonly countdown = signal([
-    { value: '00', label: 'Days' },
-    { value: '00', label: 'Hrs' },
+    { value: '00', label: 'Jours' },
+    { value: '00', label: 'Heures' },
     { value: '00', label: 'Min' },
     { value: '00', label: 'Sec' },
   ]);
@@ -42,8 +42,8 @@ export class EventPageComponent implements OnInit, OnDestroy {
     const seconds = Math.floor((diff / 1000) % 60);
 
     this.countdown.set([
-      { value: String(days).padStart(2, '0'), label: 'Days' },
-      { value: String(hours).padStart(2, '0'), label: 'Hrs' },
+      { value: String(days).padStart(2, '0'), label: 'Jours' },
+      { value: String(hours).padStart(2, '0'), label: 'Heures' },
       { value: String(minutes).padStart(2, '0'), label: 'Min' },
       { value: String(seconds).padStart(2, '0'), label: 'Sec' },
     ]);

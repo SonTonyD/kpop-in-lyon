@@ -124,12 +124,12 @@ values
     'HoshiVibes',
     'Carat Night Lyon',
     5,
-    'La playlist, les freebies et les espaces photo étaient incroyables. L’expérience était vraiment immersive.',
+    'La playlist, les cadeaux et les espaces photo étaient incroyables. L’expérience était vraiment immersive.',
     true
   ),
   (
     'WonwooLens',
-    'Showcase Fan Project',
+    'Projet fan showcase',
     4,
     'Mise en place très élégante et équipe adorable. J’aimerais simplement une salle encore plus grande la prochaine fois.',
     true

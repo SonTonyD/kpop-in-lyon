@@ -30,7 +30,10 @@ export class ReviewsPageComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(32)]],
       event: ['', [Validators.required, Validators.maxLength(80)]],
       rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
-      comment: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(this.commentMaxLength)]],
+      comment: [
+        '',
+        [Validators.required, Validators.minLength(10), Validators.maxLength(this.commentMaxLength)],
+      ],
     });
   }
 

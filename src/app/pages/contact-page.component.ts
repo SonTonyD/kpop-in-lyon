@@ -2,6 +2,8 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { collaborationTypes, decorationTypes } from '../data/site-content';
+import { EventRequestsService } from '../services/event-requests.service';
+import { EventRequestPayload } from '../services/back-office.types';
 
 @Component({
   selector: 'app-contact-page',
@@ -14,11 +16,16 @@ export class ContactPageComponent {
   protected readonly collaborationTypes = collaborationTypes;
   protected readonly decorationTypes = decorationTypes;
   protected readonly submitted = signal(false);
+  protected readonly submitting = signal(false);
+  protected readonly submitError = signal('');
   protected readonly selectedCollaboration = signal<string[]>([]);
   protected readonly selectedDecorations = signal<string[]>([]);
   protected readonly form;
 
-  constructor(private readonly formBuilder: FormBuilder) {
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly eventRequestsService: EventRequestsService,
+  ) {
     this.form = this.formBuilder.group({
       fullName: ['', Validators.required],
       fanbaseName: ['', Validators.required],
@@ -73,18 +80,48 @@ export class ContactPageComponent {
     return selected.includes(value);
   }
 
-  protected submit(): void {
+  protected async submit(): Promise<void> {
     if (this.form.invalid) {
       this.submitted.set(false);
+      this.submitError.set('');
       this.form.markAllAsTouched();
       return;
     }
 
-    this.submitted.set(true);
-    this.form.reset();
-    (this.form.get('collaborationTypes') as FormArray).clear();
-    (this.form.get('decorationTypes') as FormArray).clear();
-    this.selectedCollaboration.set([]);
-    this.selectedDecorations.set([]);
+    this.submitting.set(true);
+    this.submitted.set(false);
+    this.submitError.set('');
+
+    try {
+      const value = this.form.getRawValue();
+      const payload: EventRequestPayload = {
+        fullName: value.fullName ?? '',
+        fanbaseName: value.fanbaseName ?? '',
+        email: value.email ?? '',
+        socialLinks: value.socialLinks || null,
+        artist: value.artist ?? '',
+        city: value.city ?? '',
+        period: value.period ?? '',
+        collaborationTypes: toStringArray(value.collaborationTypes),
+        decorationTypes: toStringArray(value.decorationTypes),
+        details: value.details ?? '',
+      };
+
+      await this.eventRequestsService.createRequest(payload);
+      this.submitted.set(true);
+      this.form.reset();
+      (this.form.get('collaborationTypes') as FormArray).clear();
+      (this.form.get('decorationTypes') as FormArray).clear();
+      this.selectedCollaboration.set([]);
+      this.selectedDecorations.set([]);
+    } catch {
+      this.submitError.set('La demande n’a pas pu être envoyée. Réessaie dans quelques instants.');
+    } finally {
+      this.submitting.set(false);
+    }
   }
+}
+
+function toStringArray(value: unknown[] | null | undefined): string[] {
+  return (value ?? []).filter((item): item is string => typeof item === 'string');
 }

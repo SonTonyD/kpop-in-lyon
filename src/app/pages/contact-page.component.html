@@ -125,9 +125,14 @@
     </section>
 
     <div class="form-footer">
-      <button type="submit" class="button-primary">Envoyer la demande</button>
+      <button type="submit" class="button-primary" [disabled]="submitting()">
+        {{ submitting() ? 'Envoi...' : 'Envoyer la demande' }}
+      </button>
       @if (submitted()) {
-        <p class="success-message">La demande a bien été préparée. Le branchement d’envoi pourra venir ensuite.</p>
+        <p class="success-message">La demande a bien été envoyée. Nous reviendrons vers vous rapidement.</p>
+      }
+      @if (submitError()) {
+        <p class="error-message">{{ submitError() }}</p>
       }
     </div>
   </form>

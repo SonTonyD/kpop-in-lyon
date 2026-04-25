@@ -75,6 +75,16 @@ small {
   color: var(--text-strong);
 }
 
+.error-message {
+  margin: 0;
+  color: #ffb4c7;
+}
+
+.button-primary:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
 @media (min-width: 48rem) {
   .contact-page {
     padding-inline: 1rem;

@@ -10,6 +10,10 @@
   margin-top: 2rem;
 }
 
+.state-message {
+  margin-top: 2rem;
+}
+
 .review-card {
   display: grid;
   gap: 1rem;

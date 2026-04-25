@@ -1,0 +1,118 @@
+<section class="page-shell back-office-page">
+  <header class="back-office-header">
+    <div>
+      <p class="eyebrow">Back-office</p>
+      <h1>Gestion Kpop in Lyon</h1>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="ghost-button" (click)="refresh()">Actualiser</button>
+      <button type="button" class="button-primary" (click)="signOut()">Déconnexion</button>
+    </div>
+  </header>
+
+  <div class="tab-bar" role="tablist" aria-label="Sections du back-office">
+    <button
+      type="button"
+      [class.active]="activeTab() === 'reviews'"
+      (click)="activeTab.set('reviews')"
+    >
+      Avis participants
+      <span>{{ reviews().length }}</span>
+    </button>
+    <button
+      type="button"
+      [class.active]="activeTab() === 'requests'"
+      (click)="activeTab.set('requests')"
+    >
+      Demandes d’évènements
+      <span>{{ requests().length }}</span>
+    </button>
+  </div>
+
+  @if (error()) {
+    <p class="state-message error-message surface-card">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="state-message surface-card">Chargement des données...</p>
+  } @else if (activeTab() === 'reviews') {
+    <section class="admin-list" aria-label="Avis participants">
+      @if (reviews().length === 0) {
+        <p class="state-message surface-card">Aucun avis n’a encore été reçu.</p>
+      } @else {
+        @for (review of reviews(); track review.id) {
+          <article class="admin-card surface-card">
+            <div class="card-main">
+              <div>
+                <p class="card-kicker">{{ review.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+                <h2>{{ review.name }}</h2>
+                <p>{{ review.event }} · {{ review.rating }}/5</p>
+              </div>
+              <button
+                type="button"
+                class="publish-toggle"
+                [class.active]="review.isPublished"
+                [disabled]="savingId() === review.id"
+                (click)="togglePublished(review)"
+              >
+                {{ review.isPublished ? 'Publié' : 'Masqué' }}
+              </button>
+            </div>
+            <p class="review-copy">{{ review.comment }}</p>
+          </article>
+        }
+      }
+    </section>
+  } @else {
+    <section class="admin-list" aria-label="Demandes d’évènements">
+      @if (requests().length === 0) {
+        <p class="state-message surface-card">Aucune demande d’évènement n’a encore été reçue.</p>
+      } @else {
+        @for (request of requests(); track request.id) {
+          <article class="admin-card surface-card">
+            <div class="card-main">
+              <div>
+                <p class="card-kicker">{{ request.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+                <h2>{{ request.artist }}</h2>
+                <p>{{ request.fanbaseName }} · {{ request.city }} · {{ request.period }}</p>
+              </div>
+              <label class="status-field">
+                <span>Statut</span>
+                <select
+                  [value]="request.status"
+                  [disabled]="savingId() === request.id"
+                  (change)="updateStatus(request, $event)"
+                >
+                  @for (status of statuses; track status.value) {
+                    <option [value]="status.value">{{ status.label }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+
+            <dl class="request-details">
+              <div>
+                <dt>Contact</dt>
+                <dd>{{ request.fullName }} · <a [href]="'mailto:' + request.email">{{ request.email }}</a></dd>
+              </div>
+              <div>
+                <dt>Réseaux</dt>
+                <dd>{{ request.socialLinks || 'Non renseigné' }}</dd>
+              </div>
+              <div>
+                <dt>Collaboration</dt>
+                <dd>{{ request.collaborationTypes.join(', ') }}</dd>
+              </div>
+              <div>
+                <dt>Décorations</dt>
+                <dd>{{ request.decorationTypes.join(', ') }}</dd>
+              </div>
+            </dl>
+
+            <p class="request-copy">{{ request.details }}</p>
+          </article>
+        }
+      }
+    </section>
+  }
+</section>

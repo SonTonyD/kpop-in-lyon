@@ -8,8 +8,15 @@
     </p>
   </div>
 
-  <div class="reviews-grid">
-    @for (review of reviews; track review.name) {
+  @if (loading()) {
+    <p class="state-message surface-card">Chargement des avis...</p>
+  } @else if (error()) {
+    <p class="state-message surface-card">{{ error() }}</p>
+  } @else if (reviews().length === 0) {
+    <p class="state-message surface-card">Aucun avis n’est publié pour le moment.</p>
+  } @else {
+    <div class="reviews-grid">
+    @for (review of reviews(); track review.id) {
       <article class="surface-card review-card">
         <div class="review-header">
           <div>
@@ -26,7 +33,8 @@
         <p class="review-copy">{{ review.comment }}</p>
       </article>
     }
-  </div>
+    </div>
+  }
 
   <div class="cta-banner surface-card">
     <div>

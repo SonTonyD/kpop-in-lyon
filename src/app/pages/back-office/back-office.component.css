@@ -1,0 +1,189 @@
+.back-office-page {
+  padding-bottom: 2rem;
+}
+
+.back-office-header,
+.card-main,
+.header-actions,
+.tab-bar {
+  display: flex;
+  align-items: center;
+}
+
+.back-office-header {
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.back-office-header h1 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: clamp(2rem, 6vw, 3.8rem);
+  line-height: 1;
+}
+
+.header-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.tab-bar {
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+
+.tab-bar button,
+.publish-toggle {
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+.tab-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 1rem;
+  white-space: nowrap;
+}
+
+.tab-bar button.active,
+.publish-toggle.active {
+  background: rgba(255, 110, 199, 0.18);
+  border-color: rgba(255, 110, 199, 0.46);
+  color: var(--text-strong);
+}
+
+.tab-bar span {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.65rem;
+  min-height: 1.65rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.78rem;
+}
+
+.admin-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-card {
+  display: grid;
+  gap: 1rem;
+  border-radius: 0.5rem;
+}
+
+.card-main {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.card-main h2 {
+  margin: 0 0 0.35rem;
+  color: var(--text-strong);
+  font-size: 1.25rem;
+}
+
+.card-main p,
+.review-copy,
+.request-copy {
+  margin: 0;
+}
+
+.card-kicker {
+  color: var(--accent-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.publish-toggle {
+  min-width: 6.5rem;
+  min-height: 2.4rem;
+  padding: 0.55rem 0.9rem;
+  font-weight: 800;
+}
+
+.status-field {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 11rem;
+}
+
+.status-field span {
+  color: var(--text-soft);
+  font-size: 0.8rem;
+}
+
+select {
+  border: 1px solid var(--border-soft);
+  border-radius: 0.65rem;
+  background: #171020;
+  color: var(--text-strong);
+  padding: 0.7rem 0.8rem;
+}
+
+.request-details {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.request-details div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.request-details dt {
+  color: var(--text-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.request-details dd {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.state-message {
+  margin: 1rem 0 0;
+}
+
+.error-message {
+  color: #ffb4c7;
+}
+
+button:disabled,
+select:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+@media (min-width: 52rem) {
+  .request-details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 42rem) {
+  .back-office-header,
+  .card-main {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .header-actions {
+    justify-content: flex-start;
+  }
+}

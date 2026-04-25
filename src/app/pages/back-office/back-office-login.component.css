@@ -1,0 +1,83 @@
+.auth-page {
+  display: grid;
+  place-items: start center;
+  padding-bottom: 2rem;
+}
+
+.auth-panel {
+  width: min(32rem, 100%);
+}
+
+.auth-panel h1 {
+  margin-bottom: 0.75rem;
+  color: var(--text-strong);
+  font-size: clamp(2rem, 8vw, 3.5rem);
+  line-height: 1;
+}
+
+form,
+label {
+  display: grid;
+  gap: 0.75rem;
+}
+
+form {
+  margin-top: 1.5rem;
+  gap: 1.1rem;
+}
+
+label span {
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  border: 1px solid var(--border-soft);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-strong);
+  padding: 0.95rem 1rem;
+}
+
+input:focus {
+  outline: 2px solid rgba(255, 110, 199, 0.28);
+  outline-offset: 0.1rem;
+}
+
+small {
+  margin: 0;
+  color: #ffb4c7;
+}
+
+.error-box {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 180, 199, 0.34);
+  border-radius: 0.75rem;
+  background: rgba(255, 180, 199, 0.08);
+  color: #ffb4c7;
+}
+
+.error-box p,
+.error-box small {
+  margin: 0;
+}
+
+.error-box small {
+  color: var(--text-soft);
+  overflow-wrap: anywhere;
+}
+
+.auth-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}

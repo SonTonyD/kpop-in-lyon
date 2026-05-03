@@ -95,10 +95,22 @@
             <input type="text" formControlName="capacity" placeholder="Capacité 250 personnes" />
           </label>
 
-          <label class="full-width">
-            <span>Image de fond</span>
-            <input type="text" formControlName="image" />
-          </label>
+          <div class="poster-field full-width">
+            <span>Affiche de l'Ã©vÃ¨nement</span>
+            <div class="poster-upload">
+              <img [src]="posterPreview()" alt="AperÃ§u de l'affiche de l'Ã©vÃ¨nement" />
+              <div>
+                <label class="poster-picker">
+                  <input type="file" accept="image/*" (change)="onPosterSelected($event)" />
+                  <span>Choisir une affiche</span>
+                </label>
+                <p>Format recommandÃ© : 4:5, comme event-seventeen.jpeg. JPEG, PNG ou WebP acceptÃ©s.</p>
+                @if (selectedPosterName()) {
+                  <p class="poster-name">{{ selectedPosterName() }}</p>
+                }
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="form-actions">
@@ -147,6 +159,7 @@
                 </div>
               </div>
               <p class="request-copy">{{ event.description }}</p>
+              <img class="event-poster-thumb" [src]="event.image" alt="Affiche de l'Ã©vÃ¨nement" />
               <dl class="request-details">
                 <div>
                   <dt>Format</dt>

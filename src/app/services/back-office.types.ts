@@ -58,6 +58,8 @@ export interface ManagedEvent {
   format: string;
   capacity: string;
   image: string;
+  imagePath: string | null;
+  dominantColor: string;
   isActive: boolean;
   createdAt: string;
 }
@@ -73,4 +75,6 @@ export interface ManagedEventPayload {
   format: string;
   capacity: string;
   image: string;
+  imagePath: string | null;
+  dominantColor: string;
 }

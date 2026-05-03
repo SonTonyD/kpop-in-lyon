@@ -11,6 +11,7 @@ interface HomeSlide {
   actionLabel?: string;
   actionLink?: string;
   image: string;
+  dominantColor: string;
   kind: 'upcoming' | 'past';
 }
 
@@ -35,6 +36,7 @@ export class HomePageComponent implements OnInit {
       actionLabel: 'Voir l’évènement',
       actionLink: '/event',
       image: this.event()?.image ?? 'assets/event-hero.svg',
+      dominantColor: this.event()?.dominantColor ?? '#ff6ec7',
       kind: 'upcoming',
     },
     {
@@ -42,6 +44,7 @@ export class HomePageComponent implements OnInit {
       title: 'Évènements passés',
       description: 'Merci pour tous les moments partagés avec la communauté.',
       image: pastEventImages[0],
+      dominantColor: '#ff6ec7',
       kind: 'past',
     },
   ]);
@@ -77,6 +80,14 @@ export class HomePageComponent implements OnInit {
 
   protected nextSlide(): void {
     this.currentSlide.update((value) => (value + 1) % this.slides().length);
+  }
+
+  protected slideBackgroundImage(slide: HomeSlide): string {
+    if (slide.kind === 'past') {
+      return `linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(${slide.image})`;
+    }
+
+    return buildEventBackground(slide.image, slide.dominantColor);
   }
 
   protected handleTouchStart(event: TouchEvent): void {
@@ -129,4 +140,24 @@ export class HomePageComponent implements OnInit {
     this.touchStartY = null;
     this.touchCurrentY = null;
   }
+}
+
+function buildEventBackground(image: string, dominantColor: string): string {
+  const color = /^#[0-9a-f]{6}$/i.test(dominantColor) ? dominantColor : '#ff6ec7';
+
+  return [
+    `radial-gradient(circle at 18% 24%, ${hexToRgba(color, 0.42)}, transparent 28%)`,
+    `radial-gradient(circle at 78% 18%, ${hexToRgba(color, 0.24)}, transparent 22%)`,
+    'linear-gradient(180deg, rgba(6, 7, 18, 0.52), rgba(6, 7, 18, 0.9))',
+    `url(${image})`,
+  ].join(', ');
+}
+
+function hexToRgba(hex: string, alpha: number): string {
+  const normalized = hex.replace('#', '');
+  const red = parseInt(normalized.slice(0, 2), 16);
+  const green = parseInt(normalized.slice(2, 4), 16);
+  const blue = parseInt(normalized.slice(4, 6), 16);
+
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }

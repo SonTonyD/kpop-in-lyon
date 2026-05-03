@@ -9,6 +9,7 @@ export interface EventInfo {
   capacity: string;
   description: string;
   image: string;
+  dominantColor: string;
 }
 
 export interface Review {
@@ -40,6 +41,7 @@ export const upcomingEvent: EventInfo = {
   description:
     'Un évènement fan dédié à SEVENTEEN, pensé pour rassembler les fans autour de leur univers.',
   image: 'assets/event-hero.svg',
+  dominantColor: '#ff6ec7',
 };
 
 export const pastEventImages = [

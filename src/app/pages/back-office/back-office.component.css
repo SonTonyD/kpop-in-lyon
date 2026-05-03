@@ -128,7 +128,8 @@
   min-width: 0;
 }
 
-.event-form-grid span {
+.event-form-grid span,
+.poster-field > span {
   color: var(--text-strong);
   font-weight: 700;
 }
@@ -148,6 +149,71 @@
 .event-form-grid textarea:focus {
   outline: 2px solid rgba(255, 110, 199, 0.28);
   outline-offset: 0.1rem;
+}
+
+.poster-field {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.poster-upload {
+  display: grid;
+  gap: 0.85rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.poster-upload img,
+.event-poster-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.poster-upload img {
+  max-width: 9rem;
+}
+
+.poster-picker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.6rem;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 110, 199, 0.18);
+  color: var(--text-strong);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.poster-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.poster-upload p {
+  margin: 0.6rem 0 0;
+  color: var(--text-soft);
+  line-height: 1.5;
+}
+
+.poster-upload .poster-name {
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+.event-poster-thumb {
+  max-width: 8rem;
 }
 
 .form-actions {
@@ -248,6 +314,10 @@ select:disabled {
   .managed-events-layout {
     grid-template-columns: minmax(20rem, 0.85fr) minmax(0, 1.15fr);
     align-items: start;
+  }
+
+  .poster-upload {
+    grid-template-columns: auto 1fr;
   }
 
   .full-width {

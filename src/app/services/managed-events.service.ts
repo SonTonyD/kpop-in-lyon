@@ -3,6 +3,9 @@ import { EventInfo } from '../data/site-content';
 import { ManagedEvent, ManagedEventPayload } from './back-office.types';
 import { SupabaseService } from './supabase.service';
 
+export const DEFAULT_EVENT_DOMINANT_COLOR = '#ff6ec7';
+const EVENT_POSTERS_BUCKET = 'event-posters';
+
 interface ManagedEventRow {
   id: string;
   title: string;
@@ -15,6 +18,8 @@ interface ManagedEventRow {
   format: string;
   capacity: string;
   image: string;
+  image_path: string | null;
+  dominant_color: string | null;
   is_active: boolean;
   created_at: string;
 }
@@ -81,6 +86,30 @@ export class ManagedEventsService {
     return mapManagedEvent(data);
   }
 
+  async uploadPoster(file: File, eventId: string): Promise<{ image: string; imagePath: string }> {
+    const imagePath = `${eventId}/${Date.now()}-${safeFileName(file.name)}`;
+    const { error } = await this.supabase.client.storage
+      .from(EVENT_POSTERS_BUCKET)
+      .upload(imagePath, file, {
+        cacheControl: '31536000',
+        contentType: file.type || 'image/jpeg',
+        upsert: false,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    const { data } = this.supabase.client.storage
+      .from(EVENT_POSTERS_BUCKET)
+      .getPublicUrl(imagePath);
+
+    return {
+      image: data.publicUrl,
+      imagePath,
+    };
+  }
+
   async setActiveEvent(id: string): Promise<void> {
     const { error: resetError } = await this.supabase.client
       .from('managed_events')
@@ -101,11 +130,27 @@ export class ManagedEventsService {
     }
   }
 
-  async deleteEvent(id: string): Promise<void> {
+  async deleteEvent(event: Pick<ManagedEvent, 'id' | 'imagePath'> | string): Promise<void> {
+    const id = typeof event === 'string' ? event : event.id;
+    const imagePath = typeof event === 'string' ? null : event.imagePath;
     const { error } = await this.supabase.client.from('managed_events').delete().eq('id', id);
 
     if (error) {
       throw error;
+    }
+
+    if (imagePath) {
+      await this.deletePoster(imagePath);
+    }
+  }
+
+  async deletePoster(imagePath: string): Promise<void> {
+    const { error } = await this.supabase.client.storage
+      .from(EVENT_POSTERS_BUCKET)
+      .remove([imagePath]);
+
+    if (error) {
+      console.warn('Event poster could not be deleted from storage.', error);
     }
   }
 }
@@ -122,6 +167,7 @@ export function managedEventToEventInfo(event: ManagedEvent): EventInfo {
     capacity: event.capacity,
     description: event.description,
     image: event.image,
+    dominantColor: event.dominantColor,
   };
 }
 
@@ -137,10 +183,12 @@ function toRowPayload(payload: ManagedEventPayload): Omit<ManagedEventRow, 'id' 
     format: payload.format,
     capacity: payload.capacity,
     image: payload.image,
+    image_path: payload.imagePath,
+    dominant_color: payload.dominantColor,
   };
 }
 
-function mapManagedEvent(row: ManagedEventRow): ManagedEvent {
+export function mapManagedEvent(row: ManagedEventRow): ManagedEvent {
   return {
     id: row.id,
     title: row.title,
@@ -153,7 +201,23 @@ function mapManagedEvent(row: ManagedEventRow): ManagedEvent {
     format: row.format,
     capacity: row.capacity,
     image: row.image,
+    imagePath: row.image_path ?? null,
+    dominantColor: row.dominant_color ?? DEFAULT_EVENT_DOMINANT_COLOR,
     isActive: row.is_active,
     createdAt: row.created_at,
   };
+}
+
+function safeFileName(fileName: string): string {
+  const extension = fileName.split('.').pop()?.toLowerCase() || 'jpg';
+  const baseName = fileName
+    .replace(/\.[^/.]+$/, '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48);
+
+  return `${baseName || 'poster'}.${extension}`;
 }

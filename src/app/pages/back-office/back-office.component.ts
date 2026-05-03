@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -24,13 +24,15 @@ type BackOfficeTab = 'managedEvents' | 'reviews' | 'requests';
   templateUrl: './back-office.component.html',
   styleUrl: './back-office.component.css',
 })
-export class BackOfficeComponent implements OnInit {
+export class BackOfficeComponent implements OnInit, OnDestroy {
   protected readonly activeTab = signal<BackOfficeTab>('managedEvents');
   protected readonly loading = signal(true);
   protected readonly savingId = signal('');
   protected readonly error = signal('');
   protected readonly success = signal('');
   protected readonly editingEventId = signal<string | null>(null);
+  protected readonly posterPreview = signal('assets/event-hero.svg');
+  protected readonly selectedPosterName = signal('');
   protected readonly managedEvents = signal<ManagedEvent[]>([]);
   protected readonly reviews = signal<ParticipantReview[]>([]);
   protected readonly requests = signal<EventRequest[]>([]);
@@ -61,11 +63,20 @@ export class BackOfficeComponent implements OnInit {
       format: ['', [Validators.required, Validators.maxLength(80)]],
       capacity: ['', [Validators.required, Validators.maxLength(80)]],
       image: ['assets/event-hero.svg', Validators.required],
+      imagePath: [null as string | null],
+      dominantColor: ['#ff6ec7', Validators.required],
     });
   }
 
+  private selectedPosterFile: File | null = null;
+  private objectPreviewUrl: string | null = null;
+
   async ngOnInit(): Promise<void> {
     await this.refresh();
+  }
+
+  ngOnDestroy(): void {
+    this.revokeObjectPreview();
   }
 
   protected async refresh(): Promise<void> {
@@ -95,18 +106,41 @@ export class BackOfficeComponent implements OnInit {
       return;
     }
 
-    const payload = this.getManagedEventPayload();
+    let payload = this.getManagedEventPayload();
     const editingId = this.editingEventId();
+    const previousEvent = editingId
+      ? this.managedEvents().find((event) => event.id === editingId) ?? null
+      : null;
     this.savingId.set(editingId ?? 'new-event');
     this.error.set('');
     this.success.set('');
 
     try {
+      if (this.selectedPosterFile) {
+        const uploadOwnerId = editingId ?? `new-event-${crypto.randomUUID()}`;
+        const uploadedPoster = await this.managedEventsService.uploadPoster(
+          this.selectedPosterFile,
+          uploadOwnerId,
+        );
+        payload = {
+          ...payload,
+          image: uploadedPoster.image,
+          imagePath: uploadedPoster.imagePath,
+        };
+      }
+
       if (editingId) {
         const updatedEvent = await this.managedEventsService.updateEvent(editingId, payload);
         this.managedEvents.update((events) =>
           events.map((event) => (event.id === editingId ? updatedEvent : event)),
         );
+        if (
+          this.selectedPosterFile &&
+          previousEvent?.imagePath &&
+          previousEvent.imagePath !== updatedEvent.imagePath
+        ) {
+          await this.managedEventsService.deletePoster(previousEvent.imagePath);
+        }
         this.success.set('L’évènement a bien été modifié.');
       } else {
         const createdEvent = await this.managedEventsService.createEvent(payload);
@@ -135,7 +169,10 @@ export class BackOfficeComponent implements OnInit {
       format: event.format,
       capacity: event.capacity,
       image: event.image,
+      imagePath: event.imagePath,
+      dominantColor: event.dominantColor,
     });
+    this.clearSelectedPoster(event.image);
     this.activeTab.set('managedEvents');
   }
 
@@ -151,7 +188,39 @@ export class BackOfficeComponent implements OnInit {
       format: '',
       capacity: '',
       image: 'assets/event-hero.svg',
+      imagePath: null,
+      dominantColor: '#ff6ec7',
     });
+    this.clearSelectedPoster('assets/event-hero.svg');
+  }
+
+  protected async onPosterSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      this.error.set('Le fichier selectionne doit etre une image.');
+      input.value = '';
+      return;
+    }
+
+    this.revokeObjectPreview();
+    this.selectedPosterFile = file;
+    this.selectedPosterName.set(file.name);
+    this.objectPreviewUrl = URL.createObjectURL(file);
+    this.posterPreview.set(this.objectPreviewUrl);
+    this.eventForm.patchValue({ image: this.objectPreviewUrl });
+
+    try {
+      const dominantColor = await extractDominantColor(this.objectPreviewUrl);
+      this.eventForm.patchValue({ dominantColor });
+    } catch {
+      this.eventForm.patchValue({ dominantColor: '#ff6ec7' });
+    }
   }
 
   protected async setActiveManagedEvent(event: ManagedEvent): Promise<void> {
@@ -187,7 +256,7 @@ export class BackOfficeComponent implements OnInit {
     this.success.set('');
 
     try {
-      await this.managedEventsService.deleteEvent(event.id);
+      await this.managedEventsService.deleteEvent(event);
       this.managedEvents.update((events) => events.filter((item) => item.id !== event.id));
       if (this.editingEventId() === event.id) {
         this.resetEventForm();
@@ -307,8 +376,81 @@ export class BackOfficeComponent implements OnInit {
       format: (value.format ?? '').trim(),
       capacity: (value.capacity ?? '').trim(),
       image: (value.image ?? '').trim(),
+      imagePath: value.imagePath ?? null,
+      dominantColor: normalizeHexColor(value.dominantColor),
     };
   }
+
+  private clearSelectedPoster(preview: string): void {
+    this.revokeObjectPreview();
+    this.selectedPosterFile = null;
+    this.selectedPosterName.set('');
+    this.posterPreview.set(preview);
+  }
+
+  private revokeObjectPreview(): void {
+    if (this.objectPreviewUrl) {
+      URL.revokeObjectURL(this.objectPreviewUrl);
+      this.objectPreviewUrl = null;
+    }
+  }
+}
+
+async function extractDominantColor(imageUrl: string): Promise<string> {
+  const image = await loadImage(imageUrl);
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+
+  if (!context) {
+    return '#ff6ec7';
+  }
+
+  const sampleSize = 48;
+  canvas.width = sampleSize;
+  canvas.height = sampleSize;
+  context.drawImage(image, 0, 0, sampleSize, sampleSize);
+
+  const pixels = context.getImageData(0, 0, sampleSize, sampleSize).data;
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+  let count = 0;
+
+  for (let index = 0; index < pixels.length; index += 16) {
+    const alpha = pixels[index + 3];
+
+    if (alpha < 128) {
+      continue;
+    }
+
+    red += pixels[index];
+    green += pixels[index + 1];
+    blue += pixels[index + 2];
+    count += 1;
+  }
+
+  if (count === 0) {
+    return '#ff6ec7';
+  }
+
+  return rgbToHex(Math.round(red / count), Math.round(green / count), Math.round(blue / count));
+}
+
+function loadImage(imageUrl: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = imageUrl;
+  });
+}
+
+function rgbToHex(red: number, green: number, blue: number): string {
+  return `#${[red, green, blue].map((value) => value.toString(16).padStart(2, '0')).join('')}`;
+}
+
+function normalizeHexColor(value: string | null | undefined): string {
+  return /^#[0-9a-f]{6}$/i.test(value ?? '') ? value! : '#ff6ec7';
 }
 
 function formatFrenchDate(date: Date): string {

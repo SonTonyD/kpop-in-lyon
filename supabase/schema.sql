@@ -38,6 +38,8 @@ create table if not exists public.managed_events (
   format text not null,
   capacity text not null,
   image text not null default 'assets/event-hero.svg',
+  image_path text,
+  dominant_color text not null default '#ff6ec7',
   is_active boolean not null default false,
   created_at timestamptz not null default now()
 );
@@ -45,6 +47,16 @@ create table if not exists public.managed_events (
 alter table public.event_requests enable row level security;
 alter table public.participant_reviews enable row level security;
 alter table public.managed_events enable row level security;
+
+alter table public.managed_events
+  add column if not exists image_path text;
+
+alter table public.managed_events
+  add column if not exists dominant_color text not null default '#ff6ec7';
+
+insert into storage.buckets (id, name, public)
+values ('event-posters', 'event-posters', true)
+on conflict (id) do update set public = true;
 
 alter table public.participant_reviews
   alter column rating drop not null;
@@ -156,6 +168,35 @@ on public.managed_events
 for delete
 to authenticated
 using (true);
+
+drop policy if exists "Public can read event posters" on storage.objects;
+create policy "Public can read event posters"
+on storage.objects
+for select
+to anon, authenticated
+using (bucket_id = 'event-posters');
+
+drop policy if exists "Managers can upload event posters" on storage.objects;
+create policy "Managers can upload event posters"
+on storage.objects
+for insert
+to authenticated
+with check (bucket_id = 'event-posters');
+
+drop policy if exists "Managers can update event posters" on storage.objects;
+create policy "Managers can update event posters"
+on storage.objects
+for update
+to authenticated
+using (bucket_id = 'event-posters')
+with check (bucket_id = 'event-posters');
+
+drop policy if exists "Managers can delete event posters" on storage.objects;
+create policy "Managers can delete event posters"
+on storage.objects
+for delete
+to authenticated
+using (bucket_id = 'event-posters');
 
 insert into public.managed_events (
   title,

@@ -28,7 +28,7 @@
     <article
       class="slide"
       [class.active]="currentSlide() === index"
-      [style.background-image]="'linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(' + slide.image + ')'"
+      [style.background-image]="slideBackgroundImage(slide)"
       [attr.aria-hidden]="currentSlide() !== index"
     >
       <div class="slide-overlay"></div>

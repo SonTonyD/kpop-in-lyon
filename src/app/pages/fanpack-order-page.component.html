@@ -92,25 +92,33 @@
         <p class="pack-content">{{ campaign()!.packContent }}</p>
 
         @if (campaign()!.completePackPrice !== null) {
-          <label class="complete-pack-row">
-            <span>
-              Pack complet des {{ activeMembers().length }} membres
-              <strong>
-                {{ formatPrice(campaign()!.completePackPrice) }}
-              </strong>
-            </span>
-            <select
-              [value]="completePackQuantity()"
-              [disabled]="completePackMax() === 0"
-              (change)="updateCompletePackQuantity($event)"
-            >
-              @for (quantity of quantityOptions(completePackMax()); track quantity) {
-                <option [value]="quantity">{{ quantity }}</option>
-              }
-            </select>
-          </label>
+          <section class="complete-pack-panel" aria-label="Option pack complet">
+            <div class="complete-pack-copy">
+              <p class="complete-pack-kicker">Option pack complet</p>
+              <h3>Pack complet des {{ activeMembers().length }} membres</h3>
+              <p>
+                Un exemplaire de chaque membre disponible dans ce fanpack.
+              </p>
+            </div>
+            <div class="complete-pack-control">
+              <strong>{{ formatPrice(campaign()!.completePackPrice) }}</strong>
+              <label>
+                <span>Quantite</span>
+                <select
+                  [value]="completePackQuantity()"
+                  [disabled]="completePackMax() === 0"
+                  (change)="updateCompletePackQuantity($event)"
+                >
+                  @for (quantity of quantityOptions(completePackMax()); track quantity) {
+                    <option [value]="quantity">{{ quantity }}</option>
+                  }
+                </select>
+              </label>
+            </div>
+          </section>
         }
 
+        <h3 class="member-section-title">Fanpacks individuels</h3>
         <div class="member-grid">
           @for (member of activeMembers(); track member.id) {
             <article class="member-row" [class.out-of-stock]="member.stock === 0">

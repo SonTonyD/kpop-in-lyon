@@ -1,0 +1,54 @@
+<section class="page-shell fanpacks-page">
+  <div class="section-heading">
+    <p class="eyebrow">Fanpacks</p>
+    <h1>Fanpacks disponibles</h1>
+    <p>
+      Retrouvez les formulaires de commande actifs et choisissez le fanpack que vous souhaitez reserver.
+    </p>
+  </div>
+
+  @if (loading()) {
+    <p class="state-message surface-card">Chargement des fanpacks...</p>
+  } @else if (error()) {
+    <p class="state-message error-message surface-card">{{ error() }}</p>
+  } @else if (campaigns().length === 0) {
+    <p class="state-message surface-card">Aucun fanpack n’est disponible pour le moment.</p>
+  } @else {
+    <div class="fanpack-grid">
+      @for (campaign of campaigns(); track campaign.id) {
+        <article class="fanpack-card surface-card">
+          <div>
+            <p class="card-kicker">{{ stockLabel(campaign) }}</p>
+            <h2>{{ campaign.name }}</h2>
+            @if (campaign.description) {
+              <p>{{ campaign.description }}</p>
+            }
+          </div>
+
+          <dl>
+            <div>
+              <dt>Membres</dt>
+              <dd>{{ memberLabel(campaign) }}</dd>
+            </div>
+            <div>
+              <dt>Prix unite</dt>
+              <dd>{{ formatPrice(campaign.unitPrice) }}</dd>
+            </div>
+            @if (campaign.completePackPrice !== null) {
+              <div>
+                <dt>Pack complet</dt>
+                <dd>{{ formatPrice(campaign.completePackPrice) }}</dd>
+              </div>
+            }
+          </dl>
+
+          <p class="pack-content">{{ campaign.packContent }}</p>
+
+          <a class="button-primary" [routerLink]="['/fanpacks', campaign.slug]">
+            Commander
+          </a>
+        </article>
+      }
+    </div>
+  }
+</section>

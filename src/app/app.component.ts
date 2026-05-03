@@ -14,6 +14,7 @@ export class AppComponent {
   readonly navItems = [
     { label: 'Accueil', path: '/', exact: true },
     { label: 'Évènement', path: '/event', exact: false },
+    { label: 'Fanpacks', path: '/fanpacks', exact: false },
     { label: 'Avis', path: '/reviews', exact: false },
     { label: 'À propos', path: '/about', exact: false },
     { label: 'Contact', path: '/contact', exact: false },

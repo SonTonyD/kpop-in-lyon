@@ -26,10 +26,11 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should expose five main navigation items', () => {
+  it('should expose six main navigation items', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.navItems.length).toBe(5);
+    expect(app.navItems.length).toBe(6);
+    expect(app.navItems.some((item) => item.path === '/fanpacks')).toBeTrue();
   });
 
   it('should render the brand name', () => {

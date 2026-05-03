@@ -100,6 +100,21 @@ export class FanpacksService {
     return (data ?? []).map(mapCampaign);
   }
 
+  async getActiveCampaigns(): Promise<FanpackCampaign[]> {
+    const { data, error } = await this.supabase.client
+      .from('fanpack_campaigns')
+      .select('*, fanpack_members(*)')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false })
+      .order('display_order', { referencedTable: 'fanpack_members', ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+    return (data ?? []).map(mapCampaign);
+  }
+
   async createCampaign(payload: FanpackCampaignPayload): Promise<FanpackCampaign> {
     const { data, error } = await this.supabase.client
       .from('fanpack_campaigns')

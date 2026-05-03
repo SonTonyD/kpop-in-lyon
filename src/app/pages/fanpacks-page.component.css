@@ -1,0 +1,77 @@
+.fanpacks-page {
+  padding-bottom: 2rem;
+}
+
+.fanpack-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.fanpack-card {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.fanpack-card h2 {
+  margin: 0 0 0.5rem;
+  color: var(--text-strong);
+  font-size: 1.55rem;
+}
+
+.fanpack-card p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.card-kicker {
+  color: var(--primary-dark);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fanpack-card dl {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.fanpack-card dl div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+  background: var(--bg-secondary);
+}
+
+.fanpack-card dt {
+  color: var(--text-soft);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.fanpack-card dd {
+  margin: 0;
+  color: var(--text-strong);
+  font-weight: 800;
+}
+
+.pack-content {
+  color: var(--text-secondary);
+}
+
+.error-message {
+  color: var(--error);
+}
+
+@media (min-width: 46rem) {
+  .fanpack-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

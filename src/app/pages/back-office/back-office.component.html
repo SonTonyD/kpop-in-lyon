@@ -181,11 +181,66 @@
       </section>
     </section>
   } @else if (activeTab() === "fanpackOrders") {
-    <section class="admin-list" aria-label="Commandes fanpacks">
+    <section class="admin-list fanpack-orders-section" aria-label="Commandes fanpacks">
       <h2 class="list-title">Commandes fanpacks</h2>
       @if (fanpackOrders().length === 0) {
         <p class="state-message surface-card">Aucune commande fanpack n’a encore ete recue.</p>
       } @else {
+        <div class="orders-table-shell surface-card">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Client</th>
+                <th>Fanpack</th>
+                <th>Panier</th>
+                <th>Montant</th>
+                <th>Recuperation</th>
+                <th>Statut</th>
+                <th>Preuve</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (order of fanpackOrders(); track order.id) {
+                <tr>
+                  <td>
+                    <span class="table-primary">{{ order.createdAt | date: "dd/MM/yyyy" }}</span>
+                    <span class="table-secondary">{{ order.createdAt | date: "HH:mm" }}</span>
+                  </td>
+                  <td>
+                    <span class="table-primary">{{ order.customerFullName }}</span>
+                    <a class="table-secondary" [href]="'mailto:' + order.customerEmail">{{ order.customerEmail }}</a>
+                    <span class="table-secondary">{{ order.socialPlatform }}: {{ order.socialUsername }}</span>
+                  </td>
+                  <td>
+                    <span class="table-primary">{{ order.campaignName }}</span>
+                  </td>
+                  <td class="basket-cell">{{ orderItemsLabel(order) }}</td>
+                  <td class="amount-cell">{{ order.totalAmount | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }}</td>
+                  <td>
+                    <span class="table-primary">{{ recoveryMethodLabel(order.recoveryMethod) }}</span>
+                    @if (order.postalAddress) {
+                      <span class="table-secondary">{{ order.postalAddress }}</span>
+                    }
+                  </td>
+                  <td>
+                    <label class="status-field table-status-field">
+                      <span>Statut</span>
+                      <select [value]="order.status" [disabled]="savingId() === order.id" (change)="updateFanpackOrderStatus(order, $event)">
+                        @for (status of fanpackOrderStatuses; track status.value) {
+                          <option [value]="status.value">{{ status.label }}</option>
+                        }
+                      </select>
+                    </label>
+                  </td>
+                  <td>
+                    <button type="button" class="ghost-button table-action" [disabled]="savingId() === 'proof-' + order.id" (click)="openFanpackProof(order)">Voir</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
         @for (order of fanpackOrders(); track order.id) {
           <article class="admin-card surface-card">
             <div class="card-main">

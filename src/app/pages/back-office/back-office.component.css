@@ -198,6 +198,86 @@
   font-size: 1.35rem;
 }
 
+.fanpack-orders-section > article {
+  display: none;
+}
+
+.orders-table-shell {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0;
+}
+
+.orders-table {
+  width: 100%;
+  min-width: 66rem;
+  border-collapse: collapse;
+  background: var(--bg-elevated);
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 0.85rem 0.9rem;
+  border-bottom: 1px solid var(--border-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.orders-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-secondary);
+  color: var(--text-soft);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.orders-table tr:hover td {
+  background: rgba(255, 228, 234, 0.26);
+}
+
+.table-primary,
+.table-secondary {
+  display: block;
+}
+
+.table-primary {
+  color: var(--text-strong);
+  font-weight: 800;
+}
+
+.table-secondary {
+  margin-top: 0.2rem;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.basket-cell {
+  max-width: 16rem;
+  color: var(--text-main);
+  line-height: 1.45;
+}
+
+.amount-cell {
+  color: var(--primary-dark);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.table-status-field {
+  min-width: 12rem;
+}
+
+.table-action {
+  min-height: 2.35rem;
+  padding: 0.55rem 0.85rem;
+}
+
 .poster-field {
   display: grid;
   gap: 0.6rem;

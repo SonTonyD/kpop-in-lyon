@@ -552,6 +552,10 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
     return 'Lyon';
   }
 
+  protected orderItemsLabel(order: FanpackOrder): string {
+    return order.items.map((item) => `${item.quantity} x ${item.memberName}`).join(', ');
+  }
+
   protected async togglePublished(review: ParticipantReview): Promise<void> {
     const nextValue = !review.isPublished;
     this.savingId.set(review.id);

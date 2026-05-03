@@ -27,6 +27,13 @@
     </button>
     <button
       type="button"
+      [class.active]="activeTab() === 'fanpackOrders'"
+      (click)="activeTab.set('fanpackOrders')"
+    >
+      Commandes fanpacks <span>{{ fanpackOrders().length }}</span>
+    </button>
+    <button
+      type="button"
       [class.active]="activeTab() === 'reviews'"
       (click)="activeTab.set('reviews')"
     >
@@ -172,6 +179,54 @@
           }
         }
       </section>
+    </section>
+  } @else if (activeTab() === "fanpackOrders") {
+    <section class="admin-list" aria-label="Commandes fanpacks">
+      <h2 class="list-title">Commandes fanpacks</h2>
+      @if (fanpackOrders().length === 0) {
+        <p class="state-message surface-card">Aucune commande fanpack n’a encore ete recue.</p>
+      } @else {
+        @for (order of fanpackOrders(); track order.id) {
+          <article class="admin-card surface-card">
+            <div class="card-main">
+              <div>
+                <p class="card-kicker">{{ order.createdAt | date: "dd/MM/yyyy HH:mm" }}</p>
+                <h2>{{ order.customerFullName }}</h2>
+                <p>{{ order.campaignName }} · {{ order.totalAmount | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }}</p>
+              </div>
+              <div class="card-actions">
+                <label class="status-field">
+                  <span>Statut</span>
+                  <select [value]="order.status" [disabled]="savingId() === order.id" (change)="updateFanpackOrderStatus(order, $event)">
+                    @for (status of fanpackOrderStatuses; track status.value) {
+                      <option [value]="status.value">{{ status.label }}</option>
+                    }
+                  </select>
+                </label>
+                <button type="button" class="ghost-button" [disabled]="savingId() === 'proof-' + order.id" (click)="openFanpackProof(order)">Preuve</button>
+              </div>
+            </div>
+            <dl class="request-details">
+              <div>
+                <dt>Contact</dt>
+                <dd>{{ order.customerEmail }} · {{ order.socialPlatform }}: {{ order.socialUsername }}</dd>
+              </div>
+              <div>
+                <dt>Recuperation</dt>
+                <dd>{{ recoveryMethodLabel(order.recoveryMethod) }} @if (order.postalAddress) { · {{ order.postalAddress }} }</dd>
+              </div>
+              <div>
+                <dt>Panier</dt>
+                <dd>
+                  @for (item of order.items; track item.id) {
+                    <span>{{ item.quantity }} x {{ item.memberName }} </span>
+                  }
+                </dd>
+              </div>
+            </dl>
+          </article>
+        }
+      }
     </section>
   } @else if (activeTab() === "fanpacks") {
     <section class="fanpack-admin-layout" aria-label="Gestion des fanpacks">

@@ -22,7 +22,7 @@ import { FanpacksService } from '../../services/fanpacks.service';
 import { ManagedEventsService } from '../../services/managed-events.service';
 import { ReviewsService } from '../../services/reviews.service';
 
-type BackOfficeTab = 'managedEvents' | 'fanpacks' | 'reviews' | 'requests';
+type BackOfficeTab = 'managedEvents' | 'fanpacks' | 'fanpackOrders' | 'reviews' | 'requests';
 
 @Component({
   selector: 'app-back-office',
@@ -514,17 +514,23 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
     this.success.set('');
 
     try {
-      await this.fanpacksService.updateOrderStatus(order, status);
+      const result = await this.fanpacksService.updateOrderStatus(order, status);
       this.fanpackOrders.update((orders) =>
         orders.map((item) => (item.id === order.id ? { ...item, status } : item)),
       );
-      this.success.set(
-        status === 'processing'
-          ? 'La commande est en traitement et l’email client a ete envoye.'
-          : 'Le statut de la commande a ete modifie.',
-      );
+      if (status === 'processing' && !result.emailSent) {
+        this.error.set(
+          `Le statut est passe en traitement, mais l’email n’a pas ete envoye. ${result.emailError ?? ''}`.trim(),
+        );
+      } else {
+        this.success.set(
+          status === 'processing'
+            ? 'La commande est en traitement et Resend a confirme la creation de l’email.'
+            : 'Le statut de la commande a ete modifie.',
+        );
+      }
     } catch {
-      this.error.set('Le statut de la commande n’a pas pu etre modifie ou l’email a echoue.');
+      this.error.set('Le statut de la commande n’a pas pu etre modifie.');
     } finally {
       this.savingId.set('');
     }

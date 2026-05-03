@@ -16,11 +16,6 @@
           <p>{{ campaign()!.description }}</p>
         }
       </div>
-
-      <aside class="total-card surface-card" aria-live="polite">
-        <span>Total a payer</span>
-        <strong>{{ total() | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }}</strong>
-      </aside>
     </div>
 
     <form class="fanpack-form surface-card" [formGroup]="form" (ngSubmit)="submit()">
@@ -101,7 +96,7 @@
             <span>
               Pack complet des {{ activeMembers().length }} membres
               <strong>
-                {{ campaign()!.completePackPrice | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }}
+                {{ formatPrice(campaign()!.completePackPrice) }}
               </strong>
             </span>
             <input
@@ -111,6 +106,8 @@
               [value]="completePackQuantity()"
               [disabled]="completePackMax() === 0"
               (input)="updateCompletePackQuantity($event)"
+              (change)="updateCompletePackQuantity($event)"
+              (wheel)="preventQuantityWheel($event)"
             />
           </label>
         }
@@ -135,6 +132,8 @@
                 [value]="memberQuantity(member)"
                 [disabled]="member.stock === 0"
                 (input)="updateMemberQuantity(member, $event)"
+                (change)="updateMemberQuantity(member, $event)"
+                (wheel)="preventQuantityWheel($event)"
               />
             </article>
           }
@@ -162,6 +161,11 @@
           <p class="proof-name">{{ selectedProofName() }}</p>
         }
       </section>
+
+      <aside class="total-card total-card-bottom" aria-live="polite">
+        <span>Total a payer</span>
+        <strong>{{ formatPrice(currentTotal()) }}</strong>
+      </aside>
 
       <div class="form-footer">
         <button type="submit" class="button-primary" [disabled]="submitting()">

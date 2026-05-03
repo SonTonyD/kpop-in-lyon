@@ -69,12 +69,29 @@ Deno.serve(async (request) => {
       }),
     });
 
+    const responseText = await response.text();
+    const resendResult = parseJson(responseText);
+
     if (!response.ok) {
-      const detail = await response.text();
-      return jsonResponse({ error: 'Resend request failed', detail }, 502);
+      return jsonResponse({
+        ok: false,
+        emailSent: false,
+        error: 'Resend request failed',
+        resendStatus: response.status,
+        detail: responseText,
+      });
     }
 
-    return jsonResponse({ ok: true });
+    if (!resendResult?.id) {
+      return jsonResponse({
+        ok: false,
+        emailSent: false,
+        error: 'Resend did not return an email id',
+        detail: responseText,
+      });
+    }
+
+    return jsonResponse({ ok: true, emailSent: true, resendId: resendResult.id });
   } catch (error) {
     return jsonResponse({ error: String(error) }, 500);
   }
@@ -94,4 +111,14 @@ function escapeHtml(value: string): string {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+function parseJson(value: string): Record<string, unknown> | null {
+  try {
+    const parsed = JSON.parse(value);
+
+    return parsed && typeof parsed === 'object' ? parsed as Record<string, unknown> : null;
+  } catch {
+    return null;
+  }
 }

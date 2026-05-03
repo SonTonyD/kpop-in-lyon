@@ -198,7 +198,10 @@ export class FanpacksService {
       p_postal_address: payload.postalAddress,
       p_proof_path: payload.proofPath,
       p_complete_pack_quantity: payload.completePackQuantity,
-      p_member_quantities: payload.memberQuantities,
+      p_member_quantities: payload.memberQuantities.map((item) => ({
+        member_id: item.memberId,
+        quantity: item.quantity,
+      })),
     });
 
     if (error) {
@@ -235,7 +238,10 @@ export class FanpacksService {
     return data.signedUrl;
   }
 
-  async updateOrderStatus(order: FanpackOrder, status: FanpackOrderStatus): Promise<void> {
+  async updateOrderStatus(
+    order: FanpackOrder,
+    status: FanpackOrderStatus,
+  ): Promise<{ emailSent: boolean; emailError: string | null }> {
     const { error } = await this.supabase.client
       .from('fanpack_orders')
       .update({ status })
@@ -246,15 +252,37 @@ export class FanpacksService {
     }
 
     if (status === 'processing' && order.status !== 'processing') {
-      const { error: emailError } = await this.supabase.client.functions.invoke(
+      const { data, error: emailError } = await this.supabase.client.functions.invoke<{
+        emailSent?: boolean;
+        resendId?: string;
+        error?: string;
+        detail?: string;
+        resendStatus?: number;
+      }>(
         'send-fanpack-status-email',
         { body: { orderId: order.id } },
       );
 
       if (emailError) {
-        throw emailError;
+        return { emailSent: false, emailError: getErrorMessage(emailError) };
+      }
+
+      if (data?.emailSent === false) {
+        return {
+          emailSent: false,
+          emailError: formatEmailFunctionError(data.error, data.detail, data.resendStatus),
+        };
+      }
+
+      if (data?.emailSent === true && !data.resendId) {
+        return {
+          emailSent: false,
+          emailError: 'La fonction a repondu sans identifiant Resend.',
+        };
       }
     }
+
+    return { emailSent: true, emailError: null };
   }
 }
 
@@ -373,4 +401,19 @@ function safeFileName(fileName: string): string {
 
 function roundMoney(value: number): number {
   return Math.round(value * 100) / 100;
+}
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+function formatEmailFunctionError(
+  error: string | undefined,
+  detail: string | undefined,
+  status: number | undefined,
+): string {
+  const statusPrefix = status ? `Resend ${status}` : 'Resend';
+  const message = detail || error || 'Erreur inconnue';
+
+  return `${statusPrefix}: ${message}`;
 }

@@ -1,5 +1,5 @@
-import { CommonModule, CurrencyPipe } from '@angular/common';
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit, computed, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -18,7 +18,7 @@ import {
 @Component({
   selector: 'app-fanpack-order-page',
   standalone: true,
-  imports: [CommonModule, CurrencyPipe, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './fanpack-order-page.component.html',
   styleUrl: './fanpack-order-page.component.css',
 })
@@ -31,6 +31,7 @@ export class FanpackOrderPageComponent implements OnInit {
   protected readonly campaign = signal<FanpackCampaign | null>(null);
   protected readonly quantities = signal<Record<string, number>>({});
   protected readonly completePackQuantity = signal(0);
+  protected readonly total = signal(0);
   protected readonly recoveryOptions: { value: FanpackRecoveryMethod; label: string }[] = [
     { value: 'lyon', label: 'Lyon' },
     { value: 'post', label: 'Par la poste' },
@@ -41,27 +42,13 @@ export class FanpackOrderPageComponent implements OnInit {
     (this.campaign()?.members ?? []).filter((member) => member.isActive),
   );
   protected readonly completePackMax = computed(() => getCompletePackMaxQuantity(this.activeMembers()));
-  protected readonly total = computed(() => {
-    const campaign = this.campaign();
-
-    if (!campaign) {
-      return 0;
-    }
-
-    return calculateFanpackTotal(
-      campaign,
-      this.activeMembers(),
-      this.quantities(),
-      this.completePackQuantity(),
-    );
-  });
-
   private proofFile: File | null = null;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly fanpacksService: FanpacksService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
   ) {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -82,10 +69,12 @@ export class FanpackOrderPageComponent implements OnInit {
       this.quantities.set(
         Object.fromEntries((campaign?.members ?? []).map((member) => [member.id, 0])),
       );
+      this.recalculateTotal();
     } catch {
       this.error.set('Le formulaire fanpack ne peut pas etre charge pour le moment.');
     } finally {
       this.loading.set(false);
+      this.changeDetectorRef.detectChanges();
     }
   }
 
@@ -102,6 +91,7 @@ export class FanpackOrderPageComponent implements OnInit {
     const quantity = clampQuantity(Number(input.value), this.memberMaxQuantity(member));
     this.quantities.update((quantities) => ({ ...quantities, [member.id]: quantity }));
     input.value = String(quantity);
+    this.recalculateTotal();
   }
 
   protected updateCompletePackQuantity(event: Event): void {
@@ -109,6 +99,12 @@ export class FanpackOrderPageComponent implements OnInit {
     const quantity = clampQuantity(Number(input.value), this.completePackMax());
     this.completePackQuantity.set(quantity);
     input.value = String(quantity);
+    this.recalculateTotal();
+  }
+
+  protected preventQuantityWheel(event: WheelEvent): void {
+    event.preventDefault();
+    (event.currentTarget as HTMLInputElement).blur();
   }
 
   protected onProofSelected(event: Event): void {
@@ -145,10 +141,34 @@ export class FanpackOrderPageComponent implements OnInit {
     );
   }
 
+  protected currentTotal(): number {
+    const campaign = this.campaign();
+
+    if (!campaign) {
+      return 0;
+    }
+
+    return calculateFanpackTotal(
+      campaign,
+      this.activeMembers(),
+      this.quantities(),
+      this.completePackQuantity(),
+    );
+  }
+
+  protected formatPrice(value: number | null | undefined): string {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value ?? 0);
+  }
+
   protected async submit(): Promise<void> {
     this.applyPostalAddressValidation();
 
-    if (this.form.invalid || !this.proofFile || !this.hasSelectedFanpacks() || this.total() <= 0) {
+    if (this.form.invalid || !this.proofFile || !this.hasSelectedFanpacks() || this.currentTotal() <= 0) {
       this.form.markAllAsTouched();
       this.error.set('Merci de completer tous les champs obligatoires et de choisir au moins un fanpack.');
       return;
@@ -195,6 +215,7 @@ export class FanpackOrderPageComponent implements OnInit {
       });
       this.quantities.set(Object.fromEntries(campaign.members.map((member) => [member.id, 0])));
       this.completePackQuantity.set(0);
+      this.recalculateTotal();
       this.proofFile = null;
       this.selectedProofName.set('');
     } catch {
@@ -215,6 +236,24 @@ export class FanpackOrderPageComponent implements OnInit {
     }
 
     postalAddressControl.updateValueAndValidity();
+  }
+
+  private recalculateTotal(): void {
+    const campaign = this.campaign();
+
+    if (!campaign) {
+      this.total.set(0);
+      return;
+    }
+
+    this.total.set(
+      calculateFanpackTotal(
+        campaign,
+        this.activeMembers(),
+        this.quantities(),
+        this.completePackQuantity(),
+      ),
+    );
   }
 }
 

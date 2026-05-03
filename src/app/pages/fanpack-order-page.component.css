@@ -12,6 +12,10 @@
 .total-card {
   display: grid;
   gap: 0.35rem;
+  padding: 1.1rem;
+  border: 1px solid rgba(232, 96, 122, 0.22);
+  border-radius: 0.5rem;
+  background: var(--bg-soft);
 }
 
 .total-card span {
@@ -26,6 +30,10 @@
   color: var(--primary-dark);
   font-size: clamp(2rem, 7vw, 3.25rem);
   line-height: 1;
+}
+
+.total-card-bottom {
+  margin-top: 0.5rem;
 }
 
 .fanpack-form,
@@ -216,10 +224,6 @@ input:disabled {
 }
 
 @media (min-width: 48rem) {
-  .fanpack-header {
-    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.35fr);
-  }
-
   .form-grid,
   .payment-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

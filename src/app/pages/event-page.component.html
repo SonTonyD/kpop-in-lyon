@@ -7,7 +7,7 @@
 
   <div class="event-content">
     @if (loading() || !event()) {
-      <div class="event-copy skeleton-event" aria-label="Chargement de l’évènement">
+      <div class="event-copy skeleton-event" aria-label="Chargement de l'evenement">
         <div class="skeleton-line skeleton-kicker"></div>
         <div class="skeleton-title"></div>
         <div class="skeleton-title skeleton-title-short"></div>
@@ -31,57 +31,63 @@
         </div>
       </div>
     } @else {
-      <div class="event-copy">
-      <div class="event-context">
-        <p class="event-index">EV-01 - ÉVÈNEMENT ACTUEL</p>
-        <div class="sale-indicator">
-          <span class="sale-dot"></span>
-          <span>Inscriptions ouvertes</span>
-        </div>
-      </div>
-
-      <h1>
-        @for (titleLine of splitTitle(event()!.title); track titleLine) {
-          <span>{{ titleLine }}</span>
-        }
-      </h1>
-
-      <p class="event-description">{{ event()!.description }}</p>
-      <div class="event-separator"></div>
-
-      <div class="event-bottom">
-        <div class="event-facts">
-          <article class="fact-block">
-            <p>Date</p>
-            <strong>{{ event()!.date | uppercase }}</strong>
-            <span>Heure : {{ event()!.time }}</span>
-          </article>
-
-          <article class="fact-block">
-            <p>Lieu</p>
-            <strong>{{ event()!.location | uppercase }}, {{ event()!.venueNote | uppercase }}</strong>
-            <span>{{ event()!.venueNote }}</span>
-          </article>
-
-          <article class="fact-block">
-            <p>Format</p>
-            <strong>{{ event()!.format | uppercase }}</strong>
-            <span>{{ event()!.capacity }}</span>
-          </article>
-        </div>
-
-        <aside class="countdown-card">
-          <p class="countdown-label">Début dans</p>
-          <div class="countdown-grid">
-            @for (item of countdown(); track item.label) {
-              <div class="countdown-item">
-                <strong>{{ item.value }}</strong>
-                <span>{{ item.label }}</span>
-              </div>
-            }
+      <div class="event-layout">
+        <div class="event-copy">
+          <div class="event-context">
+            <p class="event-index">EV-01 - EVENEMENT ACTUEL</p>
+            <div class="sale-indicator">
+              <span class="sale-dot"></span>
+              <span>Inscriptions ouvertes</span>
+            </div>
           </div>
-        </aside>
-      </div>
+
+          <h1>
+            @for (titleLine of splitTitle(event()!.title); track titleLine) {
+              <span>{{ titleLine }}</span>
+            }
+          </h1>
+
+          <p class="event-description">{{ event()!.description }}</p>
+          <div class="event-separator"></div>
+
+          <div class="event-bottom">
+            <div class="event-facts">
+              <article class="fact-block">
+                <p>Date</p>
+                <strong>{{ event()!.date | uppercase }}</strong>
+                <span>Heure : {{ event()!.time }}</span>
+              </article>
+
+              <article class="fact-block">
+                <p>Lieu</p>
+                <strong>{{ event()!.location | uppercase }}, {{ event()!.venueNote | uppercase }}</strong>
+                <span>{{ event()!.venueNote }}</span>
+              </article>
+
+              <article class="fact-block">
+                <p>Format</p>
+                <strong>{{ event()!.format | uppercase }}</strong>
+                <span>{{ event()!.capacity }}</span>
+              </article>
+            </div>
+
+            <aside class="countdown-card">
+              <p class="countdown-label">Debut dans</p>
+              <div class="countdown-grid">
+                @for (item of countdown(); track item.label) {
+                  <div class="countdown-item">
+                    <strong>{{ item.value }}</strong>
+                    <span>{{ item.label }}</span>
+                  </div>
+                }
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <figure class="event-poster">
+          <img [src]="event()!.image" [alt]="'Affiche de ' + event()!.title" />
+        </figure>
       </div>
     }
   </div>

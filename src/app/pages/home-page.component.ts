@@ -87,7 +87,7 @@ export class HomePageComponent implements OnInit {
       return `linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(${slide.image})`;
     }
 
-    return buildEventBackground(slide.image, slide.dominantColor);
+    return buildEventBackground(slide.dominantColor);
   }
 
   protected handleTouchStart(event: TouchEvent): void {
@@ -142,14 +142,14 @@ export class HomePageComponent implements OnInit {
   }
 }
 
-function buildEventBackground(image: string, dominantColor: string): string {
+function buildEventBackground(dominantColor: string): string {
   const color = /^#[0-9a-f]{6}$/i.test(dominantColor) ? dominantColor : '#ff6ec7';
 
   return [
-    `radial-gradient(circle at 18% 24%, ${hexToRgba(color, 0.42)}, transparent 28%)`,
-    `radial-gradient(circle at 78% 18%, ${hexToRgba(color, 0.24)}, transparent 22%)`,
-    'linear-gradient(180deg, rgba(6, 7, 18, 0.52), rgba(6, 7, 18, 0.9))',
-    `url(${image})`,
+    `radial-gradient(circle at 18% 24%, ${hexToRgba(color, 0.58)}, transparent 32%)`,
+    `radial-gradient(circle at 78% 18%, ${hexToRgba(color, 0.34)}, transparent 24%)`,
+    `linear-gradient(135deg, ${hexToRgba(color, 0.34)}, rgba(6, 7, 18, 0.92) 46%)`,
+    'linear-gradient(180deg, rgba(6, 7, 18, 0.72), rgba(6, 7, 18, 0.94))',
   ].join(', ');
 }
 

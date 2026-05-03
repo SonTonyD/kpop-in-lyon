@@ -9,7 +9,7 @@
     <article class="slide active skeleton-slide">
       <div class="slide-overlay"></div>
       <div class="slide-shell">
-        <div class="slide-panel skeleton-panel" aria-label="Chargement de l’évènement">
+        <div class="slide-panel skeleton-panel" aria-label="Chargement de l'evenement">
           <div class="skeleton-line skeleton-kicker"></div>
           <div class="skeleton-title"></div>
           <div class="skeleton-title skeleton-title-short"></div>
@@ -25,97 +25,105 @@
     </article>
   } @else {
     @for (slide of slides(); track slide.title; let index = $index) {
-    <article
-      class="slide"
-      [class.active]="currentSlide() === index"
-      [style.background-image]="slideBackgroundImage(slide)"
-      [attr.aria-hidden]="currentSlide() !== index"
-    >
-      <div class="slide-overlay"></div>
+      <article
+        class="slide"
+        [class.active]="currentSlide() === index"
+        [style.background-image]="slideBackgroundImage(slide)"
+        [attr.aria-hidden]="currentSlide() !== index"
+      >
+        <div class="slide-overlay"></div>
 
-      <div class="slide-shell">
-        <div class="slide-panel" [class.slide-panel--past]="slide.kind === 'past'">
-          @if (slide.kind === 'upcoming') {
-            <div class="slide-context">
-              <p class="eyebrow">{{ slide.eyebrow }}</p>
-              <div class="sale-indicator">
-                <span class="sale-dot"></span>
-                <span>Inscriptions ouvertes</span>
-              </div>
-            </div>
+        <div class="slide-shell">
+          <div class="slide-panel" [class.slide-panel--past]="slide.kind === 'past'">
+            @if (slide.kind === 'upcoming') {
+              <div class="upcoming-layout">
+                <div class="upcoming-copy">
+                  <div class="slide-context">
+                    <p class="eyebrow">{{ slide.eyebrow }}</p>
+                    <div class="sale-indicator">
+                      <span class="sale-dot"></span>
+                      <span>Inscriptions ouvertes</span>
+                    </div>
+                  </div>
 
-            <h1>
-              @for (titleLine of splitTitle(event()!.title); track titleLine) {
-                <span>{{ titleLine }}</span>
-              }
-            </h1>
-
-            <p class="slide-copy slide-quote">{{ slide.description }}</p>
-            <div class="slide-separator"></div>
-
-            <div class="slide-facts">
-              <div class="slide-fact">
-                <p>Date</p>
-                <strong>{{ event()!.date | uppercase }}</strong>
-                <span>Heure : {{ event()!.time }}</span>
-              </div>
-
-              <div class="slide-fact">
-                <p>Lieu</p>
-                <strong>{{ event()!.location | uppercase }}, {{ event()!.venueNote | uppercase }}</strong>
-                <span>{{ event()!.venueNote }}</span>
-              </div>
-
-              <div class="slide-fact">
-                <p>Format</p>
-                <strong>{{ event()!.format | uppercase }}</strong>
-                <span>{{ event()!.capacity }}</span>
-              </div>
-            </div>
-
-            <a class="button-primary" [routerLink]="slide.actionLink">{{ slide.actionLabel }}</a>
-          } @else {
-            <div class="past-hero">
-              <div class="slide-context">
-                <p class="eyebrow">{{ slide.eyebrow }}</p>
-                <div class="sale-indicator sale-indicator--past">
-                  <span class="sale-dot sale-dot--past"></span>
-                  <span>Souvenirs de la communauté</span>
-                </div>
-              </div>
-
-              <h2 class="past-title">
-                <span>ÉVÈNEMENTS</span>
-                <span>PASSÉS</span>
-              </h2>
-
-              <p class="slide-copy slide-quote">{{ slide.description }}</p>
-              <div class="slide-separator"></div>
-
-              <div class="past-hero-layout">
-                <div class="past-facts">
-                  @for (stat of pastEventStats; track stat.label; let index = $index) {
-                    @if (index < 2) {
-                      <div class="stat-card stat-card--hero">
-                        <p>{{ stat.label }}</p>
-                        <strong>{{ stat.value }}</strong>
-                        <span>Données issues des retours participants et de la fréquentation.</span>
-                      </div>
+                  <h1>
+                    @for (titleLine of splitTitle(event()!.title); track titleLine) {
+                      <span>{{ titleLine }}</span>
                     }
-                  }
+                  </h1>
+
+                  <p class="slide-copy slide-quote">{{ slide.description }}</p>
+                  <div class="slide-separator"></div>
+
+                  <div class="slide-facts">
+                    <div class="slide-fact">
+                      <p>Date</p>
+                      <strong>{{ event()!.date | uppercase }}</strong>
+                      <span>Heure : {{ event()!.time }}</span>
+                    </div>
+
+                    <div class="slide-fact">
+                      <p>Lieu</p>
+                      <strong>{{ event()!.location | uppercase }}, {{ event()!.venueNote | uppercase }}</strong>
+                      <span>{{ event()!.venueNote }}</span>
+                    </div>
+
+                    <div class="slide-fact">
+                      <p>Format</p>
+                      <strong>{{ event()!.format | uppercase }}</strong>
+                      <span>{{ event()!.capacity }}</span>
+                    </div>
+                  </div>
+
+                  <a class="button-primary" [routerLink]="slide.actionLink">{{ slide.actionLabel }}</a>
                 </div>
 
-                <div class="past-gallery past-gallery--hero">
-                  @for (image of pastEventImages; track image) {
-                    <img [src]="image" alt="Souvenir d’un évènement K-pop passé" />
-                  }
+                <figure class="upcoming-poster">
+                  <img [src]="slide.image" [alt]="'Affiche de ' + slide.title" />
+                </figure>
+              </div>
+            } @else {
+              <div class="past-hero">
+                <div class="slide-context">
+                  <p class="eyebrow">{{ slide.eyebrow }}</p>
+                  <div class="sale-indicator sale-indicator--past">
+                    <span class="sale-dot sale-dot--past"></span>
+                    <span>Souvenirs de la communaute</span>
+                  </div>
+                </div>
+
+                <h2 class="past-title">
+                  <span>EVENEMENTS</span>
+                  <span>PASSES</span>
+                </h2>
+
+                <p class="slide-copy slide-quote">{{ slide.description }}</p>
+                <div class="slide-separator"></div>
+
+                <div class="past-hero-layout">
+                  <div class="past-facts">
+                    @for (stat of pastEventStats; track stat.label; let index = $index) {
+                      @if (index < 2) {
+                        <div class="stat-card stat-card--hero">
+                          <p>{{ stat.label }}</p>
+                          <strong>{{ stat.value }}</strong>
+                          <span>Donnees issues des retours participants et de la frequentation.</span>
+                        </div>
+                      }
+                    }
+                  </div>
+
+                  <div class="past-gallery past-gallery--hero">
+                    @for (image of pastEventImages; track image) {
+                      <img [src]="image" alt="Souvenir d'un evenement K-pop passe" />
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
-          }
+            }
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
     }
   }
 
@@ -124,9 +132,9 @@
       type="button"
       class="ghost-button carousel-arrow"
       (click)="previousSlide()"
-      aria-label="Diapositive précédente"
+      aria-label="Diapositive precedente"
     >
-      Précédent
+      Precedent
     </button>
 
     <div class="carousel-dots" aria-label="Pagination du carrousel">
@@ -136,7 +144,7 @@
           class="carousel-dot"
           [class.active]="currentSlide() === index"
           (click)="goToSlide(index)"
-          [attr.aria-label]="'Aller à la diapositive ' + (index + 1)"
+          [attr.aria-label]="'Aller a la diapositive ' + (index + 1)"
         ></button>
       }
     </div>

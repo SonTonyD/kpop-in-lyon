@@ -405,28 +405,48 @@ async function extractDominantColor(imageUrl: string): Promise<string> {
     return '#ff6ec7';
   }
 
-  const sampleSize = 48;
-  canvas.width = sampleSize;
-  canvas.height = sampleSize;
-  context.drawImage(image, 0, 0, sampleSize, sampleSize);
+  const width = image.naturalWidth || image.width;
+  const height = image.naturalHeight || image.height;
+  canvas.width = width;
+  canvas.height = height;
+  context.drawImage(image, 0, 0, width, height);
 
-  const pixels = context.getImageData(0, 0, sampleSize, sampleSize).data;
+  const pixels = context.getImageData(0, 0, width, height).data;
   let red = 0;
   let green = 0;
   let blue = 0;
   let count = 0;
 
-  for (let index = 0; index < pixels.length; index += 16) {
-    const alpha = pixels[index + 3];
+  const leftEdgeWidth = Math.min(60, width);
+  const rightEdgeStart = Math.max(width - 60, 0);
+  const topEdgeHeight = Math.min(100, height);
+  const bottomEdgeStart = Math.max(height - 50, 0);
+  const sampleStep = 2;
 
-    if (alpha < 128) {
-      continue;
+  for (let y = 0; y < height; y += sampleStep) {
+    for (let x = 0; x < width; x += sampleStep) {
+      const isPosterContour =
+        x < leftEdgeWidth ||
+        x >= rightEdgeStart ||
+        y < topEdgeHeight ||
+        y >= bottomEdgeStart;
+
+      if (!isPosterContour) {
+        continue;
+      }
+
+      const index = (y * width + x) * 4;
+      const alpha = pixels[index + 3];
+
+      if (alpha < 128) {
+        continue;
+      }
+
+      red += pixels[index];
+      green += pixels[index + 1];
+      blue += pixels[index + 2];
+      count += 1;
     }
-
-    red += pixels[index];
-    green += pixels[index + 1];
-    blue += pixels[index + 2];
-    count += 1;
   }
 
   if (count === 0) {

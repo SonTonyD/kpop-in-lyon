@@ -18,10 +18,10 @@
   backdrop-filter: blur(18px);
   background: linear-gradient(
     180deg,
-    rgba(5, 6, 15, 0.88),
-    rgba(5, 6, 15, 0.34)
+    rgba(255, 255, 255, 0.96),
+    rgba(255, 255, 255, 0.78)
   );
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-light);
   overflow-x: hidden;
 }
 
@@ -74,7 +74,7 @@
   background: linear-gradient(
     90deg,
     transparent,
-    var(--accent) 18%,
+    var(--primary) 18%,
     transparent
   );
   opacity: 0;
@@ -100,11 +100,11 @@
   align-items: center;
   justify-content: center;
   min-height: 2.35rem;
-  border: 1px solid rgba(255, 110, 199, 0.4);
+  border: 1px solid rgba(232, 96, 122, 0.34);
   border-radius: 999px;
   padding: 0.55rem 0.85rem;
-  background: rgba(255, 110, 199, 0.14);
-  color: var(--text-strong);
+  background: var(--primary-light);
+  color: var(--primary-dark);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.14em;

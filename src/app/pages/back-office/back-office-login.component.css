@@ -33,21 +33,21 @@ label span {
 
 input {
   width: 100%;
-  border: 1px solid var(--border-soft);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-strong);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg-main);
+  color: var(--text-main);
   padding: 0.95rem 1rem;
 }
 
 input:focus {
-  outline: 2px solid rgba(255, 110, 199, 0.28);
+  outline: 2px solid rgba(232, 96, 122, 0.28);
   outline-offset: 0.1rem;
 }
 
 small {
   margin: 0;
-  color: #ffb4c7;
+  color: var(--error);
 }
 
 .error-box {
@@ -55,10 +55,10 @@ small {
   gap: 0.35rem;
   margin: 0;
   padding: 0.85rem;
-  border: 1px solid rgba(255, 180, 199, 0.34);
+  border: 1px solid rgba(224, 92, 82, 0.3);
   border-radius: 0.75rem;
-  background: rgba(255, 180, 199, 0.08);
-  color: #ffb4c7;
+  background: rgba(224, 92, 82, 0.08);
+  color: var(--error);
 }
 
 .error-box p,

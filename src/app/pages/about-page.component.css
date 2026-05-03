@@ -9,13 +9,13 @@
 
 .about-visual {
   min-height: 18rem;
-  border-radius: 1.5rem;
-  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-light);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 45%),
-    radial-gradient(circle at 20% 20%, rgba(255, 110, 199, 0.3), transparent 25%),
-    radial-gradient(circle at 80% 25%, rgba(106, 155, 255, 0.35), transparent 28%),
-    linear-gradient(160deg, #18142e 0%, #090611 100%);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.62), transparent 45%),
+    radial-gradient(circle at 20% 20%, rgba(232, 96, 122, 0.24), transparent 25%),
+    radial-gradient(circle at 80% 25%, rgba(74, 138, 181, 0.24), transparent 28%),
+    linear-gradient(160deg, var(--bg-soft) 0%, var(--secondary-light) 100%);
   box-shadow: var(--shadow-soft);
 }
 

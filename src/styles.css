@@ -1,14 +1,31 @@
 :root {
-  --bg-main: #07050c;
-  --bg-elevated: rgba(16, 11, 29, 0.72);
-  --text-main: #d5d3de;
-  --text-soft: #a9a2bb;
-  --text-strong: #fff8ff;
-  --accent: #ff6ec7;
-  --accent-soft: #f4bfdc;
-  --accent-alt: #68a8ff;
-  --border-soft: rgba(255, 255, 255, 0.12);
-  --shadow-soft: 0 24px 70px rgba(3, 3, 12, 0.42);
+  --primary: #E8607A;
+  --primary-hover: #C94D63;
+  --primary-dark: #A33550;
+  --primary-light: #FFE4EA;
+  --secondary: #4A8AB5;
+  --secondary-hover: #2E6A91;
+  --secondary-light: #DCE9F5;
+  --bg-main: #FFFFFF;
+  --bg-secondary: #F6F8FA;
+  --bg-soft: #FFF0F3;
+  --text-main: #1E2D3A;
+  --text-secondary: #5A6B7C;
+  --text-disabled: #96A3AE;
+  --border-light: #EBF0F5;
+  --border: #D0DBE5;
+  --success: #52C48A;
+  --warning: #F5BB50;
+  --error: #E05C52;
+  --info: #5B9CF6;
+  --bg-elevated: rgba(255, 255, 255, 0.88);
+  --text-soft: var(--text-secondary);
+  --text-strong: var(--text-main);
+  --accent: var(--primary);
+  --accent-soft: var(--primary-dark);
+  --accent-alt: var(--secondary);
+  --border-soft: var(--border-light);
+  --shadow-soft: 0 18px 46px rgba(30, 45, 58, 0.1);
   --header-offset: 4.8rem;
   --footer-space: 4.5rem;
 }
@@ -33,9 +50,9 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: var(--text-main);
   background:
-    radial-gradient(circle at top left, rgba(255, 110, 199, 0.14), transparent 22%),
-    radial-gradient(circle at top right, rgba(104, 168, 255, 0.12), transparent 22%),
-    linear-gradient(180deg, #0b0813 0%, #07050c 100%);
+    radial-gradient(circle at top left, rgba(232, 96, 122, 0.12), transparent 24%),
+    radial-gradient(circle at top right, rgba(74, 138, 181, 0.13), transparent 24%),
+    linear-gradient(180deg, var(--bg-main) 0%, var(--bg-secondary) 100%);
 }
 
 body::before {
@@ -44,10 +61,10 @@ body::before {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(208, 219, 229, 0.34) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(208, 219, 229, 0.34) 1px, transparent 1px);
   background-size: 2.5rem 2.5rem;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), transparent 70%);
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 72%);
 }
 
 h1,
@@ -73,7 +90,7 @@ a {
 
 .surface-card {
   padding: 1.35rem;
-  border-radius: 1.5rem;
+  border-radius: 0.5rem;
   background: var(--bg-elevated);
   border: 1px solid var(--border-soft);
   box-shadow: var(--shadow-soft);
@@ -106,14 +123,15 @@ a {
 }
 
 .button-primary {
-  background: linear-gradient(135deg, var(--accent), #ff8db6);
-  color: #170d23;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: #ffffff;
   font-weight: 800;
 }
 
 .ghost-button {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-strong);
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  color: var(--text-main);
 }
 
 .button-primary:hover,

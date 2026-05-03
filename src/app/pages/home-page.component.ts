@@ -84,7 +84,7 @@ export class HomePageComponent implements OnInit {
 
   protected slideBackgroundImage(slide: HomeSlide): string {
     if (slide.kind === 'past') {
-      return `linear-gradient(180deg, rgba(6, 7, 18, 0.45), rgba(6, 7, 18, 0.88)), url(${slide.image})`;
+      return `linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(246, 248, 250, 0.9)), url(${slide.image})`;
     }
 
     return buildEventBackground(slide.dominantColor);
@@ -146,10 +146,10 @@ function buildEventBackground(dominantColor: string): string {
   const color = /^#[0-9a-f]{6}$/i.test(dominantColor) ? dominantColor : '#ff6ec7';
 
   return [
-    `radial-gradient(circle at 18% 24%, ${hexToRgba(color, 0.58)}, transparent 32%)`,
-    `radial-gradient(circle at 78% 18%, ${hexToRgba(color, 0.34)}, transparent 24%)`,
-    `linear-gradient(135deg, ${hexToRgba(color, 0.34)}, rgba(6, 7, 18, 0.92) 46%)`,
-    'linear-gradient(180deg, rgba(6, 7, 18, 0.72), rgba(6, 7, 18, 0.94))',
+    `radial-gradient(circle at 18% 24%, ${hexToRgba(color, 0.28)}, transparent 34%)`,
+    `radial-gradient(circle at 78% 18%, ${hexToRgba(color, 0.18)}, transparent 28%)`,
+    `linear-gradient(135deg, ${hexToRgba(color, 0.18)}, rgba(255, 255, 255, 0.92) 48%)`,
+    'linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 248, 250, 0.96))',
   ].join(', ');
 }
 

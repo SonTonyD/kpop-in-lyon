@@ -5,8 +5,12 @@
       <h1>Gestion Kpop in Lyon</h1>
     </div>
     <div class="header-actions">
-      <button type="button" class="ghost-button" (click)="refresh()">Actualiser</button>
-      <button type="button" class="button-primary" (click)="signOut()">Déconnexion</button>
+      <button type="button" class="ghost-button" (click)="refresh()">
+        Actualiser
+      </button>
+      <button type="button" class="button-primary" (click)="signOut()">
+        Déconnexion
+      </button>
     </div>
   </header>
 
@@ -46,18 +50,35 @@
 
   @if (loading()) {
     <p class="state-message surface-card">Chargement des données...</p>
-  } @else if (activeTab() === 'managedEvents') {
-    <section class="managed-events-layout" aria-label="Gestion des évènements affichés">
-      <form class="admin-card surface-card managed-event-form" [formGroup]="eventForm" (ngSubmit)="saveManagedEvent()">
+  } @else if (activeTab() === "managedEvents") {
+    <section
+      class="managed-events-layout"
+      aria-label="Gestion des évènements affichés"
+    >
+      <form
+        class="admin-card surface-card managed-event-form"
+        [formGroup]="eventForm"
+        (ngSubmit)="saveManagedEvent()"
+      >
         <div>
-          <p class="card-kicker">{{ editingEventId() ? 'Modification' : 'Nouvel évènement' }}</p>
-          <h2>{{ editingEventId() ? 'Modifier l’évènement' : 'Créer un évènement' }}</h2>
+          <p class="card-kicker">
+            {{ editingEventId() ? "Modification" : "Nouvel évènement" }}
+          </p>
+          <h2>
+            {{
+              editingEventId() ? "Modifier l’évènement" : "Créer un évènement"
+            }}
+          </h2>
         </div>
 
         <div class="event-form-grid">
           <label>
             <span>Titre affiché en grand</span>
-            <input type="text" formControlName="title" placeholder="SEVENTEEN ÉVÈNEMENT" />
+            <input
+              type="text"
+              formControlName="title"
+              placeholder="SEVENTEEN ÉVÈNEMENT"
+            />
           </label>
 
           <label class="full-width">
@@ -87,24 +108,39 @@
 
           <label>
             <span>Format</span>
-            <input type="text" formControlName="format" placeholder="Évènement fan" />
+            <input
+              type="text"
+              formControlName="format"
+              placeholder="Évènement fan"
+            />
           </label>
 
           <label>
             <span>Capacité</span>
-            <input type="text" formControlName="capacity" placeholder="Capacité 250 personnes" />
+            <input
+              type="text"
+              formControlName="capacity"
+              placeholder="Capacité 250 personnes"
+            />
           </label>
 
           <div class="poster-field full-width">
-            <span>Affiche de l'Ã©vÃ¨nement</span>
+            <span>Affiche de l'Évènement</span>
             <div class="poster-upload">
-              <img [src]="posterPreview()" alt="AperÃ§u de l'affiche de l'Ã©vÃ¨nement" />
+              <img
+                [src]="posterPreview()"
+                alt="Aperçu de l'affiche de l'Évènement"
+              />
               <div>
                 <label class="poster-picker">
-                  <input type="file" accept="image/*" (change)="onPosterSelected($event)" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    (change)="onPosterSelected($event)"
+                  />
                   <span>Choisir une affiche</span>
                 </label>
-                <p>Format recommandÃ© : 4:5, comme event-seventeen.jpeg. JPEG, PNG ou WebP acceptÃ©s.</p>
+                <p>Format recommandé : 4:5 JPEG</p>
                 @if (selectedPosterName()) {
                   <p class="poster-name">{{ selectedPosterName() }}</p>
                 }
@@ -114,28 +150,51 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="button-primary" [disabled]="savingId() === 'new-event'">
-            {{ editingEventId() ? 'Enregistrer les modifications' : 'Créer l’évènement' }}
+          <button
+            type="submit"
+            class="button-primary"
+            [disabled]="savingId() === 'new-event'"
+          >
+            {{
+              editingEventId()
+                ? "Enregistrer les modifications"
+                : "Créer l’évènement"
+            }}
           </button>
           @if (editingEventId()) {
-            <button type="button" class="ghost-button" (click)="resetEventForm()">Annuler</button>
+            <button
+              type="button"
+              class="ghost-button"
+              (click)="resetEventForm()"
+            >
+              Annuler
+            </button>
           }
         </div>
       </form>
 
       <section class="admin-list" aria-label="Évènements configurés">
         @if (managedEvents().length === 0) {
-          <p class="state-message surface-card">Aucun évènement n’a encore été créé.</p>
+          <p class="state-message surface-card">
+            Aucun évènement n’a encore été créé.
+          </p>
         } @else {
           @for (event of managedEvents(); track event.id) {
             <article class="admin-card surface-card">
               <div class="card-main">
                 <div>
                   <p class="card-kicker">
-                    {{ event.isActive ? 'Affiché en première page' : (event.createdAt | date: 'dd/MM/yyyy HH:mm') }}
+                    {{
+                      event.isActive
+                        ? "Affiché en première page"
+                        : (event.createdAt | date: "dd/MM/yyyy HH:mm")
+                    }}
                   </p>
                   <h2>{{ event.title }}</h2>
-                  <p>{{ event.dateLabel }} · {{ event.timeLabel }} · {{ event.location }}, {{ event.country }}</p>
+                  <p>
+                    {{ event.dateLabel }} · {{ event.timeLabel }} ·
+                    {{ event.location }}, {{ event.country }}
+                  </p>
                 </div>
                 <div class="card-actions">
                   <button
@@ -145,9 +204,15 @@
                     [disabled]="savingId() === event.id"
                     (click)="setActiveManagedEvent(event)"
                   >
-                    {{ event.isActive ? 'En cours' : 'Afficher' }}
+                    {{ event.isActive ? "En cours" : "Afficher" }}
                   </button>
-                  <button type="button" class="ghost-button" (click)="editManagedEvent(event)">Modifier</button>
+                  <button
+                    type="button"
+                    class="ghost-button"
+                    (click)="editManagedEvent(event)"
+                  >
+                    Modifier
+                  </button>
                   <button
                     type="button"
                     class="danger-button"
@@ -159,7 +224,11 @@
                 </div>
               </div>
               <p class="request-copy">{{ event.description }}</p>
-              <img class="event-poster-thumb" [src]="event.image" alt="Affiche de l'Ã©vÃ¨nement" />
+              <img
+                class="event-poster-thumb"
+                [src]="event.image"
+                alt="Affiche de l'Ã©vÃ¨nement"
+              />
               <dl class="request-details">
                 <div>
                   <dt>Format</dt>
@@ -175,18 +244,27 @@
         }
       </section>
     </section>
-  } @else if (activeTab() === 'reviews') {
+  } @else if (activeTab() === "reviews") {
     <section class="admin-list" aria-label="Avis participants">
       @if (reviews().length === 0) {
-        <p class="state-message surface-card">Aucun avis n’a encore été reçu.</p>
+        <p class="state-message surface-card">
+          Aucun avis n’a encore été reçu.
+        </p>
       } @else {
         @for (review of reviews(); track review.id) {
           <article class="admin-card surface-card">
             <div class="card-main">
               <div>
-                <p class="card-kicker">{{ review.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+                <p class="card-kicker">
+                  {{ review.createdAt | date: "dd/MM/yyyy HH:mm" }}
+                </p>
                 <h2>{{ review.name }}</h2>
-                <p>{{ review.event }} @if (review.rating !== null) { · {{ review.rating }}/5 }</p>
+                <p>
+                  {{ review.event }}
+                  @if (review.rating !== null) {
+                    · {{ review.rating }}/5
+                  }
+                </p>
               </div>
               <div class="card-actions">
                 <button
@@ -196,7 +274,7 @@
                   [disabled]="savingId() === review.id"
                   (click)="togglePublished(review)"
                 >
-                  {{ review.isPublished ? 'Publié' : 'Masqué' }}
+                  {{ review.isPublished ? "Publié" : "Masqué" }}
                 </button>
                 <button
                   type="button"
@@ -216,15 +294,22 @@
   } @else {
     <section class="admin-list" aria-label="Demandes d’évènements">
       @if (requests().length === 0) {
-        <p class="state-message surface-card">Aucune demande d’évènement n’a encore été reçue.</p>
+        <p class="state-message surface-card">
+          Aucune demande d’évènement n’a encore été reçue.
+        </p>
       } @else {
         @for (request of requests(); track request.id) {
           <article class="admin-card surface-card">
             <div class="card-main">
               <div>
-                <p class="card-kicker">{{ request.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+                <p class="card-kicker">
+                  {{ request.createdAt | date: "dd/MM/yyyy HH:mm" }}
+                </p>
                 <h2>{{ request.artist }}</h2>
-                <p>{{ request.fanbaseName }} · {{ request.city }} · {{ request.period }}</p>
+                <p>
+                  {{ request.fanbaseName }} · {{ request.city }} ·
+                  {{ request.period }}
+                </p>
               </div>
               <div class="card-actions">
                 <label class="status-field">
@@ -253,19 +338,22 @@
             <dl class="request-details">
               <div>
                 <dt>Contact</dt>
-                <dd>{{ request.fullName }} · <a [href]="'mailto:' + request.email">{{ request.email }}</a></dd>
+                <dd>
+                  {{ request.fullName }} ·
+                  <a [href]="'mailto:' + request.email">{{ request.email }}</a>
+                </dd>
               </div>
               <div>
                 <dt>Réseaux</dt>
-                <dd>{{ request.socialLinks || 'Non renseigné' }}</dd>
+                <dd>{{ request.socialLinks || "Non renseigné" }}</dd>
               </div>
               <div>
                 <dt>Collaboration</dt>
-                <dd>{{ request.collaborationTypes.join(', ') }}</dd>
+                <dd>{{ request.collaborationTypes.join(", ") }}</dd>
               </div>
               <div>
                 <dt>Décorations</dt>
-                <dd>{{ request.decorationTypes.join(', ') }}</dd>
+                <dd>{{ request.decorationTypes.join(", ") }}</dd>
               </div>
             </dl>
 

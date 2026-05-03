@@ -32,17 +32,17 @@ label span {
 input,
 textarea {
   width: 100%;
-  border: 1px solid var(--border-soft);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-strong);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg-main);
+  color: var(--text-main);
   padding: 0.95rem 1rem;
   font: inherit;
 }
 
 input:focus,
 textarea:focus {
-  outline: 2px solid rgba(255, 110, 199, 0.28);
+  outline: 2px solid rgba(232, 96, 122, 0.28);
   outline-offset: 0.1rem;
 }
 
@@ -54,9 +54,9 @@ small {
   grid-template-columns: auto 1fr;
   align-items: start;
   padding: 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
 }
 
 .choice-card input {
@@ -77,7 +77,7 @@ small {
 
 .error-message {
   margin: 0;
-  color: #ffb4c7;
+  color: var(--error);
 }
 
 .button-primary:disabled {

@@ -49,7 +49,7 @@
 }
 
 .review-stars span {
-  color: rgba(255, 255, 255, 0.24);
+  color: var(--border);
 }
 
 .review-stars span.active {
@@ -92,16 +92,16 @@
   min-width: 0;
   max-width: 100%;
   width: 100%;
-  border: 1px solid var(--border-soft);
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-strong);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--bg-main);
+  color: var(--text-main);
   padding: 0.95rem 1rem;
 }
 
 .review-form input:focus,
 .review-form textarea:focus {
-  outline: 2px solid rgba(255, 110, 199, 0.28);
+  outline: 2px solid rgba(232, 96, 122, 0.28);
   outline-offset: 0.1rem;
 }
 
@@ -146,9 +146,9 @@
   place-items: center;
   min-height: 2.75rem;
   min-width: 0;
-  border: 1px solid var(--border-soft);
+  border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-main);
   color: var(--text-main);
   cursor: pointer;
   font-size: 0.9rem;
@@ -156,9 +156,9 @@
 }
 
 .rating-options input:checked + span {
-  border-color: rgba(255, 110, 199, 0.58);
-  background: rgba(255, 110, 199, 0.18);
-  color: var(--text-strong);
+  border-color: rgba(232, 96, 122, 0.58);
+  background: var(--primary-light);
+  color: var(--primary-dark);
 }
 
 .form-actions {
@@ -176,7 +176,7 @@
 }
 
 .error-message {
-  color: #ffb4c7;
+  color: var(--error);
 }
 
 .button-primary:disabled {

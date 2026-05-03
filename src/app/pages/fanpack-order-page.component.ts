@@ -87,24 +87,21 @@ export class FanpackOrderPageComponent implements OnInit {
   }
 
   protected updateMemberQuantity(member: FanpackMember, event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const quantity = clampQuantity(Number(input.value), this.memberMaxQuantity(member));
+    const select = event.target as HTMLSelectElement;
+    const quantity = clampQuantity(Number(select.value), this.memberMaxQuantity(member));
     this.quantities.update((quantities) => ({ ...quantities, [member.id]: quantity }));
-    input.value = String(quantity);
     this.recalculateTotal();
   }
 
   protected updateCompletePackQuantity(event: Event): void {
-    const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLSelectElement;
     const quantity = clampQuantity(Number(input.value), this.completePackMax());
     this.completePackQuantity.set(quantity);
-    input.value = String(quantity);
     this.recalculateTotal();
   }
 
-  protected preventQuantityWheel(event: WheelEvent): void {
-    event.preventDefault();
-    (event.currentTarget as HTMLInputElement).blur();
+  protected quantityOptions(max: number): number[] {
+    return Array.from({ length: Math.max(0, max) + 1 }, (_, index) => index);
   }
 
   protected onProofSelected(event: Event): void {
@@ -141,6 +138,18 @@ export class FanpackOrderPageComponent implements OnInit {
     );
   }
 
+  protected canSubmit(): boolean {
+    this.applyPostalAddressValidation(false);
+
+    return (
+      this.form.valid &&
+      !!this.proofFile &&
+      this.hasSelectedFanpacks() &&
+      this.currentTotal() > 0 &&
+      !this.submitting()
+    );
+  }
+
   protected currentTotal(): number {
     const campaign = this.campaign();
 
@@ -168,7 +177,7 @@ export class FanpackOrderPageComponent implements OnInit {
   protected async submit(): Promise<void> {
     this.applyPostalAddressValidation();
 
-    if (this.form.invalid || !this.proofFile || !this.hasSelectedFanpacks() || this.currentTotal() <= 0) {
+    if (!this.canSubmit()) {
       this.form.markAllAsTouched();
       this.error.set('Merci de completer tous les champs obligatoires et de choisir au moins un fanpack.');
       return;
@@ -180,12 +189,18 @@ export class FanpackOrderPageComponent implements OnInit {
       return;
     }
 
+    const proofFile = this.proofFile;
+
+    if (!proofFile) {
+      return;
+    }
+
     this.submitting.set(true);
     this.error.set('');
     this.submitted.set(false);
 
     try {
-      const proofPath = await this.fanpacksService.uploadPaymentProof(this.proofFile, campaign.id);
+      const proofPath = await this.fanpacksService.uploadPaymentProof(proofFile, campaign.id);
       const value = this.form.getRawValue();
       const payload: FanpackOrderPayload = {
         campaignId: campaign.id,
@@ -225,7 +240,7 @@ export class FanpackOrderPageComponent implements OnInit {
     }
   }
 
-  private applyPostalAddressValidation(): void {
+  private applyPostalAddressValidation(emitEvent = true): void {
     const postalAddressControl = this.form.controls.postalAddress;
 
     if (this.needsPostalAddress()) {
@@ -235,7 +250,7 @@ export class FanpackOrderPageComponent implements OnInit {
       postalAddressControl.setValue('');
     }
 
-    postalAddressControl.updateValueAndValidity();
+    postalAddressControl.updateValueAndValidity({ emitEvent });
   }
 
   private recalculateTotal(): void {

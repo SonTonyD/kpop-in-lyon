@@ -99,16 +99,15 @@
                 {{ formatPrice(campaign()!.completePackPrice) }}
               </strong>
             </span>
-            <input
-              type="number"
-              min="0"
-              [max]="completePackMax()"
+            <select
               [value]="completePackQuantity()"
               [disabled]="completePackMax() === 0"
-              (input)="updateCompletePackQuantity($event)"
               (change)="updateCompletePackQuantity($event)"
-              (wheel)="preventQuantityWheel($event)"
-            />
+            >
+              @for (quantity of quantityOptions(completePackMax()); track quantity) {
+                <option [value]="quantity">{{ quantity }}</option>
+              }
+            </select>
           </label>
         }
 
@@ -125,16 +124,15 @@
                   }
                 </p>
               </div>
-              <input
-                type="number"
-                min="0"
-                [max]="memberMaxQuantity(member)"
+              <select
                 [value]="memberQuantity(member)"
                 [disabled]="member.stock === 0"
-                (input)="updateMemberQuantity(member, $event)"
                 (change)="updateMemberQuantity(member, $event)"
-                (wheel)="preventQuantityWheel($event)"
-              />
+              >
+                @for (quantity of quantityOptions(memberMaxQuantity(member)); track quantity) {
+                  <option [value]="quantity">{{ quantity }}</option>
+                }
+              </select>
             </article>
           }
         </div>
@@ -168,7 +166,7 @@
       </aside>
 
       <div class="form-footer">
-        <button type="submit" class="button-primary" [disabled]="submitting()">
+        <button type="submit" class="button-primary" [disabled]="!canSubmit()">
           {{ submitting() ? 'Envoi...' : 'Valider la commande' }}
         </button>
         @if (submitted()) {

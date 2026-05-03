@@ -516,8 +516,9 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
     try {
       const result = await this.fanpacksService.updateOrderStatus(order, status);
       this.fanpackOrders.update((orders) =>
-        orders.map((item) => (item.id === order.id ? { ...item, status } : item)),
+        orders.map((item) => (item.id === order.id ? result.order : item)),
       );
+      this.fanpackOrders.set(await this.fanpacksService.getOrders());
       if (status === 'processing' && !result.emailSent) {
         this.error.set(
           `Le statut est passe en traitement, mais l’email n’a pas ete envoye. ${result.emailError ?? ''}`.trim(),

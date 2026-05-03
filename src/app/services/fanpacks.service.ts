@@ -256,15 +256,19 @@ export class FanpacksService {
   async updateOrderStatus(
     order: FanpackOrder,
     status: FanpackOrderStatus,
-  ): Promise<{ emailSent: boolean; emailError: string | null }> {
-    const { error } = await this.supabase.client
+  ): Promise<{ order: FanpackOrder; emailSent: boolean; emailError: string | null }> {
+    const { data, error } = await this.supabase.client
       .from('fanpack_orders')
       .update({ status })
-      .eq('id', order.id);
+      .eq('id', order.id)
+      .select('*, fanpack_order_items(*)')
+      .single();
 
     if (error) {
       throw error;
     }
+
+    const updatedOrder = mapOrder(data);
 
     if (status === 'processing' && order.status !== 'processing') {
       const { data, error: emailError } = await this.supabase.client.functions.invoke<{
@@ -279,11 +283,12 @@ export class FanpacksService {
       );
 
       if (emailError) {
-        return { emailSent: false, emailError: getErrorMessage(emailError) };
+        return { order: updatedOrder, emailSent: false, emailError: getErrorMessage(emailError) };
       }
 
       if (data?.emailSent === false) {
         return {
+          order: updatedOrder,
           emailSent: false,
           emailError: formatEmailFunctionError(data.error, data.detail, data.resendStatus),
         };
@@ -291,13 +296,14 @@ export class FanpacksService {
 
       if (data?.emailSent === true && !data.resendId) {
         return {
+          order: updatedOrder,
           emailSent: false,
           emailError: 'La fonction a repondu sans identifiant Resend.',
         };
       }
     }
 
-    return { emailSent: true, emailError: null };
+    return { order: updatedOrder, emailSent: true, emailError: null };
   }
 }
 

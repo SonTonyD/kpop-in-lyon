@@ -201,7 +201,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (order of fanpackOrders(); track order.id) {
+              @for (order of fanpackOrders(); track order.id + '-' + order.status) {
                 <tr>
                   <td>
                     <span class="table-primary">{{ order.createdAt | date: "dd/MM/yyyy" }}</span>
@@ -224,11 +224,12 @@
                     }
                   </td>
                   <td>
+                    <span class="status-badge">{{ fanpackOrderStatusLabel(order.status) }}</span>
                     <label class="status-field table-status-field">
                       <span>Statut</span>
                       <select [value]="order.status" [disabled]="savingId() === order.id" (change)="updateFanpackOrderStatus(order, $event)">
                         @for (status of fanpackOrderStatuses; track status.value) {
-                          <option [value]="status.value">{{ status.label }}</option>
+                          <option [value]="status.value" [selected]="status.value === order.status">{{ status.label }}</option>
                         }
                       </select>
                     </label>

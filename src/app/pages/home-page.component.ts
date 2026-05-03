@@ -90,6 +90,10 @@ export class HomePageComponent implements OnInit {
     return buildEventBackground(slide.dominantColor);
   }
 
+  protected slideHaloColor(slide: HomeSlide): string {
+    return hexToRgba(normalizeHexColor(slide.dominantColor), 0.34);
+  }
+
   protected handleTouchStart(event: TouchEvent): void {
     this.touchStartX = event.touches[0]?.clientX ?? null;
     this.touchStartY = event.touches[0]?.clientY ?? null;
@@ -143,21 +147,51 @@ export class HomePageComponent implements OnInit {
 }
 
 function buildEventBackground(dominantColor: string): string {
-  const color = /^#[0-9a-f]{6}$/i.test(dominantColor) ? dominantColor : '#ff6ec7';
+  const color = normalizeHexColor(dominantColor);
+  const light = mixHexColors(color, '#ffffff', 0.42);
+  const deep = mixHexColors(color, '#1e2d3a', 0.34);
 
   return [
-    `radial-gradient(circle at 18% 24%, ${hexToRgba(color, 0.28)}, transparent 34%)`,
-    `radial-gradient(circle at 78% 18%, ${hexToRgba(color, 0.18)}, transparent 28%)`,
-    `linear-gradient(135deg, ${hexToRgba(color, 0.18)}, rgba(255, 255, 255, 0.92) 48%)`,
-    'linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(246, 248, 250, 0.96))',
+    `radial-gradient(circle at 14% 22%, ${hexToRgba(light, 0.52)}, transparent 34%)`,
+    `radial-gradient(circle at 82% 18%, ${hexToRgba(color, 0.34)}, transparent 30%)`,
+    `radial-gradient(circle at 58% 82%, ${hexToRgba(deep, 0.18)}, transparent 42%)`,
+    `linear-gradient(135deg, ${hexToRgba(light, 0.38)} 0%, ${hexToRgba(color, 0.22)} 42%, ${hexToRgba(deep, 0.14)} 100%)`,
+    'linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(246, 248, 250, 0.88))',
   ].join(', ');
 }
 
-function hexToRgba(hex: string, alpha: number): string {
+function normalizeHexColor(value: string): string {
+  return /^#[0-9a-f]{6}$/i.test(value) ? value : '#ff6ec7';
+}
+
+function mixHexColors(source: string, target: string, targetWeight: number): string {
+  const sourceRgb = hexToRgb(source);
+  const targetRgb = hexToRgb(target);
+  const sourceWeight = 1 - targetWeight;
+
+  return rgbToHex(
+    Math.round(sourceRgb.red * sourceWeight + targetRgb.red * targetWeight),
+    Math.round(sourceRgb.green * sourceWeight + targetRgb.green * targetWeight),
+    Math.round(sourceRgb.blue * sourceWeight + targetRgb.blue * targetWeight),
+  );
+}
+
+function hexToRgb(hex: string): { red: number; green: number; blue: number } {
   const normalized = hex.replace('#', '');
-  const red = parseInt(normalized.slice(0, 2), 16);
-  const green = parseInt(normalized.slice(2, 4), 16);
-  const blue = parseInt(normalized.slice(4, 6), 16);
+
+  return {
+    red: parseInt(normalized.slice(0, 2), 16),
+    green: parseInt(normalized.slice(2, 4), 16),
+    blue: parseInt(normalized.slice(4, 6), 16),
+  };
+}
+
+function rgbToHex(red: number, green: number, blue: number): string {
+  return `#${[red, green, blue].map((value) => value.toString(16).padStart(2, '0')).join('')}`;
+}
+
+function hexToRgba(hex: string, alpha: number): string {
+  const { red, green, blue } = hexToRgb(hex);
 
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }

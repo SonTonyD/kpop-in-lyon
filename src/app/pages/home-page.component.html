@@ -29,6 +29,7 @@
         class="slide"
         [class.active]="currentSlide() === index"
         [style.background-image]="slideBackgroundImage(slide)"
+        [style.--poster-halo]="slideHaloColor(slide)"
         [attr.aria-hidden]="currentSlide() !== index"
       >
         <div class="slide-overlay"></div>

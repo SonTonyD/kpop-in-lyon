@@ -2,6 +2,7 @@
   class="event-hero"
   [class.event-hero--loading]="loading() || !event()"
   [style.background-image]="event() ? eventBackgroundImage(event()!) : ''"
+  [style.--poster-halo]="event() ? eventHaloColor(event()!) : null"
 >
   <div class="event-overlay"></div>
 

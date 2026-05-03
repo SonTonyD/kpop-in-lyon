@@ -1,5 +1,6 @@
 .event-hero {
   position: relative;
+  --poster-halo: rgba(232, 96, 122, 0.34);
   margin-top: calc(-1 * var(--header-offset));
   min-height: 100svh;
   background-position: center;
@@ -66,9 +67,21 @@
 }
 
 .event-poster {
+  position: relative;
   width: min(100%, 23rem);
   margin: 0;
   justify-self: center;
+}
+
+.event-poster::before {
+  content: '';
+  position: absolute;
+  inset: -1.4rem;
+  z-index: -1;
+  border-radius: 1.4rem;
+  background:
+    radial-gradient(circle, var(--poster-halo) 0%, rgba(255, 255, 255, 0.5) 44%, transparent 72%);
+  filter: blur(10px);
 }
 
 .event-poster img {
@@ -79,7 +92,10 @@
   object-fit: contain;
   border-radius: 0.65rem;
   border: 1px solid rgba(208, 219, 229, 0.88);
-  box-shadow: 0 28px 60px rgba(30, 45, 58, 0.16);
+  box-shadow:
+    0 28px 60px rgba(30, 45, 58, 0.16),
+    0 0 0 0.55rem var(--poster-halo),
+    0 0 70px var(--poster-halo);
 }
 
 .event-context {

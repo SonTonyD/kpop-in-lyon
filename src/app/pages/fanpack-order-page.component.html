@@ -1,0 +1,181 @@
+<section class="page-shell fanpack-page">
+  @if (loading()) {
+    <p class="state-message surface-card">Chargement du formulaire fanpack...</p>
+  } @else if (!campaign()) {
+    <div class="section-heading">
+      <p class="eyebrow">Fanpacks</p>
+      <h1>Formulaire indisponible</h1>
+      <p>Ce fanpack n’est pas ouvert ou n’existe pas.</p>
+    </div>
+  } @else {
+    <div class="fanpack-header">
+      <div class="section-heading">
+        <p class="eyebrow">Commande fanpack</p>
+        <h1>{{ campaign()!.name }}</h1>
+        @if (campaign()!.description) {
+          <p>{{ campaign()!.description }}</p>
+        }
+      </div>
+
+      <aside class="total-card surface-card" aria-live="polite">
+        <span>Total a payer</span>
+        <strong>{{ total() | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }}</strong>
+      </aside>
+    </div>
+
+    <form class="fanpack-form surface-card" [formGroup]="form" (ngSubmit)="submit()">
+      <section>
+        <h2>Informations client</h2>
+        <div class="form-grid">
+          <label>
+            <span>Email</span>
+            <input type="email" formControlName="email" autocomplete="email" />
+            @if (form.controls.email.touched && form.controls.email.invalid) {
+              <small>Un email valide est requis.</small>
+            }
+          </label>
+
+          <label>
+            <span>Nom prenom</span>
+            <input type="text" formControlName="fullName" autocomplete="name" />
+            @if (form.controls.fullName.touched && form.controls.fullName.invalid) {
+              <small>Ce champ est obligatoire.</small>
+            }
+          </label>
+
+          <fieldset class="choice-field">
+            <legend>Reseau social</legend>
+            <label>
+              <input type="radio" formControlName="socialPlatform" value="instagram" />
+              <span>Instagram</span>
+            </label>
+            <label>
+              <input type="radio" formControlName="socialPlatform" value="twitter" />
+              <span>Twitter</span>
+            </label>
+          </fieldset>
+
+          <label>
+            <span>Nom d’utilisateur</span>
+            <input type="text" formControlName="socialUsername" />
+            @if (form.controls.socialUsername.touched && form.controls.socialUsername.invalid) {
+              <small>Ce champ est obligatoire.</small>
+            }
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Recuperation</h2>
+        <fieldset class="choice-field recovery-field">
+          <legend>Methode de recuperation</legend>
+          @for (option of recoveryOptions; track option.value) {
+            <label>
+              <input
+                type="radio"
+                formControlName="recoveryMethod"
+                [value]="option.value"
+              />
+              <span>{{ option.label }}</span>
+            </label>
+          }
+        </fieldset>
+
+        @if (needsPostalAddress()) {
+          <label class="postal-field">
+            <span>Adresse postale</span>
+            <textarea rows="4" formControlName="postalAddress"></textarea>
+            @if (form.controls.postalAddress.touched && form.controls.postalAddress.invalid) {
+              <small>L’adresse postale est obligatoire pour l’envoi par la poste.</small>
+            }
+          </label>
+        }
+      </section>
+
+      <section>
+        <h2>Choix des fanpacks</h2>
+        <p class="pack-content">{{ campaign()!.packContent }}</p>
+
+        @if (campaign()!.completePackPrice !== null) {
+          <label class="complete-pack-row">
+            <span>
+              Pack complet des {{ activeMembers().length }} membres
+              <strong>
+                {{ campaign()!.completePackPrice | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }}
+              </strong>
+            </span>
+            <input
+              type="number"
+              min="0"
+              [max]="completePackMax()"
+              [value]="completePackQuantity()"
+              [disabled]="completePackMax() === 0"
+              (input)="updateCompletePackQuantity($event)"
+            />
+          </label>
+        }
+
+        <div class="member-grid">
+          @for (member of activeMembers(); track member.id) {
+            <article class="member-row" [class.out-of-stock]="member.stock === 0">
+              <div>
+                <h3>{{ member.name }}</h3>
+                <p>
+                  @if (member.stock > 0) {
+                    {{ member.stock }} en stock · max {{ member.maxPerOrder }}
+                  } @else {
+                    Rupture de stock
+                  }
+                </p>
+              </div>
+              <input
+                type="number"
+                min="0"
+                [max]="memberMaxQuantity(member)"
+                [value]="memberQuantity(member)"
+                [disabled]="member.stock === 0"
+                (input)="updateMemberQuantity(member, $event)"
+              />
+            </article>
+          }
+        </div>
+      </section>
+
+      <section class="payment-section">
+        <h2>Paiement</h2>
+        <div class="payment-grid">
+          <article>
+            <strong>PayPal</strong>
+            <p>kpopinlyon69&#64;gmail.com</p>
+          </article>
+          <article>
+            <strong>Virement bancaire</strong>
+            <p>Merci de nous contacter via Instagram (&#64;kpopinlyon) pour obtenir le RIB.</p>
+          </article>
+        </div>
+
+        <label class="proof-picker">
+          <input type="file" accept="image/*" (change)="onProofSelected($event)" />
+          <span>Deposer la preuve de paiement</span>
+        </label>
+        @if (selectedProofName()) {
+          <p class="proof-name">{{ selectedProofName() }}</p>
+        }
+      </section>
+
+      <div class="form-footer">
+        <button type="submit" class="button-primary" [disabled]="submitting()">
+          {{ submitting() ? 'Envoi...' : 'Valider la commande' }}
+        </button>
+        @if (submitted()) {
+          <p class="success-message">
+            La commande a bien ete envoyee. Elle apparaitra comme preuve a valider dans le back-office.
+          </p>
+        }
+        @if (error()) {
+          <p class="error-message">{{ error() }}</p>
+        }
+      </div>
+    </form>
+  }
+</section>

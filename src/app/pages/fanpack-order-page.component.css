@@ -1,0 +1,232 @@
+.fanpack-page {
+  padding-bottom: 2rem;
+}
+
+.fanpack-header {
+  display: grid;
+  gap: 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+}
+
+.total-card {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.total-card span {
+  color: var(--text-soft);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+}
+
+.total-card strong {
+  color: var(--primary-dark);
+  font-size: clamp(2rem, 7vw, 3.25rem);
+  line-height: 1;
+}
+
+.fanpack-form,
+.fanpack-form section,
+.form-grid,
+.member-grid,
+.form-footer {
+  display: grid;
+  gap: 1rem;
+}
+
+.fanpack-form h2 {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 1.35rem;
+}
+
+.form-grid label,
+.postal-field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.form-grid span,
+.postal-field span,
+.choice-field legend {
+  color: var(--text-strong);
+  font-weight: 800;
+}
+
+input,
+textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--bg-main);
+  color: var(--text-main);
+  padding: 0.82rem 0.9rem;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid rgba(232, 96, 122, 0.28);
+  outline-offset: 0.1rem;
+}
+
+small,
+.error-message {
+  color: var(--error);
+}
+
+.success-message {
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+.choice-field {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.choice-field legend {
+  width: 100%;
+  margin-bottom: 0.15rem;
+}
+
+.choice-field label,
+.complete-pack-row,
+.member-row,
+.payment-grid article {
+  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+  background: var(--bg-secondary);
+}
+
+.choice-field label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.85rem;
+  font-weight: 700;
+}
+
+.choice-field input {
+  width: auto;
+}
+
+.pack-content {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.complete-pack-row,
+.member-row {
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.9rem;
+}
+
+.complete-pack-row span {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--text-strong);
+  font-weight: 800;
+}
+
+.complete-pack-row strong {
+  color: var(--primary-dark);
+}
+
+.complete-pack-row input,
+.member-row input {
+  max-width: 7rem;
+}
+
+.member-row h3 {
+  margin: 0 0 0.25rem;
+  color: var(--text-strong);
+  font-size: 1.1rem;
+}
+
+.member-row p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.member-row.out-of-stock {
+  opacity: 0.68;
+}
+
+.payment-grid {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.payment-grid article {
+  padding: 0.95rem;
+}
+
+.payment-grid strong {
+  color: var(--text-strong);
+}
+
+.payment-grid p {
+  margin: 0.35rem 0 0;
+}
+
+.proof-picker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  width: fit-content;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.proof-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.proof-name {
+  margin: 0;
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+button:disabled,
+input:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+@media (min-width: 48rem) {
+  .fanpack-header {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.35fr);
+  }
+
+  .form-grid,
+  .payment-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .complete-pack-row,
+  .member-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}

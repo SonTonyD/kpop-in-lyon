@@ -78,3 +78,95 @@ export interface ManagedEventPayload {
   imagePath: string | null;
   dominantColor: string;
 }
+
+export type FanpackRecoveryMethod = 'lyon' | 'post' | 'mondial_relay';
+export type FanpackSocialPlatform = 'instagram' | 'twitter';
+export type FanpackOrderStatus =
+  | 'proof_pending'
+  | 'processing'
+  | 'completed'
+  | 'rejected'
+  | 'cancelled';
+
+export interface FanpackMember {
+  id: string;
+  campaignId: string;
+  name: string;
+  stock: number;
+  maxPerOrder: number;
+  displayOrder: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface FanpackMemberPayload {
+  name: string;
+  stock: number;
+  maxPerOrder: number;
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export interface FanpackCampaign {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  packContent: string;
+  unitPrice: number;
+  completePackPrice: number | null;
+  isActive: boolean;
+  createdAt: string;
+  members: FanpackMember[];
+}
+
+export interface FanpackCampaignPayload {
+  name: string;
+  slug: string;
+  description: string | null;
+  packContent: string;
+  unitPrice: number;
+  completePackPrice: number | null;
+  isActive: boolean;
+}
+
+export interface FanpackOrderItem {
+  id: string;
+  orderId: string;
+  memberId: string | null;
+  memberName: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal: number;
+  isCompletePack: boolean;
+}
+
+export interface FanpackOrder {
+  id: string;
+  campaignId: string;
+  campaignName: string;
+  customerEmail: string;
+  customerFullName: string;
+  socialPlatform: FanpackSocialPlatform;
+  socialUsername: string;
+  recoveryMethod: FanpackRecoveryMethod;
+  postalAddress: string | null;
+  proofPath: string;
+  totalAmount: number;
+  status: FanpackOrderStatus;
+  createdAt: string;
+  items: FanpackOrderItem[];
+}
+
+export interface FanpackOrderPayload {
+  campaignId: string;
+  customerEmail: string;
+  customerFullName: string;
+  socialPlatform: FanpackSocialPlatform;
+  socialUsername: string;
+  recoveryMethod: FanpackRecoveryMethod;
+  postalAddress: string | null;
+  proofPath: string;
+  completePackQuantity: number;
+  memberQuantities: { memberId: string; quantity: number }[];
+}

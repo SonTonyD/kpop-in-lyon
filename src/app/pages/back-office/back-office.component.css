@@ -88,6 +88,13 @@
   gap: 1rem;
 }
 
+.fanpack-admin-layout,
+.admin-stack,
+.member-admin-list {
+  display: grid;
+  gap: 1rem;
+}
+
 .admin-card {
   display: grid;
   gap: 1rem;
@@ -128,6 +135,17 @@
   min-width: 0;
 }
 
+.inline-check {
+  display: inline-flex !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  width: fit-content;
+}
+
+.inline-check input {
+  width: auto;
+}
+
 .event-form-grid span,
 .poster-field > span {
   color: var(--text-strong);
@@ -149,6 +167,35 @@
 .event-form-grid textarea:focus {
   outline: 2px solid rgba(232, 96, 122, 0.28);
   outline-offset: 0.1rem;
+}
+
+.member-admin-row {
+  display: grid;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.8rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+  background: var(--bg-secondary);
+}
+
+.member-admin-row div:first-child {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.member-admin-row strong {
+  color: var(--text-strong);
+}
+
+.member-admin-row span {
+  color: var(--text-soft);
+}
+
+.list-title {
+  margin: 0;
+  color: var(--text-strong);
+  font-size: 1.35rem;
 }
 
 .poster-field {
@@ -311,9 +358,14 @@ select:disabled {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .managed-events-layout {
+  .managed-events-layout,
+  .fanpack-admin-layout {
     grid-template-columns: minmax(20rem, 0.85fr) minmax(0, 1.15fr);
     align-items: start;
+  }
+
+  .member-admin-row {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .poster-upload {

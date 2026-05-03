@@ -5,12 +5,8 @@
       <h1>Gestion Kpop in Lyon</h1>
     </div>
     <div class="header-actions">
-      <button type="button" class="ghost-button" (click)="refresh()">
-        Actualiser
-      </button>
-      <button type="button" class="button-primary" (click)="signOut()">
-        Déconnexion
-      </button>
+      <button type="button" class="ghost-button" (click)="refresh()">Actualiser</button>
+      <button type="button" class="button-primary" (click)="signOut()">Deconnexion</button>
     </div>
   </header>
 
@@ -20,24 +16,28 @@
       [class.active]="activeTab() === 'managedEvents'"
       (click)="activeTab.set('managedEvents')"
     >
-      Évènements
-      <span>{{ managedEvents().length }}</span>
+      Evenements <span>{{ managedEvents().length }}</span>
+    </button>
+    <button
+      type="button"
+      [class.active]="activeTab() === 'fanpacks'"
+      (click)="activeTab.set('fanpacks')"
+    >
+      Fanpacks <span>{{ fanpackOrders().length }}</span>
     </button>
     <button
       type="button"
       [class.active]="activeTab() === 'reviews'"
       (click)="activeTab.set('reviews')"
     >
-      Avis participants
-      <span>{{ reviews().length }}</span>
+      Avis participants <span>{{ reviews().length }}</span>
     </button>
     <button
       type="button"
       [class.active]="activeTab() === 'requests'"
       (click)="activeTab.set('requests')"
     >
-      Demandes d’évènements
-      <span>{{ requests().length }}</span>
+      Demandes d’evenements <span>{{ requests().length }}</span>
     </button>
   </div>
 
@@ -49,36 +49,23 @@
   }
 
   @if (loading()) {
-    <p class="state-message surface-card">Chargement des données...</p>
+    <p class="state-message surface-card">Chargement des donnees...</p>
   } @else if (activeTab() === "managedEvents") {
-    <section
-      class="managed-events-layout"
-      aria-label="Gestion des évènements affichés"
-    >
+    <section class="managed-events-layout" aria-label="Gestion des evenements affiches">
       <form
         class="admin-card surface-card managed-event-form"
         [formGroup]="eventForm"
         (ngSubmit)="saveManagedEvent()"
       >
         <div>
-          <p class="card-kicker">
-            {{ editingEventId() ? "Modification" : "Nouvel évènement" }}
-          </p>
-          <h2>
-            {{
-              editingEventId() ? "Modifier l’évènement" : "Créer un évènement"
-            }}
-          </h2>
+          <p class="card-kicker">{{ editingEventId() ? "Modification" : "Nouvel evenement" }}</p>
+          <h2>{{ editingEventId() ? "Modifier l’evenement" : "Creer un evenement" }}</h2>
         </div>
 
         <div class="event-form-grid">
           <label>
-            <span>Titre affiché en grand</span>
-            <input
-              type="text"
-              formControlName="title"
-              placeholder="SEVENTEEN ÉVÈNEMENT"
-            />
+            <span>Titre affiche en grand</span>
+            <input type="text" formControlName="title" placeholder="SEVENTEEN EVENEMENT" />
           </label>
 
           <label class="full-width">
@@ -108,39 +95,24 @@
 
           <label>
             <span>Format</span>
-            <input
-              type="text"
-              formControlName="format"
-              placeholder="Évènement fan"
-            />
+            <input type="text" formControlName="format" placeholder="Evenement fan" />
           </label>
 
           <label>
-            <span>Capacité</span>
-            <input
-              type="text"
-              formControlName="capacity"
-              placeholder="Capacité 250 personnes"
-            />
+            <span>Capacite</span>
+            <input type="text" formControlName="capacity" placeholder="Capacite 250 personnes" />
           </label>
 
           <div class="poster-field full-width">
-            <span>Affiche de l'Évènement</span>
+            <span>Affiche de l’evenement</span>
             <div class="poster-upload">
-              <img
-                [src]="posterPreview()"
-                alt="Aperçu de l'affiche de l'Évènement"
-              />
+              <img [src]="posterPreview()" alt="Apercu de l’affiche de l’evenement" />
               <div>
                 <label class="poster-picker">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    (change)="onPosterSelected($event)"
-                  />
+                  <input type="file" accept="image/*" (change)="onPosterSelected($event)" />
                   <span>Choisir une affiche</span>
                 </label>
-                <p>Format recommandé : 4:5 JPEG</p>
+                <p>Format recommande : 4:5 JPEG</p>
                 @if (selectedPosterName()) {
                   <p class="poster-name">{{ selectedPosterName() }}</p>
                 }
@@ -150,51 +122,28 @@
         </div>
 
         <div class="form-actions">
-          <button
-            type="submit"
-            class="button-primary"
-            [disabled]="savingId() === 'new-event'"
-          >
-            {{
-              editingEventId()
-                ? "Enregistrer les modifications"
-                : "Créer l’évènement"
-            }}
+          <button type="submit" class="button-primary" [disabled]="savingId() === 'new-event'">
+            {{ editingEventId() ? "Enregistrer les modifications" : "Creer l’evenement" }}
           </button>
           @if (editingEventId()) {
-            <button
-              type="button"
-              class="ghost-button"
-              (click)="resetEventForm()"
-            >
-              Annuler
-            </button>
+            <button type="button" class="ghost-button" (click)="resetEventForm()">Annuler</button>
           }
         </div>
       </form>
 
-      <section class="admin-list" aria-label="Évènements configurés">
+      <section class="admin-list" aria-label="Evenements configures">
         @if (managedEvents().length === 0) {
-          <p class="state-message surface-card">
-            Aucun évènement n’a encore été créé.
-          </p>
+          <p class="state-message surface-card">Aucun evenement n’a encore ete cree.</p>
         } @else {
           @for (event of managedEvents(); track event.id) {
             <article class="admin-card surface-card">
               <div class="card-main">
                 <div>
                   <p class="card-kicker">
-                    {{
-                      event.isActive
-                        ? "Affiché en première page"
-                        : (event.createdAt | date: "dd/MM/yyyy HH:mm")
-                    }}
+                    {{ event.isActive ? "Affiche en premiere page" : (event.createdAt | date: "dd/MM/yyyy HH:mm") }}
                   </p>
                   <h2>{{ event.title }}</h2>
-                  <p>
-                    {{ event.dateLabel }} · {{ event.timeLabel }} ·
-                    {{ event.location }}, {{ event.country }}
-                  </p>
+                  <p>{{ event.dateLabel }} · {{ event.timeLabel }} · {{ event.location }}, {{ event.country }}</p>
                 </div>
                 <div class="card-actions">
                   <button
@@ -206,13 +155,7 @@
                   >
                     {{ event.isActive ? "En cours" : "Afficher" }}
                   </button>
-                  <button
-                    type="button"
-                    class="ghost-button"
-                    (click)="editManagedEvent(event)"
-                  >
-                    Modifier
-                  </button>
+                  <button type="button" class="ghost-button" (click)="editManagedEvent(event)">Modifier</button>
                   <button
                     type="button"
                     class="danger-button"
@@ -224,66 +167,211 @@
                 </div>
               </div>
               <p class="request-copy">{{ event.description }}</p>
-              <img
-                class="event-poster-thumb"
-                [src]="event.image"
-                alt="Affiche de l'Ã©vÃ¨nement"
-              />
-              <dl class="request-details">
-                <div>
-                  <dt>Format</dt>
-                  <dd>{{ event.format }}</dd>
-                </div>
-                <div>
-                  <dt>Capacité</dt>
-                  <dd>{{ event.capacity }}</dd>
-                </div>
-              </dl>
+              <img class="event-poster-thumb" [src]="event.image" alt="Affiche de l’evenement" />
             </article>
           }
         }
       </section>
     </section>
+  } @else if (activeTab() === "fanpacks") {
+    <section class="fanpack-admin-layout" aria-label="Gestion des fanpacks">
+      <div class="admin-stack">
+        <form class="admin-card surface-card managed-event-form" [formGroup]="fanpackForm" (ngSubmit)="saveFanpackCampaign()">
+          <div>
+            <p class="card-kicker">{{ editingFanpackId() ? "Modification" : "Nouveau fanpack" }}</p>
+            <h2>{{ editingFanpackId() ? "Modifier le fanpack" : "Creer un fanpack" }}</h2>
+          </div>
+
+          <div class="event-form-grid">
+            <label>
+              <span>Nom</span>
+              <input type="text" formControlName="name" placeholder="BTS" />
+            </label>
+            <label>
+              <span>Slug URL</span>
+              <input type="text" formControlName="slug" placeholder="bts" />
+            </label>
+            <label class="full-width">
+              <span>Description courte</span>
+              <textarea rows="3" formControlName="description"></textarea>
+            </label>
+            <label class="full-width">
+              <span>Contenu affiche du fanpack</span>
+              <textarea rows="4" formControlName="packContent"></textarea>
+            </label>
+            <label>
+              <span>Prix unitaire</span>
+              <input type="number" min="0" step="0.01" formControlName="unitPrice" />
+            </label>
+            <label>
+              <span>Prix pack complet optionnel</span>
+              <input type="number" min="0" step="0.01" formControlName="completePackPrice" />
+            </label>
+            <label class="inline-check full-width">
+              <input type="checkbox" formControlName="isActive" />
+              <span>Formulaire public actif</span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="button-primary" [disabled]="savingId() === 'new-fanpack'">
+              {{ editingFanpackId() ? "Enregistrer" : "Creer le fanpack" }}
+            </button>
+            @if (editingFanpackId()) {
+              <button type="button" class="ghost-button" (click)="resetFanpackForm()">Annuler</button>
+            }
+          </div>
+        </form>
+
+        @if (selectedFanpack()) {
+          <form class="admin-card surface-card managed-event-form" [formGroup]="fanpackMemberForm" (ngSubmit)="saveFanpackMember()">
+            <div>
+              <p class="card-kicker">{{ selectedFanpack()!.name }}</p>
+              <h2>{{ editingMemberId() ? "Modifier un membre" : "Ajouter un membre" }}</h2>
+            </div>
+            <div class="event-form-grid">
+              <label>
+                <span>Nom du membre</span>
+                <input type="text" formControlName="name" placeholder="JIN" />
+              </label>
+              <label>
+                <span>Stock</span>
+                <input type="number" min="0" formControlName="stock" />
+              </label>
+              <label>
+                <span>Max par commande</span>
+                <input type="number" min="1" formControlName="maxPerOrder" />
+              </label>
+              <label>
+                <span>Ordre</span>
+                <input type="number" min="1" formControlName="displayOrder" />
+              </label>
+              <label class="inline-check full-width">
+                <input type="checkbox" formControlName="isActive" />
+                <span>Membre visible sur le formulaire</span>
+              </label>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="button-primary" [disabled]="savingId() === 'new-fanpack-member'">
+                {{ editingMemberId() ? "Enregistrer le membre" : "Ajouter le membre" }}
+              </button>
+              @if (editingMemberId()) {
+                <button type="button" class="ghost-button" (click)="resetFanpackMemberForm()">Annuler</button>
+              }
+            </div>
+          </form>
+        }
+      </div>
+
+      <div class="admin-stack">
+        <section class="admin-list" aria-label="Fanpacks configures">
+          @if (fanpackCampaigns().length === 0) {
+            <p class="state-message surface-card">Aucun fanpack n’a encore ete cree.</p>
+          } @else {
+            @for (campaign of fanpackCampaigns(); track campaign.id) {
+              <article class="admin-card surface-card">
+                <div class="card-main">
+                  <div>
+                    <p class="card-kicker">{{ campaign.isActive ? "Actif" : "Masque" }}</p>
+                    <h2>{{ campaign.name }}</h2>
+                    <p>/fanpacks/{{ campaign.slug }} · {{ campaign.unitPrice | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }} l’unite</p>
+                  </div>
+                  <div class="card-actions">
+                    <button type="button" class="ghost-button" (click)="selectedFanpackId.set(campaign.id); resetFanpackMemberForm()">Membres</button>
+                    <button type="button" class="ghost-button" (click)="editFanpackCampaign(campaign)">Modifier</button>
+                    <button type="button" class="danger-button" [disabled]="savingId() === campaign.id" (click)="deleteFanpackCampaign(campaign)">Supprimer</button>
+                  </div>
+                </div>
+                <p class="request-copy">{{ campaign.packContent }}</p>
+
+                @if (selectedFanpackId() === campaign.id) {
+                  <div class="member-admin-list">
+                    @for (member of campaign.members; track member.id) {
+                      <article class="member-admin-row">
+                        <div>
+                          <strong>{{ member.name }}</strong>
+                          <span>{{ member.stock }} en stock · max {{ member.maxPerOrder }} · {{ member.isActive ? "visible" : "masque" }}</span>
+                        </div>
+                        <div class="card-actions">
+                          <button type="button" class="ghost-button" (click)="editFanpackMember(member)">Modifier</button>
+                          <button type="button" class="danger-button" [disabled]="savingId() === member.id" (click)="deleteFanpackMember(member)">Supprimer</button>
+                        </div>
+                      </article>
+                    }
+                  </div>
+                }
+              </article>
+            }
+          }
+        </section>
+
+        <section class="admin-list" aria-label="Commandes fanpacks">
+          <h2 class="list-title">Commandes fanpacks</h2>
+          @if (fanpackOrders().length === 0) {
+            <p class="state-message surface-card">Aucune commande fanpack n’a encore ete recue.</p>
+          } @else {
+            @for (order of fanpackOrders(); track order.id) {
+              <article class="admin-card surface-card">
+                <div class="card-main">
+                  <div>
+                    <p class="card-kicker">{{ order.createdAt | date: "dd/MM/yyyy HH:mm" }}</p>
+                    <h2>{{ order.customerFullName }}</h2>
+                    <p>{{ order.campaignName }} · {{ order.totalAmount | currency: 'EUR' : 'symbol' : '1.2-2' : 'fr-FR' }}</p>
+                  </div>
+                  <div class="card-actions">
+                    <label class="status-field">
+                      <span>Statut</span>
+                      <select [value]="order.status" [disabled]="savingId() === order.id" (change)="updateFanpackOrderStatus(order, $event)">
+                        @for (status of fanpackOrderStatuses; track status.value) {
+                          <option [value]="status.value">{{ status.label }}</option>
+                        }
+                      </select>
+                    </label>
+                    <button type="button" class="ghost-button" [disabled]="savingId() === 'proof-' + order.id" (click)="openFanpackProof(order)">Preuve</button>
+                  </div>
+                </div>
+                <dl class="request-details">
+                  <div>
+                    <dt>Contact</dt>
+                    <dd>{{ order.customerEmail }} · {{ order.socialPlatform }}: {{ order.socialUsername }}</dd>
+                  </div>
+                  <div>
+                    <dt>Recuperation</dt>
+                    <dd>{{ recoveryMethodLabel(order.recoveryMethod) }} @if (order.postalAddress) { · {{ order.postalAddress }} }</dd>
+                  </div>
+                  <div>
+                    <dt>Panier</dt>
+                    <dd>
+                      @for (item of order.items; track item.id) {
+                        <span>{{ item.quantity }} x {{ item.memberName }} </span>
+                      }
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            }
+          }
+        </section>
+      </div>
+    </section>
   } @else if (activeTab() === "reviews") {
     <section class="admin-list" aria-label="Avis participants">
       @if (reviews().length === 0) {
-        <p class="state-message surface-card">
-          Aucun avis n’a encore été reçu.
-        </p>
+        <p class="state-message surface-card">Aucun avis n’a encore ete recu.</p>
       } @else {
         @for (review of reviews(); track review.id) {
           <article class="admin-card surface-card">
             <div class="card-main">
               <div>
-                <p class="card-kicker">
-                  {{ review.createdAt | date: "dd/MM/yyyy HH:mm" }}
-                </p>
+                <p class="card-kicker">{{ review.createdAt | date: "dd/MM/yyyy HH:mm" }}</p>
                 <h2>{{ review.name }}</h2>
-                <p>
-                  {{ review.event }}
-                  @if (review.rating !== null) {
-                    · {{ review.rating }}/5
-                  }
-                </p>
+                <p>{{ review.event }} @if (review.rating !== null) { · {{ review.rating }}/5 }</p>
               </div>
               <div class="card-actions">
-                <button
-                  type="button"
-                  class="publish-toggle"
-                  [class.active]="review.isPublished"
-                  [disabled]="savingId() === review.id"
-                  (click)="togglePublished(review)"
-                >
-                  {{ review.isPublished ? "Publié" : "Masqué" }}
+                <button type="button" class="publish-toggle" [class.active]="review.isPublished" [disabled]="savingId() === review.id" (click)="togglePublished(review)">
+                  {{ review.isPublished ? "Publie" : "Masque" }}
                 </button>
-                <button
-                  type="button"
-                  class="danger-button"
-                  [disabled]="savingId() === review.id"
-                  (click)="deleteReview(review)"
-                >
-                  Supprimer
-                </button>
+                <button type="button" class="danger-button" [disabled]="savingId() === review.id" (click)="deleteReview(review)">Supprimer</button>
               </div>
             </div>
             <p class="review-copy">{{ review.comment }}</p>
@@ -292,67 +380,46 @@
       }
     </section>
   } @else {
-    <section class="admin-list" aria-label="Demandes d’évènements">
+    <section class="admin-list" aria-label="Demandes d’evenements">
       @if (requests().length === 0) {
-        <p class="state-message surface-card">
-          Aucune demande d’évènement n’a encore été reçue.
-        </p>
+        <p class="state-message surface-card">Aucune demande d’evenement n’a encore ete recue.</p>
       } @else {
         @for (request of requests(); track request.id) {
           <article class="admin-card surface-card">
             <div class="card-main">
               <div>
-                <p class="card-kicker">
-                  {{ request.createdAt | date: "dd/MM/yyyy HH:mm" }}
-                </p>
+                <p class="card-kicker">{{ request.createdAt | date: "dd/MM/yyyy HH:mm" }}</p>
                 <h2>{{ request.artist }}</h2>
-                <p>
-                  {{ request.fanbaseName }} · {{ request.city }} ·
-                  {{ request.period }}
-                </p>
+                <p>{{ request.fanbaseName }} · {{ request.city }} · {{ request.period }}</p>
               </div>
               <div class="card-actions">
                 <label class="status-field">
                   <span>Statut</span>
-                  <select
-                    [value]="request.status"
-                    [disabled]="savingId() === request.id"
-                    (change)="updateStatus(request, $event)"
-                  >
+                  <select [value]="request.status" [disabled]="savingId() === request.id" (change)="updateStatus(request, $event)">
                     @for (status of statuses; track status.value) {
                       <option [value]="status.value">{{ status.label }}</option>
                     }
                   </select>
                 </label>
-                <button
-                  type="button"
-                  class="danger-button"
-                  [disabled]="savingId() === request.id"
-                  (click)="deleteRequest(request)"
-                >
-                  Supprimer
-                </button>
+                <button type="button" class="danger-button" [disabled]="savingId() === request.id" (click)="deleteRequest(request)">Supprimer</button>
               </div>
             </div>
 
             <dl class="request-details">
               <div>
                 <dt>Contact</dt>
-                <dd>
-                  {{ request.fullName }} ·
-                  <a [href]="'mailto:' + request.email">{{ request.email }}</a>
-                </dd>
+                <dd>{{ request.fullName }} · <a [href]="'mailto:' + request.email">{{ request.email }}</a></dd>
               </div>
               <div>
-                <dt>Réseaux</dt>
-                <dd>{{ request.socialLinks || "Non renseigné" }}</dd>
+                <dt>Reseaux</dt>
+                <dd>{{ request.socialLinks || "Non renseigne" }}</dd>
               </div>
               <div>
                 <dt>Collaboration</dt>
                 <dd>{{ request.collaborationTypes.join(", ") }}</dd>
               </div>
               <div>
-                <dt>Décorations</dt>
+                <dt>Decorations</dt>
                 <dd>{{ request.decorationTypes.join(", ") }}</dd>
               </div>
             </dl>

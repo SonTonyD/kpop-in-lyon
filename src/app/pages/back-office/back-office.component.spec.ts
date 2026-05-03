@@ -20,6 +20,7 @@ describe('BackOfficeComponent event poster form', () => {
       {} as never,
       managedEventsService as never,
       {} as never,
+      {} as never,
       new FormBuilder(),
       { navigateByUrl: async () => true } as never,
     );

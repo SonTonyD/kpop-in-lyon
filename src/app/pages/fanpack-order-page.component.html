@@ -8,6 +8,12 @@
       <p>Ce fanpack n’est pas ouvert ou n’existe pas.</p>
     </div>
   } @else {
+    @if (campaign()!.bannerImage) {
+      <figure class="fanpack-banner">
+        <img [src]="campaign()!.bannerImage" [alt]="'Banniere du fanpack ' + campaign()!.name" />
+      </figure>
+    }
+
     <div class="fanpack-header">
       <div class="section-heading">
         <p class="eyebrow">Commande fanpack</p>

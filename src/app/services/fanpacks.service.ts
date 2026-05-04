@@ -13,6 +13,7 @@ import {
 import { SupabaseService } from './supabase.service';
 
 const PAYMENT_PROOFS_BUCKET = 'fanpack-payment-proofs';
+const FANPACK_BANNERS_BUCKET = 'fanpack-banners';
 
 interface FanpackMemberRow {
   id: string;
@@ -31,6 +32,8 @@ interface FanpackCampaignRow {
   slug: string;
   description: string | null;
   pack_content: string;
+  banner_image: string | null;
+  banner_image_path: string | null;
   unit_price: number | string;
   complete_pack_price: number | string | null;
   is_active: boolean;
@@ -145,10 +148,16 @@ export class FanpacksService {
   }
 
   async deleteCampaign(id: string): Promise<void> {
+    const campaigns = await this.getCampaigns();
+    const campaign = campaigns.find((item) => item.id === id) ?? null;
     const { error } = await this.supabase.client.from('fanpack_campaigns').delete().eq('id', id);
 
     if (error) {
       throw error;
+    }
+
+    if (campaign?.bannerImagePath) {
+      await this.deleteBanner(campaign.bannerImagePath);
     }
   }
 
@@ -253,6 +262,43 @@ export class FanpacksService {
     return data.signedUrl;
   }
 
+  async uploadBanner(
+    file: File,
+    campaignId: string,
+  ): Promise<{ bannerImage: string; bannerImagePath: string }> {
+    const bannerImagePath = `${campaignId}/${Date.now()}-${safeFileName(file.name)}`;
+    const { error } = await this.supabase.client.storage
+      .from(FANPACK_BANNERS_BUCKET)
+      .upload(bannerImagePath, file, {
+        cacheControl: '31536000',
+        contentType: file.type || 'image/jpeg',
+        upsert: false,
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    const { data } = this.supabase.client.storage
+      .from(FANPACK_BANNERS_BUCKET)
+      .getPublicUrl(bannerImagePath);
+
+    return {
+      bannerImage: data.publicUrl,
+      bannerImagePath,
+    };
+  }
+
+  async deleteBanner(bannerImagePath: string): Promise<void> {
+    const { error } = await this.supabase.client.storage
+      .from(FANPACK_BANNERS_BUCKET)
+      .remove([bannerImagePath]);
+
+    if (error) {
+      console.warn('Fanpack banner could not be deleted from storage.', error);
+    }
+  }
+
   async updateOrderStatus(
     order: FanpackOrder,
     status: FanpackOrderStatus,
@@ -335,6 +381,8 @@ function mapCampaign(row: FanpackCampaignRow): FanpackCampaign {
     slug: row.slug,
     description: row.description,
     packContent: row.pack_content,
+    bannerImage: row.banner_image ?? null,
+    bannerImagePath: row.banner_image_path ?? null,
     unitPrice: Number(row.unit_price),
     completePackPrice: row.complete_pack_price === null ? null : Number(row.complete_pack_price),
     isActive: row.is_active,
@@ -390,6 +438,8 @@ function toCampaignRowPayload(payload: FanpackCampaignPayload) {
     slug: payload.slug,
     description: payload.description,
     pack_content: payload.packContent,
+    banner_image: payload.bannerImage,
+    banner_image_path: payload.bannerImagePath,
     unit_price: payload.unitPrice,
     complete_pack_price: payload.completePackPrice,
     is_active: payload.isActive,

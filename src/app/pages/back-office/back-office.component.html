@@ -310,6 +310,26 @@
               <span>Contenu affiche du fanpack</span>
               <textarea rows="4" formControlName="packContent"></textarea>
             </label>
+            <div class="poster-field full-width">
+              <span>Image banniere du formulaire</span>
+              <div class="poster-upload fanpack-banner-upload">
+                @if (fanpackBannerPreview()) {
+                  <img [src]="fanpackBannerPreview()" alt="Apercu de la banniere fanpack" />
+                } @else {
+                  <div class="banner-placeholder">Aucune banniere</div>
+                }
+                <div>
+                  <label class="poster-picker">
+                    <input type="file" accept="image/*" (change)="onFanpackBannerSelected($event)" />
+                    <span>Choisir une banniere</span>
+                  </label>
+                  <p>Format recommande : image large 16:6 ou 3:1.</p>
+                  @if (selectedFanpackBannerName()) {
+                    <p class="poster-name">{{ selectedFanpackBannerName() }}</p>
+                  }
+                </div>
+              </div>
+            </div>
             <label>
               <span>Prix unitaire</span>
               <input type="number" min="0" step="0.01" formControlName="unitPrice" />

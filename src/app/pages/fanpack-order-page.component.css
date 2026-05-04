@@ -9,6 +9,19 @@
   margin-bottom: 1rem;
 }
 
+.fanpack-banner {
+  margin: 0 0 1.25rem;
+}
+
+.fanpack-banner img {
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  object-fit: cover;
+  border: 1px solid var(--border-soft);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-soft);
+}
+
 .total-card {
   display: grid;
   gap: 0.35rem;

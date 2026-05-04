@@ -43,6 +43,8 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
   protected readonly selectedFanpackId = signal<string | null>(null);
   protected readonly posterPreview = signal('assets/event-hero.svg');
   protected readonly selectedPosterName = signal('');
+  protected readonly fanpackBannerPreview = signal('');
+  protected readonly selectedFanpackBannerName = signal('');
   protected readonly managedEvents = signal<ManagedEvent[]>([]);
   protected readonly fanpackCampaigns = signal<FanpackCampaign[]>([]);
   protected readonly fanpackOrders = signal<FanpackOrder[]>([]);
@@ -66,7 +68,9 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
   ];
 
   private selectedPosterFile: File | null = null;
+  private selectedFanpackBannerFile: File | null = null;
   private objectPreviewUrl: string | null = null;
+  private fanpackBannerObjectPreviewUrl: string | null = null;
 
   constructor(
     private readonly authService: AuthService,
@@ -96,6 +100,8 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
       slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)]],
       description: ['', Validators.maxLength(240)],
       packContent: ['', [Validators.required, Validators.maxLength(500)]],
+      bannerImage: [null as string | null],
+      bannerImagePath: [null as string | null],
       unitPrice: [0, [Validators.required, Validators.min(0)]],
       completePackPrice: [null as number | null, Validators.min(0)],
       isActive: [true],
@@ -115,6 +121,7 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.revokeObjectPreview();
+    this.revokeFanpackBannerPreview();
   }
 
   protected async refresh(): Promise<void> {
@@ -264,6 +271,28 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
     }
   }
 
+  protected onFanpackBannerSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      this.error.set('La banniere selectionnee doit etre une image.');
+      input.value = '';
+      return;
+    }
+
+    this.revokeFanpackBannerPreview();
+    this.selectedFanpackBannerFile = file;
+    this.selectedFanpackBannerName.set(file.name);
+    this.fanpackBannerObjectPreviewUrl = URL.createObjectURL(file);
+    this.fanpackBannerPreview.set(this.fanpackBannerObjectPreviewUrl);
+    this.fanpackForm.patchValue({ bannerImage: this.fanpackBannerObjectPreviewUrl });
+  }
+
   protected async setActiveManagedEvent(event: ManagedEvent): Promise<void> {
     this.savingId.set(event.id);
     this.error.set('');
@@ -327,10 +356,35 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
     this.success.set('');
 
     try {
-      const payload = this.getFanpackCampaignPayload();
+      let payload = this.getFanpackCampaignPayload();
+      const previousCampaign = editingId
+        ? this.fanpackCampaigns().find((campaign) => campaign.id === editingId) ?? null
+        : null;
+
+      if (this.selectedFanpackBannerFile) {
+        const uploadOwnerId = editingId ?? `new-fanpack-${crypto.randomUUID()}`;
+        const uploadedBanner = await this.fanpacksService.uploadBanner(
+          this.selectedFanpackBannerFile,
+          uploadOwnerId,
+        );
+        payload = {
+          ...payload,
+          bannerImage: uploadedBanner.bannerImage,
+          bannerImagePath: uploadedBanner.bannerImagePath,
+        };
+      }
+
       const saved = editingId
         ? await this.fanpacksService.updateCampaign(editingId, payload)
         : await this.fanpacksService.createCampaign(payload);
+
+      if (
+        this.selectedFanpackBannerFile &&
+        previousCampaign?.bannerImagePath &&
+        previousCampaign.bannerImagePath !== saved.bannerImagePath
+      ) {
+        await this.fanpacksService.deleteBanner(previousCampaign.bannerImagePath);
+      }
 
       this.fanpackCampaigns.update((campaigns) =>
         editingId
@@ -355,10 +409,13 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
       slug: campaign.slug,
       description: campaign.description ?? '',
       packContent: campaign.packContent,
+      bannerImage: campaign.bannerImage,
+      bannerImagePath: campaign.bannerImagePath,
       unitPrice: campaign.unitPrice,
       completePackPrice: campaign.completePackPrice,
       isActive: campaign.isActive,
     });
+    this.clearSelectedFanpackBanner(campaign.bannerImage ?? '');
     this.resetFanpackMemberForm();
   }
 
@@ -369,10 +426,13 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
       slug: '',
       description: '',
       packContent: '',
+      bannerImage: null,
+      bannerImagePath: null,
       unitPrice: 0,
       completePackPrice: null,
       isActive: true,
     });
+    this.clearSelectedFanpackBanner('');
   }
 
   protected async deleteFanpackCampaign(campaign: FanpackCampaign): Promise<void> {
@@ -680,6 +740,8 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
       slug: normalizeSlug(value.slug ?? ''),
       description: (value.description ?? '').trim() || null,
       packContent: (value.packContent ?? '').trim(),
+      bannerImage: value.bannerImage ?? null,
+      bannerImagePath: value.bannerImagePath ?? null,
       unitPrice: Number(value.unitPrice ?? 0),
       completePackPrice: Number.isFinite(completePackPrice) ? completePackPrice : null,
       isActive: !!value.isActive,
@@ -705,10 +767,24 @@ export class BackOfficeComponent implements OnInit, OnDestroy {
     this.posterPreview.set(preview);
   }
 
+  private clearSelectedFanpackBanner(preview: string): void {
+    this.revokeFanpackBannerPreview();
+    this.selectedFanpackBannerFile = null;
+    this.selectedFanpackBannerName.set('');
+    this.fanpackBannerPreview.set(preview);
+  }
+
   private revokeObjectPreview(): void {
     if (this.objectPreviewUrl) {
       URL.revokeObjectURL(this.objectPreviewUrl);
       this.objectPreviewUrl = null;
+    }
+  }
+
+  private revokeFanpackBannerPreview(): void {
+    if (this.fanpackBannerObjectPreviewUrl) {
+      URL.revokeObjectURL(this.fanpackBannerObjectPreviewUrl);
+      this.fanpackBannerObjectPreviewUrl = null;
     }
   }
 }

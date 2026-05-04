@@ -257,11 +257,19 @@ create table if not exists public.fanpack_campaigns (
   slug text not null unique,
   description text,
   pack_content text not null,
+  banner_image text,
+  banner_image_path text,
   unit_price numeric(10, 2) not null check (unit_price >= 0),
   complete_pack_price numeric(10, 2) check (complete_pack_price is null or complete_pack_price >= 0),
   is_active boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+alter table public.fanpack_campaigns
+  add column if not exists banner_image text;
+
+alter table public.fanpack_campaigns
+  add column if not exists banner_image_path text;
 
 create table if not exists public.fanpack_members (
   id uuid primary key default gen_random_uuid(),
@@ -315,6 +323,10 @@ alter table public.fanpack_order_items enable row level security;
 insert into storage.buckets (id, name, public)
 values ('fanpack-payment-proofs', 'fanpack-payment-proofs', false)
 on conflict (id) do update set public = false;
+
+insert into storage.buckets (id, name, public)
+values ('fanpack-banners', 'fanpack-banners', true)
+on conflict (id) do update set public = true;
 
 drop policy if exists "Public can read active fanpack campaigns" on public.fanpack_campaigns;
 create policy "Public can read active fanpack campaigns"
@@ -418,6 +430,35 @@ on storage.objects
 for select
 to authenticated
 using (bucket_id = 'fanpack-payment-proofs');
+
+drop policy if exists "Public can read fanpack banners" on storage.objects;
+create policy "Public can read fanpack banners"
+on storage.objects
+for select
+to anon, authenticated
+using (bucket_id = 'fanpack-banners');
+
+drop policy if exists "Managers can upload fanpack banners" on storage.objects;
+create policy "Managers can upload fanpack banners"
+on storage.objects
+for insert
+to authenticated
+with check (bucket_id = 'fanpack-banners');
+
+drop policy if exists "Managers can update fanpack banners" on storage.objects;
+create policy "Managers can update fanpack banners"
+on storage.objects
+for update
+to authenticated
+using (bucket_id = 'fanpack-banners')
+with check (bucket_id = 'fanpack-banners');
+
+drop policy if exists "Managers can delete fanpack banners" on storage.objects;
+create policy "Managers can delete fanpack banners"
+on storage.objects
+for delete
+to authenticated
+using (bucket_id = 'fanpack-banners');
 
 create or replace function public.submit_fanpack_order(
   p_campaign_id uuid,

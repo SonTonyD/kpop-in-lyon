@@ -113,6 +113,8 @@ export interface FanpackCampaign {
   slug: string;
   description: string | null;
   packContent: string;
+  bannerImage: string | null;
+  bannerImagePath: string | null;
   unitPrice: number;
   completePackPrice: number | null;
   isActive: boolean;
@@ -125,6 +127,8 @@ export interface FanpackCampaignPayload {
   slug: string;
   description: string | null;
   packContent: string;
+  bannerImage: string | null;
+  bannerImagePath: string | null;
   unitPrice: number;
   completePackPrice: number | null;
   isActive: boolean;

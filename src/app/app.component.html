@@ -14,9 +14,40 @@
       }
     </nav>
 
-    @if (authService.session()) {
-      <a class="admin-access" routerLink="/back-office">Gestion</a>
-    }
+    <div class="header-actions">
+      <nav class="social-links" aria-label="Réseaux sociaux Kpop in Lyon">
+        <a
+          href="https://www.instagram.com/kpopinlyon_/"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram Kpop in Lyon"
+          title="Instagram"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.5" cy="6.5" r="1"></circle>
+          </svg>
+        </a>
+        <a
+          href="https://x.com/KPOPINLYON"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="X Kpop in Lyon"
+          title="X"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 4l16 16"></path>
+            <path d="M20 4L4 20"></path>
+            <path d="M8 4h3.2l4.8 16H12.8z"></path>
+          </svg>
+        </a>
+      </nav>
+
+      @if (authService.session()) {
+        <a class="admin-access" routerLink="/back-office">Gestion</a>
+      }
+    </div>
   </header>
 
   <main>
